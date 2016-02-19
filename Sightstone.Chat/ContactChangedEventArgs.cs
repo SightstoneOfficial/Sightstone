@@ -1,0 +1,17 @@
+﻿using System;
+
+namespace Sightstone.Chat
+{
+    public class ContactChangedEventArgs : EventArgs
+    {
+        public Contact Contact;
+
+        public ContactChangeType ChangeType;
+
+        public ContactChangedEventArgs(Contact contact, ContactChangeType type)
+        {
+            this.Contact = contact;
+            this.ChangeType = type;
+        }
+    }
+}
