@@ -47,7 +47,7 @@ namespace Sightstone.Chat
                 AutoRoster = true,
                 KeepAlive = true,
                 Priority = 50,
-                Resource = "SightstoneOfficial",
+                Resource = "xiff",
                 UseSSL = true
             };
             _connection = xmppClientConnection;
