@@ -1,4 +1,4 @@
-﻿namespace SightStone
+﻿namespace Sightstone.ViewModels
 {
     public interface IShell
     {

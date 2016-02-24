@@ -7,8 +7,8 @@
     <ProjectGuid>{CFD70B77-054E-4900-A2B5-71368CC789E2}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SightStone</RootNamespace>
-    <AssemblyName>SightStone</AssemblyName>
+    <RootNamespace>Sightstone</RootNamespace>
+    <AssemblyName>Sightstone</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -33,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
@@ -60,6 +63,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Windows.Interactivity, Version=4.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\packages\MahApps.Metro.1.2.4.0\lib\net45\System.Windows.Interactivity.dll</HintPath>
@@ -87,12 +91,16 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Window1.xaml.cs">
-      <DependentUpon>Window1.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="Services\IServiceLocator.cs" />
+    <Compile Include="Services\MefServiceLocator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IShell.cs" />
+    <Compile Include="AppBootstrapper.cs" />
+    <Compile Include="Helpers\IThemeManager.cs" />
+    <Compile Include="Helpers\IViewLocator.cs" />
+    <Compile Include="Helpers\StartupTasks.cs" />
+    <Compile Include="Helpers\ThemeManager.cs" />
+    <Compile Include="Helpers\ViewLocator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -129,7 +137,7 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Page Include="Window1.xaml">
+    <Page Include="Resources\Theme1.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -138,9 +146,9 @@
     <Resource Include="Resources\Entypo-license.txt" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\rtmp-sharp\rtmp-sharp.csproj">
-      <Project>{aa1a4f5d-3bd4-4832-9f5d-90727007727e}</Project>
-      <Name>rtmp-sharp</Name>
+    <ProjectReference Include="..\Sightstone.Chat\Sightstone.Chat.csproj">
+      <Project>{99e201b6-5885-4619-8c8b-a5871b3912f5}</Project>
+      <Name>Sightstone.Chat</Name>
     </ProjectReference>
     <ProjectReference Include="..\Sightstone.Core\Sightstone.Core.csproj">
       <Project>{171f6346-aaec-4d1d-9b11-0b70100b4cb2}</Project>
@@ -154,12 +162,18 @@
       <Project>{6377eb9a-2693-44d3-856a-1ae328314a45}</Project>
       <Name>Sightstone.Plugin</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Sightstone.ViewModels\Sightstone.ViewModels.csproj">
+      <Project>{95d47198-a97d-4270-92de-3df535fa89d1}</Project>
+      <Name>Sightstone.ViewModels</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sightstone.Views\Sightstone.Views.csproj">
-      <Project>{bf2a744a-ff3f-4b30-8d03-7f0e3e39bd1b}</Project>
+      <Project>{ee5f1704-7f68-4265-94b3-fa27c0103ef6}</Project>
       <Name>Sightstone.Views</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

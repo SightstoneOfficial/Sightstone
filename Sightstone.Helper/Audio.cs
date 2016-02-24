@@ -11,13 +11,14 @@ namespace Sightstone.Helper
     /// <summary>
     /// Helps with playing audio files
     /// </summary>
-    public class Audio
+    public class Audio : IDisposable
     {
         #region Class
         public Audio(string fileLocation, bool loaded = false)
         {
             FileLocation = fileLocation;
             FileName = Path.GetFileName(fileLocation);
+            GetAudioData();
             if (!loaded)
             {
                 LoadAudio();
@@ -27,11 +28,25 @@ namespace Sightstone.Helper
         {
             FileLocation = fileLocation;
             FileName = fileName;
+            GetAudioData();
             if (!loaded)
             {
                 LoadAudio();
             }
         }
+
+        public Audio(string fileLocation, string fileName, AudioSettings settings, bool loaded = false)
+        {
+            FileLocation = fileLocation;
+            FileName = fileName;
+            AudioSettings = settings;
+            GetAudioData();
+            if (!loaded)
+            {
+                LoadAudio();
+            }
+        }
+
         public static Audio LoadPreviouslyLoadedSound(string fileLocation, string fileName)
         {
             return new Audio(fileLocation, fileName, true);
@@ -48,6 +63,10 @@ namespace Sightstone.Helper
         /// The name of the file (alias)
         /// </summary>
         public string FileName { get; }
+
+        public int FileLength { get; private set; }
+
+        public AudioSettings AudioSettings { get; }
         #endregion fileInfo
 
         #region DelegatesAndEvents
@@ -85,13 +104,42 @@ namespace Sightstone.Helper
                     break;
 
             }
-            mciSendString($"open {FileLocation} type waveaudio alias {file[0]}", null, 0, IntPtr.Zero);
+            mciSendString($"open {FileLocation} type waveaudio alias {FileName}", null, 0, IntPtr.Zero);
         }
 
         private void GetAudioData()
         {
+            var lengthBuf = new StringBuilder(32);
+            mciSendString("status wave length", lengthBuf, lengthBuf.Capacity, IntPtr.Zero);
+            int length = 0;
+            int.TryParse(lengthBuf.ToString(), out length);
+            FileLength = length;
+        }
+
+        private void Play()
+        {
             
         }
+
+        private void Pause()
+        {
+            
+        }
+
+        private void Stop()
+        {
+            
+        }
+
+        public void Dispose()
+        {
+            mciSendString($"cloase {FileLocation}", null, 0, IntPtr.Zero);
+        }
         #endregion mci
+    }
+
+    public class AudioSettings
+    {
+        
     }
 }

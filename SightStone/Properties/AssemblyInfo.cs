@@ -7,12 +7,12 @@ using System.Windows;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SightStone")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("Sightstone")]
+[assembly: AssemblyDescription("Standard version of sightstone")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SightStone")]
-[assembly: AssemblyCopyright("Copyright ©  2016")]
+[assembly: AssemblyCompany("SightstoneOfficial")]
+[assembly: AssemblyProduct("Sightstone")]
+[assembly: AssemblyCopyright("Copyright © SightstoneOfficial 2016")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
