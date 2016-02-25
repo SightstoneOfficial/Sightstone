@@ -91,10 +91,12 @@ namespace SightStone
 
             startupTasks.Apply(s => s());
             var settings = new Dictionary<string, object>
-{
-    { "Icon", new BitmapImage(new Uri("pack://application:,,,/Sightstone;component/Icon.ico")) },
-    { "ResizeMode", ResizeMode.NoResize }
-};
+            {
+                { "Icon", new BitmapImage(new Uri("pack://application:,,,/Sightstone;component/Icon.ico")) },
+                { "ResizeMode", ResizeMode.CanResize },
+                { "Width", 1200 },
+                { "Height", 850 }
+            };
 
             DisplayRootViewFor<IShell>(settings);
         }

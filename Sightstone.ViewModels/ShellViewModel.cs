@@ -1,19 +1,25 @@
-﻿using System.ComponentModel.Composition;
+﻿using System;
+using System.ComponentModel.Composition;
 using Caliburn.Micro;
 
 namespace Sightstone.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Screen, IShell
+    public class ShellViewModel : Conductor<object>
     {
+        public override void CanClose(Action<bool> callback)
+        {
+            
+            callback(false);
+        }
         public void Close()
         {
-            this.TryClose();
+            TryClose();
         }
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            this.DisplayName = "Sightstone";
+            DisplayName = "Sightstone";
         }
     }
 }
