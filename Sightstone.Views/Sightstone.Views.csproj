@@ -30,6 +30,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Caliburn.Micro, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.Core.2.0.2\lib\net45\Caliburn.Micro.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="Caliburn.Micro.Platform, Version=2.0.2.0, Culture=neutral, PublicKeyToken=8e5891231f2ed21f, processorArchitecture=MSIL">
+      <HintPath>..\packages\Caliburn.Micro.2.0.2\lib\net45\Caliburn.Micro.Platform.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Dragablz, Version=0.0.3.155, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\Dragablz.0.0.3.155\lib\net45\Dragablz.dll</HintPath>
       <Private>True</Private>
@@ -95,6 +103,26 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Icon.ico" />
+    <Content Include="ui\img\bar\alert.png" />
+    <Content Include="ui\img\bar\chat.png" />
+    <Content Include="ui\img\bar\contacts.png" />
+    <Content Include="ui\img\bar\plugin.png" />
+    <Content Include="ui\img\icons\ic_account_circle_black_36dp.png" />
+    <Content Include="ui\img\icons\ic_volume_up_48px-128.png" />
+    <Content Include="ui\img\icons\ic_vpn_key_36pt.png" />
+    <Content Include="ui\img\icons\Sightstone_black.png" />
+    <Content Include="ui\img\icons\Sightstone_black_s.png" />
+    <Content Include="ui\img\icons\sightstone_main_b.png" />
+    <Content Include="ui\img\icons\sightstone_main_w.png" />
+    <Content Include="ui\img\icons\Sightstone_white.png" />
+    <Content Include="ui\img\icons\Sightstone_white_s.png" />
+    <Content Include="ui\img\menubar\home.png" />
+    <Content Include="ui\img\menubar\logout.png" />
+    <Content Include="ui\img\menubar\plugins.png" />
+    <Content Include="ui\img\menubar\profile.png" />
+    <Content Include="ui\img\menubar\replays.png" />
+    <Content Include="ui\img\menubar\settings.png" />
+    <Content Include="ui\img\menubar\shop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

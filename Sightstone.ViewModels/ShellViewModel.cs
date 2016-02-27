@@ -1,24 +1,25 @@
 ﻿using System;
 using System.ComponentModel.Composition;
+using System.Diagnostics;
 using System.Windows;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
-using Sightstone.Views;
+using Sightstone.Core;
 
 namespace Sightstone.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Conductor<ShellView>
+    public class ShellViewModel : Conductor<IScreen>, IShell
     {
         [ImportingConstructor]
         public ShellViewModel(IWindowManager windowManager)
         {
-            
+            WindowData.WindowManager = windowManager;
         }
         public async override void CanClose(Action<bool> callback)
         {
-            var progressClose = await (Application.Current.MainWindow as MetroWindow).ShowMessageAsync("Quit", "Are you sure you want to quit?", MessageDialogStyle.AffirmativeAndNegative);
+            var progressClose = await WindowData.MainWindow.ShowMessageAsync("Quit", "Are you sure you want to quit?", MessageDialogStyle.AffirmativeAndNegative);
             if (progressClose == MessageDialogResult.Affirmative)
                 callback(true);
             callback(false);
@@ -31,6 +32,8 @@ namespace Sightstone.ViewModels
         {
             base.OnInitialize();
             DisplayName = "Sightstone";
+            WindowData.MainWindow = (Application.Current.MainWindow as MetroWindow);
+            ActivateItem(new LoginViewModel());
         }
     }
 }

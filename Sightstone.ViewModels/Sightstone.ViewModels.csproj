@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IShell.cs" />
+    <Compile Include="LoginViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShellViewModel.cs" />
   </ItemGroup>
@@ -89,6 +90,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Sightstone.Core\Sightstone.Core.csproj">
+      <Project>{171f6346-aaec-4d1d-9b11-0b70100b4cb2}</Project>
+      <Name>Sightstone.Core</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Sightstone.Views\Sightstone.Views.csproj">
       <Project>{ee5f1704-7f68-4265-94b3-fa27c0103ef6}</Project>
       <Name>Sightstone.Views</Name>
