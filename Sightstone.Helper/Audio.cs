@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
@@ -51,6 +52,8 @@ namespace Sightstone.Helper
         #endregion
 
         #region fileInfo
+        public static List<string> LoadedFiles { get; } = new List<string>();
+
         /// <summary>
         /// The location of the file
         /// </summary>
@@ -63,13 +66,18 @@ namespace Sightstone.Helper
 
         public int FileLength { get; private set; }
 
-        public AudioSettings AudioSettings { get; }
+        public AudioSettings AudioSettings { get; } = new AudioSettings();
+
+        private System.Timers.Timer _timer;
         #endregion fileInfo
 
         #region DelegatesAndEvents
         //OnFileFinishedPlaying?.Invoke(filename, filelocation);
         public event OnFileFinished OnFileFinishedPlaying;
         public delegate void OnFileFinished(string fileName, string fileLocation);
+
+        public event OnFileLoop OnFileLoopPlaying;
+        public delegate void OnFileLoop(string fileName, string fileLocation);
 
         public event OnFileStart OnFileStartPlaying;
         public delegate void OnFileStart(string fileName, string fileLocation);
@@ -87,9 +95,15 @@ namespace Sightstone.Helper
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string command, StringBuilder returnValue, int returnLength, IntPtr winHandle);
         
+        // ReSharper disable once InconsistentNaming
+        private static void mciSendString(string command)
+        {
+            mciSendString(command, null, 0, IntPtr.Zero);
+        }
 
         private void LoadAudio()
         {
+            LoadedFiles.Add(FileLocation);
             var file = FileName.Split('.');
             switch (file[1])
             {
@@ -101,7 +115,7 @@ namespace Sightstone.Helper
                     break;
 
             }
-            mciSendString($"open {FileLocation} type waveaudio alias {FileName}", null, 0, IntPtr.Zero);
+            mciSendString($"open {FileLocation} type waveaudio alias {FileName}");
         }
 
         private void GetAudioData()
@@ -111,23 +125,41 @@ namespace Sightstone.Helper
             int length;
             int.TryParse(lengthBuf.ToString(), out length);
             FileLength = length;
+            _timer = new System.Timers.Timer(FileLength);
         }
 
         public void Play()
         {
             OnFileStartPlaying?.Invoke(FileName, FileLocation);
             mciSendString($"play {FileName}", null, 0, IntPtr.Zero);
-            var finishTimer = new System.Timers.Timer(FileLength);
-            finishTimer.Elapsed += (sender, args) =>
+            _timer.AutoReset = true;
+            _timer.Elapsed += (sender, args) =>
             {
-                finishTimer.Stop();
-                OnFileFinishedPlaying?.Invoke(FileName, FileLocation);
+                if (!AudioSettings.LoopAudio || AudioSettings.LoopAmount == -1)
+                {
+                    _timer.Stop();
+                    OnFileFinishedPlaying?.Invoke(FileName, FileLocation);
+                }
+                else
+                {
+                    if (AudioSettings.LoopAmount <= 0)
+                    {
+                        OnFileFinishedPlaying?.Invoke(FileName, FileLocation);
+                    }
+                    else
+                    {
+                        OnFileLoopPlaying?.Invoke(FileName, FileLocation);
+                        AudioSettings.LoopAmount--;
+                        Play();
+                    }
+                }
             };
         }
 
         public void Pause()
         {
-            
+            mciSendString($"pause {FileName}");
+            _timer.Stop();
         }
 
         public void Stop()
@@ -138,12 +170,19 @@ namespace Sightstone.Helper
         public void Dispose()
         {
             mciSendString($"close {FileLocation}", null, 0, IntPtr.Zero);
+            _timer.Dispose();
         }
         #endregion mci
     }
 
     public class AudioSettings
     {
-        
+        public bool LoopAudio { get; set; } = false;
+
+        public int LoopAmount { get; set; } = -1;
+
+        public int StartTime { get; set; } = 0;
+
+        public int EndTime { get; set; } = 0;
     }
 }
