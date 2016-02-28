@@ -47,9 +47,7 @@ namespace SightStone
             Caliburn.Micro.ViewLocator.ConfigureTypeMappings(config);
             ViewModelLocator.ConfigureTypeMappings(config);
 
-            var catalog =
-                new AggregateCatalog(
-                    AssemblySource.Instance.Select(x => new AssemblyCatalog(x)).OfType<ComposablePartCatalog>());
+            var catalog = new AggregateCatalog(AssemblySource.Instance.Select(x => new AssemblyCatalog(x)));
 
             _container = new CompositionContainer(catalog);
 

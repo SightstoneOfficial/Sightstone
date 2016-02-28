@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Sightstone.Chat
 {
@@ -20,11 +16,11 @@ namespace Sightstone.Chat
 
         public MessageReceivedEventArgs(Contact sender, string messageId, string subject, string message, DateTime timestamp)
         {
-            this.Sender = sender;
-            this.MessageId = messageId;
-            this.Subject = subject;
-            this.Message = message;
-            this.Timestamp = timestamp;
+            Sender = sender;
+            MessageId = messageId;
+            Subject = subject;
+            Message = message;
+            Timestamp = timestamp;
         }
     }
 }

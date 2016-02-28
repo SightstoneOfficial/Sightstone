@@ -17,11 +17,11 @@ namespace Sightstone.Chat
         private const string CDataEnd = "]]>";
         private static readonly int CDataStartLength;
         private static readonly int CDataTotalLength;
-        public readonly __Chat Chat;
+        public readonly Chat SightstoneChat;
         private readonly XmppClientConnection _connection;
-        public readonly __Contacts Contacts;
-        public readonly __Muc Muc;
-        public readonly __Presence Presence;
+        public readonly Contacts SightstoneContacts;
+        public readonly Muc SightstoneMuc;
+        public readonly Presence SightstonePresence;
         private readonly Dictionary<string, Contact> _roster;
         public string Host;
         public string Password;
@@ -61,10 +61,10 @@ namespace Sightstone.Chat
             _connection.OnAuthError += ConnectiOnAuthError;
             _connection.OnError += ConnectiOnError;
             _connection.OnXmppConnectionStateChanged += ConnectiOnXmppConnectionStateChanged;
-            Chat = new __Chat(_connection);
-            Muc = new __Muc(_connection);
-            Contacts = new __Contacts(_connection);
-            Presence = new __Presence(_connection);
+            SightstoneChat = new Chat(_connection);
+            SightstoneMuc = new Muc(_connection);
+            SightstoneContacts = new Contacts(_connection);
+            SightstonePresence = new Presence(_connection);
             ConferenceServers = new List<string>();
         }
 
@@ -186,12 +186,12 @@ namespace Sightstone.Chat
             var internalPresences = contact.InternalPresences;
             if ((int) agsPresence.Type != -1)
             {
-                Presence presence;
+                Sightstone.Chat.Presence presence;
                 internalPresences.TryRemove(agsPresence.From, out presence);
             }
             else
             {
-                var orAdd = internalPresences.GetOrAdd(agsPresence.From, new Presence());
+                var orAdd = internalPresences.GetOrAdd(agsPresence.From, new Sightstone.Chat.Presence());
                 orAdd.Resource = agsPresence.From.Resource;
                 orAdd.PresenceType = GetPresenceType(agsPresence.Show);
                 orAdd.RawStatus = agsPresence.Status;
@@ -414,148 +414,151 @@ namespace Sightstone.Chat
         public event EventHandler<ContactChangedEventArgs> PresenceChanged;
         public event EventHandler<RosterReceivedEventArgs> RosterReceived;
         public event EventHandler<Exception> UnhandledException;
-
-        public class __Chat
+        
+        public class Chat
         {
-            private readonly XmppClientConnection connection;
+            private readonly XmppClientConnection _connection;
 
-            public __Chat(XmppClientConnection connection)
+            public Chat(XmppClientConnection connection)
             {
-                this.connection = connection;
+                _connection = connection;
             }
 
-            public void Chat(string jid, string message)
+            public void SendChat(string jid, string message)
             {
-                connection.Send(new Message(jid, MessageType.chat, message));
+                _connection.Send(new Message(jid, MessageType.chat, message));
             }
 
             public void GroupChat(string jid, string message)
             {
-                connection.Send(new Message(jid, MessageType.groupchat, message));
+                _connection.Send(new Message(jid, MessageType.groupchat, message));
             }
 
             public void Message(string jid, string subject, string message)
             {
-                connection.Send(new Message(jid, MessageType.normal, message, subject));
+                _connection.Send(new Message(jid, MessageType.normal, message, subject));
             }
         }
 
-        public class __Contacts
+        // ReSharper disable once InconsistentNaming
+        public class Contacts
         {
-            private readonly PresenceManager presence;
-            private readonly RosterManager roster;
+            private readonly PresenceManager _presence;
+            private readonly RosterManager _roster;
 
-            public __Contacts(XmppClientConnection connection)
+            public Contacts(XmppClientConnection connection)
             {
-                presence = new PresenceManager(connection);
-                roster = new RosterManager(connection);
+                _presence = new PresenceManager(connection);
+                _roster = new RosterManager(connection);
             }
 
             public void AcceptRequest(string jid, string nickname, string group)
             {
-                presence.ApproveSubscriptionRequest(jid);
+                _presence.ApproveSubscriptionRequest(jid);
                 Add(jid, nickname, group);
             }
 
             public void Add(string jid, string nickname, string group)
             {
-                presence.Subscribe(jid);
-                roster.AddRosterItem(jid, nickname, group);
+                _presence.Subscribe(jid);
+                _roster.AddRosterItem(jid, nickname, group);
             }
 
             public void DeclineRequest(string jid)
             {
-                presence.RefuseSubscriptionRequest(jid);
+                _presence.RefuseSubscriptionRequest(jid);
             }
 
             public void Delete(string jid)
             {
-                presence.Unsubscribe(jid);
-                roster.RemoveRosterItem(jid);
+                _presence.Unsubscribe(jid);
+                _roster.RemoveRosterItem(jid);
             }
 
             public void Update(string jid, string nickname, string group)
             {
-                roster.UpdateRosterItem(jid, nickname, group);
+                _roster.UpdateRosterItem(jid, nickname, group);
             }
 
             public void Update(string jid, string nickname, string[] groups)
             {
-                roster.UpdateRosterItem(jid, nickname, groups);
+                _roster.UpdateRosterItem(jid, nickname, groups);
             }
         }
 
-        public class __Muc
+        // ReSharper disable once InconsistentNaming
+        public class Muc
         {
-            private readonly XmppClientConnection connection;
-            private readonly MucManager muc;
+            private readonly XmppClientConnection _connection;
+            private readonly MucManager _muc;
 
-            public __Muc(XmppClientConnection connection)
+            public Muc(XmppClientConnection connection)
             {
-                this.connection = connection;
-                muc = new MucManager(connection);
+                _connection = connection;
+                _muc = new MucManager(connection);
             }
 
             public void DeclineInvite(string invitorJid, string roomJid)
             {
-                muc.Decline(invitorJid, roomJid);
+                _muc.Decline(invitorJid, roomJid);
             }
 
             public void DeclineInvite(string invitorJid, string roomJid, string reason)
             {
-                muc.Decline(invitorJid, roomJid, reason);
+                _muc.Decline(invitorJid, roomJid, reason);
             }
 
             public void Invite(string roomJid, string jid)
             {
-                muc.Invite(roomJid, jid);
+                _muc.Invite(roomJid, jid);
             }
 
             public void Invite(string roomJid, string jid, string reason)
             {
-                muc.Invite(roomJid, jid, reason);
+                _muc.Invite(roomJid, jid, reason);
             }
 
             public void Join(string roomJid)
             {
-                muc.JoinRoom(roomJid, connection.Username);
+                _muc.JoinRoom(roomJid, _connection.Username);
             }
 
             public void Join(string roomJid, string password)
             {
-                muc.JoinRoom(roomJid, connection.Username, password);
+                _muc.JoinRoom(roomJid, _connection.Username, password);
             }
 
             public void Leave(string roomJid)
             {
-                muc.LeaveRoom(roomJid, connection.Username);
+                _muc.LeaveRoom(roomJid, _connection.Username);
             }
         }
 
-        public class __Presence
+        // ReSharper disable once InconsistentNaming
+        public class Presence
         {
-            private readonly XmppClientConnection connection;
+            private readonly XmppClientConnection _connection;
 
-            public __Presence(XmppClientConnection connection)
+            public Presence(XmppClientConnection connection)
             {
-                this.connection = connection;
+                _connection = connection;
             }
 
             public string Message
             {
-                get { return connection.Status; }
-                set { connection.Status = value; }
+                get { return _connection.Status; }
+                set { _connection.Status = value; }
             }
 
             public PresenceType Status
             {
-                get { return GetPresenceType(connection.Show); }
-                set { connection.Show = GetShowType(value); }
+                get { return GetPresenceType(_connection.Show); }
+                set { _connection.Show = GetShowType(value); }
             }
 
             public void Post()
             {
-                connection.SendMyPresence();
+                _connection.SendMyPresence();
             }
         }
     }

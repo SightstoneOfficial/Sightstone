@@ -1,46 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml.Linq;
+﻿using System.Xml.Linq;
 using Newtonsoft.Json.Linq;
 
 namespace Sightstone.Chat
 {
     public static class ChatStatic
     {
-        public static ChatStatic.XmlStateTransformFunction XmlStateTransform;
+        public static XmlStateTransformFunction XmlStateTransform;
 
-        public static ChatStatic.JsonStateTransformFunction JsonStateTransform;
+        public static JsonStateTransformFunction JsonStateTransform;
 
-        public static ChatStatic.StringStateTransformFunction StringStateTransform;
+        public static StringStateTransformFunction StringStateTransform;
 
         internal static object ParseJsonState(JObject obj)
         {
-            if (ChatStatic.JsonStateTransform == null)
-            {
-                return null;
-            }
-            return ChatStatic.JsonStateTransform(obj);
+            return JsonStateTransform?.Invoke(obj);
         }
 
         internal static object ParseStringState(string str)
         {
-            if (ChatStatic.StringStateTransform == null)
-            {
-                return str;
-            }
-            return ChatStatic.StringStateTransform(str);
+            return StringStateTransform == null ? str : StringStateTransform(str);
         }
 
         internal static object ParseXmlState(XDocument document)
         {
-            if (ChatStatic.XmlStateTransform == null)
-            {
-                return null;
-            }
-            return ChatStatic.XmlStateTransform(document);
+            return XmlStateTransform?.Invoke(document);
         }
 
         public delegate object JsonStateTransformFunction(JObject obj);

@@ -10,8 +10,8 @@ namespace Sightstone.Chat
 
         public ContactChangedEventArgs(Contact contact, ContactChangeType type)
         {
-            this.Contact = contact;
-            this.ChangeType = type;
+            Contact = contact;
+            ChangeType = type;
         }
     }
 }

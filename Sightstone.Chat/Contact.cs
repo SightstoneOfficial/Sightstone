@@ -18,29 +18,14 @@ namespace Sightstone.Chat
 
         internal ConcurrentDictionary<string, Presence> InternalPresences;
 
-        public string BareJid
-        {
-            get
-            {
-                return (new JabberId(this.Jid)).Bare;
-            }
-            set
-            {
-            }
-        }
+        public string BareJid => (new JabberId(Jid)).Bare;
 
-        public Presence[] Presences
-        {
-            get
-            {
-                return this.InternalPresences.Values.ToArray<Presence>();
-            }
-        }
+        public Presence[] Presences => InternalPresences.Values.ToArray();
 
         public Contact()
         {
-            this.Groups = new string[0];
-            this.InternalPresences = new ConcurrentDictionary<string, Presence>(StringComparer.OrdinalIgnoreCase);
+            Groups = new string[0];
+            InternalPresences = new ConcurrentDictionary<string, Presence>(StringComparer.OrdinalIgnoreCase);
         }
     }
 }

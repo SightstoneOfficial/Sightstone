@@ -166,7 +166,7 @@
     <Compile Include="Riot\com\riotgames\team\stats\TeamStatSummary.cs" />
     <Compile Include="Riot\com\riotgames\team\TeamId.cs" />
     <Compile Include="Riot\com\riotgames\team\TeamInfo.cs" />
-    <Compile Include="Riot\RiotRtmpObject.cs" />
+    <Compile Include="Riot\IRiotRtmpObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\rtmp-sharp\rtmp-sharp.csproj">

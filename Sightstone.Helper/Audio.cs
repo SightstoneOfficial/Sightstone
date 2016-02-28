@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Sightstone.Helper
 {
@@ -111,29 +108,36 @@ namespace Sightstone.Helper
         {
             var lengthBuf = new StringBuilder(32);
             mciSendString("status wave length", lengthBuf, lengthBuf.Capacity, IntPtr.Zero);
-            int length = 0;
+            int length;
             int.TryParse(lengthBuf.ToString(), out length);
             FileLength = length;
         }
 
-        private void Play()
+        public void Play()
+        {
+            OnFileStartPlaying?.Invoke(FileName, FileLocation);
+            mciSendString($"play {FileName}", null, 0, IntPtr.Zero);
+            var finishTimer = new System.Timers.Timer(FileLength);
+            finishTimer.Elapsed += (sender, args) =>
+            {
+                finishTimer.Stop();
+                OnFileFinishedPlaying?.Invoke(FileName, FileLocation);
+            };
+        }
+
+        public void Pause()
         {
             
         }
 
-        private void Pause()
-        {
-            
-        }
-
-        private void Stop()
+        public void Stop()
         {
             
         }
 
         public void Dispose()
         {
-            mciSendString($"cloase {FileLocation}", null, 0, IntPtr.Zero);
+            mciSendString($"close {FileLocation}", null, 0, IntPtr.Zero);
         }
         #endregion mci
     }

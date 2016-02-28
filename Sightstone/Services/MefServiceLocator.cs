@@ -12,12 +12,12 @@ namespace SightStone.Services
         [ImportingConstructor]
         public MefServiceLocator(CompositionContainer compositionContainer)
         {
-            this._compositionContainer = compositionContainer;
+            _compositionContainer = compositionContainer;
         }
 
         public T GetInstance<T>() where T : class
         {
-            var instance = this._compositionContainer.GetExportedValue<T>();
+            var instance = _compositionContainer.GetExportedValue<T>();
             if (instance != null)
             {
                 return instance;

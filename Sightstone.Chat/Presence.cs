@@ -1,6 +1,5 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
-using System;
 using System.Xml.Linq;
 
 
@@ -17,18 +16,15 @@ namespace Sightstone.Chat
         [JsonIgnore]
         public string RawStatus;
 
-        public Presence()
-        {
-        }
-
         public void ParseState()
         {
             try
             {
-                this.ParseStateInternal(this.RawStatus);
+                ParseStateInternal(RawStatus);
             }
             catch
             {
+                // ignored
             }
         }
 
@@ -36,20 +32,20 @@ namespace Sightstone.Chat
         {
             if (string.IsNullOrEmpty(str))
             {
-                this.State = null;
+                State = null;
                 return;
             }
             if (str[0] == '{')
             {
-                this.State = ChatStatic.ParseJsonState(JObject.Parse(str));
+                State = ChatStatic.ParseJsonState(JObject.Parse(str));
                 return;
             }
             if (str[0] != '<' || str[str.Length - 1] != '>')
             {
-                this.State = ChatStatic.ParseStringState(str);
+                State = ChatStatic.ParseStringState(str);
                 return;
             }
-            this.State = ChatStatic.ParseXmlState(XDocument.Parse(str));
+            State = ChatStatic.ParseXmlState(XDocument.Parse(str));
         }
     }
 }
