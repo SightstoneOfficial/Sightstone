@@ -42,6 +42,7 @@ namespace Sightstone.Helper
             if (!loaded)
             {
                 LoadAudio();
+                
             }
         }
 
@@ -164,13 +165,14 @@ namespace Sightstone.Helper
 
         public void Stop()
         {
-            
+            mciSendString($"stop {FileName}");
         }
 
         public void Dispose()
         {
             mciSendString($"close {FileLocation}", null, 0, IntPtr.Zero);
             _timer.Dispose();
+
         }
         #endregion mci
     }
