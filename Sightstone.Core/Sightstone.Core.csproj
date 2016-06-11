@@ -86,7 +86,20 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Connection\Regions.cs" />
+    <Compile Include="Connection\BaseRegion.cs" />
+    <Compile Include="Connection\BR.cs" />
+    <Compile Include="Connection\CS.cs" />
+    <Compile Include="Connection\EUN.cs" />
+    <Compile Include="Connection\EUNE.cs" />
+    <Compile Include="Connection\EUW.cs" />
+    <Compile Include="Connection\KR.cs" />
+    <Compile Include="Connection\LAN.cs" />
+    <Compile Include="Connection\LAS.cs" />
+    <Compile Include="Connection\NA.cs" />
+    <Compile Include="Connection\OCE.cs" />
+    <Compile Include="Connection\PBE.cs" />
+    <Compile Include="Connection\RU.cs" />
+    <Compile Include="Connection\TR.cs" />
     <Compile Include="Languages\LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -147,6 +160,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Accounts\" />
+    <Folder Include="Connection\Garena\" />
     <Folder Include="Encryption\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

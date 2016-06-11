@@ -1,6 +1,4 @@
 ﻿namespace Sightstone.RiotConnect.Riot
 {
-    public interface IRiotRtmpObject
-    {
-    }
+    public interface IRiotRtmpObject { }
 }
