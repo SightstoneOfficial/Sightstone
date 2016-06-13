@@ -92,6 +92,14 @@
     <Compile Include="Connection\EUN.cs" />
     <Compile Include="Connection\EUNE.cs" />
     <Compile Include="Connection\EUW.cs" />
+    <Compile Include="Connection\Garena\ID.cs" />
+    <Compile Include="Connection\Garena\MY.cs" />
+    <Compile Include="Connection\Garena\PH.cs" />
+    <Compile Include="Connection\Garena\SG.cs" />
+    <Compile Include="Connection\Garena\SGMY.cs" />
+    <Compile Include="Connection\Garena\TH.cs" />
+    <Compile Include="Connection\Garena\TW.cs" />
+    <Compile Include="Connection\Garena\VN.cs" />
     <Compile Include="Connection\KR.cs" />
     <Compile Include="Connection\LAN.cs" />
     <Compile Include="Connection\LAS.cs" />
@@ -160,7 +168,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Accounts\" />
-    <Folder Include="Connection\Garena\" />
     <Folder Include="Encryption\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

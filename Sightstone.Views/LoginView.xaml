@@ -27,10 +27,10 @@
             </MediaElement>
 
         </Grid>
-        
+
         <!-- Floating Action Button -->
-        <Grid Panel.ZIndex="10" Margin="30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-            <Button Style="{StaticResource MaterialDesignFloatingActionDarkButton}" IsDefault="False">
+        <Grid Panel.ZIndex="10" Margin="30,30,30,30" HorizontalAlignment="Right" VerticalAlignment="Bottom">
+            <Button x:Name="AddAccount" Style="{StaticResource MaterialDesignFloatingActionDarkButton}" cal:Message.Attach="[Event Click] = [Action AddAccount($dataContext)]" IsDefault="False">
                 <Viewbox Width="24" Height="24">
                     <Label FontWeight="SemiBold">+</Label>
                 </Viewbox>
@@ -77,10 +77,10 @@
         </Grid>
 
         <!-- Card Template Start -->
-        <Grid x:Name="LoginGrid" Panel.ZIndex="1000" Visibility="Hidden">
+        <Grid x:Name="LoginGridIsVisible" Panel.ZIndex="1000" Visibility="Hidden">
             <!-- Visibility="Hidden"-->
-            <Grid Height="500" x:Name="HideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="30">
-                <wpf:Card UniformCornerRadius="3">
+            <Grid Height="412" x:Name="HideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
+                <wpf:Card UniformCornerRadius="3" Height="412">
                     <Grid>
                         <!-- Top Header / Button / Whatever you want -->
                         <Grid VerticalAlignment="Top" Height="41">
@@ -89,9 +89,8 @@
                         </Grid>
 
                         <!-- Content -->
-                        <Grid Margin="0,48,0,48">
+                        <Grid Margin="0,48,0,104">
                             <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
                                 <RowDefinition Height="Auto"/>
@@ -122,9 +121,8 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Source="/Sightstone.Views;component/ui\img\icons\ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
+                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
                                 <TextBox x:Name="LoginUsernameBox" controls:TextBoxHelper.Watermark="Username" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35" Grid.Column="1"/>
-                                <CheckBox Margin="0,8" Grid.Row="1" x:Name="RememberUsernameCheckbox" HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Remember Username" IsChecked="True" Grid.Column="1"/>
                             </Grid>
 
                             <!-- Password -->
@@ -137,14 +135,13 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Source="/Sightstone.Views;component/ui\img\icons\ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
-                                    <PasswordBox x:Name="LoginPasswordBox" controls:TextBoxHelper.Watermark="Password" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35"
+                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
+                                <PasswordBox x:Name="LoginPasswordBox" controls:TextBoxHelper.Watermark="Password" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35"
                                                  Grid.Row="0" Grid.Column="1"/>
-                                <CheckBox Margin="0,8" Grid.Row="1" x:Name="RememberPasswordCheckbox"  HorizontalAlignment="Left" VerticalAlignment="Bottom" Content="Remember Password" Grid.Column="1"/>
                             </Grid>
 
                             <CheckBox Grid.Row="3" x:Name="AutoLoginCheckBox" Margin="50,8,8,4" HorizontalAlignment="Left"
-                          VerticalAlignment="Top" Content="Auto-Login" />
+                          VerticalAlignment="Top" Content="Auto-Login" IsChecked="True"/>
                             <CheckBox Grid.Row="4" x:Name="invisibleLoginCheckBox" Margin="50,4,8,4" HorizontalAlignment="Left"
                           VerticalAlignment="Top" Content="Sign-in invisible" />
 
@@ -155,10 +152,6 @@
                             <CheckBox Grid.Row="6" x:Name="Video" Margin="50,4,8,8" HorizontalAlignment="Left"
                           VerticalAlignment="Bottom" Content="Disable Menu Animations"
                           IsChecked="False" />
-
-                            <Grid Grid.Row="7" Margin="50,8,8,0" Height="35" Width="290" HorizontalAlignment="Right" VerticalAlignment="Bottom">
-                                <TextBox x:Name="Version" controls:TextBoxHelper.Watermark="Client Version Override" HorizontalAlignment="Stretch" VerticalAlignment="Bottom" FontSize="16" Height="35"/>
-                            </Grid>
                         </Grid>
 
                         <!-- Bottom Footer / Button / Whatever you want -->
@@ -168,7 +161,7 @@
                                 <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
                             <Button x:Name="AddAccountButton" Content="Add Account" IsDefault="True" Height="40" Style="{StaticResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Stretch" Grid.Column="0" Panel.ZIndex="3"/>
-                            <Button x:Name="LoginButton" IsDefault="True" Height="40" HorizontalAlignment="Stretch" Grid.Column="1" Panel.ZIndex="3">Login</Button>
+                            <Button x:Name="AddAccountServer" IsDefault="True" Height="40" HorizontalAlignment="Stretch" Style="{StaticResource MaterialDesignRaisedAccentButton}" Background="BurlyWood" Grid.Column="1" Panel.ZIndex="3">Add to server</Button>
                         </Grid>
                     </Grid>
                 </wpf:Card>

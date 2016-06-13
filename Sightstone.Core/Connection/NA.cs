@@ -73,10 +73,5 @@ namespace Sightstone.Core.Connection
             get { return "spectator.na1.lol.riotgames.com:80"; }
             set { }
         }
-
-        public void NASqlite()
-        {
-            Client.sqlite = "gameStats_en_US.sqlite";
-        }
     }
 }

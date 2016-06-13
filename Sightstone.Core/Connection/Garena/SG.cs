@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace LegendaryClient.Logic.Region
+namespace Sightstone.Core.Connection
 {
     public sealed class SG : BaseRegion
     {

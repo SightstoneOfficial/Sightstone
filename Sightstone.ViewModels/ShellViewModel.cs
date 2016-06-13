@@ -10,7 +10,7 @@ using Sightstone.Core;
 namespace Sightstone.ViewModels
 {
     [Export(typeof(IShell))]
-    public class ShellViewModel : Conductor<IScreen>, IShell
+    public class ShellViewModel : Conductor<IScreen>.Collection.AllActive, IShell
     {
         [ImportingConstructor]
         public ShellViewModel(IWindowManager windowManager)
@@ -33,7 +33,9 @@ namespace Sightstone.ViewModels
             base.OnInitialize();
             DisplayName = "Sightstone";
             WindowData.MainWindow = (Application.Current.MainWindow as MetroWindow);
+            EnsureItem(new LoginViewModel());
             ActivateItem(new LoginViewModel());
+            
         }
     }
 }

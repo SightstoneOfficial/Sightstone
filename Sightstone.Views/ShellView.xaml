@@ -13,7 +13,13 @@
                       SaveWindowPosition="True"
                       WindowStartupLocation="CenterScreen"
                       mc:Ignorable="d">
-    <Grid>
-        <ContentControl x:Name="ActiveItem" />
+    <Grid ClipToBounds="True">
+        <ItemsControl ItemsSource="{Binding Path=Items}">
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <ContentControl cal:View.Model="{Binding}"/>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
     </Grid>
 </controls:MetroWindow>

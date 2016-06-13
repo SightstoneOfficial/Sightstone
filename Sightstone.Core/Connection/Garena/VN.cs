@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace LegendaryClient.Logic.Region.Garena
+namespace Sightstone.Core.Connection.Garena
 {
     public sealed class VN : BaseRegion
     {

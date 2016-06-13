@@ -10,6 +10,22 @@ namespace Sightstone.Core.Connection
             get { return "EUN"; }
         }
 
+        public override string Location
+        {
+            get { return null; }
+        }
+
+        public override bool Garena
+        {
+            get { return false; }
+        }
+
+        public override string SpectatorIpAddress
+        {
+            get { return "95.172.65.26"; }
+            set { }
+        }
+
         public override string InternalName
         {
             get { return "EUN1"; }
@@ -57,10 +73,6 @@ namespace Sightstone.Core.Connection
         {
             get { return new Uri("http://spectator.eu.lol.riotgames.com:8088/observer-mode/rest/"); }
         }
-
-        public override string SpectatorIpAddress
-        {
-            get { return "95.172.65.26"; }
-        }
+        
     }
 }
