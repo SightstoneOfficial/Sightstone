@@ -37,22 +37,6 @@
             </Button>
         </Grid>
 
-        <!-- Encrypt Box -->
-        <Grid x:Name="EncryptBox" VerticalAlignment="Center" HorizontalAlignment="Center" Panel.ZIndex="500">
-            <wpf:Card UniformCornerRadius="3">
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="300"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <PasswordBox x:Name="Encrypt" HorizontalAlignment="Center" VerticalAlignment="Center" MinWidth="300" Grid.Column="0" controls:TextBoxHelper.Watermark="Enter your Encryptionkey here" BorderThickness="0"/>
-                    <Button x:Name="EncryptCheck" cal:Message.Attach="[Event Click] = [Action Unlock($dataContext)]" Content="Unlock" HorizontalAlignment="Center" VerticalAlignment="Center" Height="27" Grid.Column="1"/>
-                </Grid>
-            </wpf:Card>
-        </Grid>
-
-
-
         <!-- Accounts -->
         <Grid Panel.ZIndex="10" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,10,10,75" Height="Auto" Width="Auto">
             <ListView x:Name="UserListView" Style="{x:Null}" Background="{x:Null}" Padding="0" BorderThickness="0" VerticalContentAlignment="Center" HorizontalContentAlignment="Center">
@@ -162,6 +146,93 @@
                             </Grid.ColumnDefinitions>
                             <Button x:Name="AddAccountButton" Content="Add Account" IsDefault="True" Height="40" Style="{StaticResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Stretch" Grid.Column="0" Panel.ZIndex="3"/>
                             <Button x:Name="AddAccountServer" IsDefault="True" Height="40" HorizontalAlignment="Stretch" Style="{StaticResource MaterialDesignRaisedAccentButton}" Background="BurlyWood" Grid.Column="1" Panel.ZIndex="3">Add to server</Button>
+                        </Grid>
+                    </Grid>
+                </wpf:Card>
+            </Grid>
+
+        </Grid>
+
+        <!-- Card Template Start -->
+        <Grid x:Name="SightstoneAccountGridIsVisible" Panel.ZIndex="999">
+            <!-- Visibility="Hidden"-->
+            <Grid Height="412" x:Name="SightstoneAccountHideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
+                <wpf:Card UniformCornerRadius="3" Height="412">
+                    <Grid>
+                        <!-- Top Header / Button / Whatever you want -->
+                        <Grid VerticalAlignment="Top" Height="41">
+                            <Button Height="40" VerticalAlignment="Top" Style="{DynamicResource MaterialDesignFlatButton}" VerticalContentAlignment="Center" FontSize="14" Content="Sightstone"/>
+                            <Border BorderThickness="0,0,0,1" BorderBrush="{StaticResource PrimaryHueLightBrush}"/>
+                        </Grid>
+
+                        <!-- Content -->
+                        <Grid Margin="0,48,0,104">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Region and Server -->
+                            <Grid Grid.Row="0" Margin="50,8,8,8" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="10"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <ComboBox x:Name="SightstoneRegionComboBox" Visibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectedIndex="3" Grid.Column="0" />
+                            </Grid>
+
+                            <!-- Username -->
+                            <Grid Grid.Row="1" Margin="10,8,8,0" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
+                                <TextBox x:Name="SightstoneLoginUsernameBox" controls:TextBoxHelper.Watermark="Username" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35" Grid.Column="1"/>
+                            </Grid>
+
+                            <!-- Password -->
+                            <Grid Grid.Row="2" Margin="10,8,8,4" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="40"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
+                                <PasswordBox x:Name="SightstoneLoginPasswordBox" controls:TextBoxHelper.Watermark="Password" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35"
+                                                 Grid.Row="0" Grid.Column="1"/>
+                            </Grid>
+
+
+                            <CheckBox Grid.Row="5" x:Name="Sound2" Margin="50,4,8,4" HorizontalAlignment="Left"
+                          VerticalAlignment="Bottom" Content="Disable Login Music"
+                          IsChecked="False" />
+                            <CheckBox Grid.Row="6" x:Name="Video2" Margin="50,4,8,8" HorizontalAlignment="Left"
+                          VerticalAlignment="Bottom" Content="Disable Menu Animations"
+                          IsChecked="False" />
+                        </Grid>
+
+                        <!-- Bottom Footer / Button / Whatever you want -->
+                        <Grid VerticalAlignment="Bottom">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Button x:Name="LoginLocal" Content="Login local" IsDefault="True" Height="40" Style="{StaticResource MaterialDesignRaisedAccentButton}" HorizontalAlignment="Stretch" Grid.Column="0" Panel.ZIndex="3"/>
+                            <Button x:Name="LoginServer" IsDefault="True" Height="40" HorizontalAlignment="Stretch" Style="{StaticResource MaterialDesignRaisedAccentButton}" Background="BurlyWood" Grid.Column="1" Panel.ZIndex="3">Login to server</Button>
                         </Grid>
                     </Grid>
                 </wpf:Card>

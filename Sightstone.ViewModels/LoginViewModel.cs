@@ -4,7 +4,7 @@ using Sightstone.Views;
 
 namespace Sightstone.ViewModels
 {
-    public class LoginViewModel : Conductor<LoginView>, IShell, IScreen
+    public class LoginViewModel : Screen, IShell
     {
         bool _LoginGridIsVisible;
         public bool LoginGridIsVisible {
