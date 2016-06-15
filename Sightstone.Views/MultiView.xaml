@@ -4,9 +4,17 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sightstone.Views"
+             xmlns:cal="http://www.caliburnproject.org"
              mc:Ignorable="d" d:DesignHeight="672"
             d:DesignWidth="1024">
     <Grid>
-            
+        <ContentControl x:Name="MainContainer" Height="632" HorizontalAlignment="Stretch" cal:View.Model="{Binding MainContainer}"
+                        VerticalAlignment="Bottom" Panel.ZIndex="3" Margin="0,0,0,40" />
+        <ContentControl x:Name="ChatContainer" Width="250" Margin="0,0,0,40" HorizontalAlignment="Right" cal:View.Model="{Binding ChatContainer}"
+                        VerticalAlignment="Stretch" Panel.ZIndex="3" Visibility="Hidden"/>
+        <ContentControl x:Name="StatusContainer" Height="40" HorizontalAlignment="Stretch" cal:View.Model="{Binding StatusContainer}"
+                        VerticalAlignment="Bottom" Panel.ZIndex="100" />
+        <ContentControl x:Name="NotificationContainer" Width="250" Margin="0,0,0,40" cal:View.Model="{Binding NotificationContainer}"
+                        HorizontalAlignment="Right" VerticalAlignment="Stretch" Panel.ZIndex="3" Visibility="Hidden"/>
     </Grid>
 </UserControl>

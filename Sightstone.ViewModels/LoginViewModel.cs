@@ -6,17 +6,17 @@ namespace Sightstone.ViewModels
 {
     public class LoginViewModel : Screen, IShell
     {
-        bool _LoginGridIsVisible = false;
+        bool _loginGridIsVisible;
         public bool LoginGridIsVisible {
             get
             {
-                return _LoginGridIsVisible;
+                return _loginGridIsVisible;
             }
             set
             {
-                if (_LoginGridIsVisible != value)
+                if (_loginGridIsVisible != value)
                 {
-                    _LoginGridIsVisible = value;
+                    _loginGridIsVisible = value;
                     NotifyOfPropertyChange(() => LoginGridIsVisible);
                 }
             }

@@ -20,7 +20,7 @@ namespace Sightstone.ViewModels
         {
             WindowData.WindowManager = windowManager;
         }
-        public async override void CanClose(Action<bool> callback)
+        public override async void CanClose(Action<bool> callback)
         {
             var progressClose = await WindowData.MainWindow.ShowMessageAsync("Quit", "Are you sure you want to quit?", MessageDialogStyle.AffirmativeAndNegative);
             if (progressClose == MessageDialogResult.Affirmative)
@@ -38,7 +38,7 @@ namespace Sightstone.ViewModels
             DisplayName = "Sightstone";
             EnsureItem(new LoginViewModel());
             ActivateItem(new LoginViewModel());
-            
+            ActivateItem(new MultiViewModel());
         }
     }
 }
