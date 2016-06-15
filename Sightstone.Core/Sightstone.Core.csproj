@@ -108,6 +108,7 @@
     <Compile Include="Connection\PBE.cs" />
     <Compile Include="Connection\RU.cs" />
     <Compile Include="Connection\TR.cs" />
+    <Compile Include="Encryption\AccountData.cs" />
     <Compile Include="Languages\LanguageManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
@@ -168,7 +169,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Accounts\" />
-    <Folder Include="Encryption\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

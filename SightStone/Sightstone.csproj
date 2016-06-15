@@ -107,6 +107,7 @@
       <DependentUpon>App.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Helpers\ValueTypeConverter.cs" />
     <Compile Include="Services\IServiceLocator.cs" />
     <Compile Include="Services\MefServiceLocator.cs" />
   </ItemGroup>
@@ -190,6 +191,28 @@
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Icon.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="ui\img\bar\alert.png" />
+    <Resource Include="ui\img\bar\chat.png" />
+    <Resource Include="ui\img\bar\contacts.png" />
+    <Resource Include="ui\img\bar\plugin.png" />
+    <Resource Include="ui\img\icons\ic_account_circle_black_36dp.png" />
+    <Resource Include="ui\img\icons\ic_volume_up_48px-128.png" />
+    <Resource Include="ui\img\icons\ic_vpn_key_36pt.png" />
+    <Resource Include="ui\img\icons\Sightstone_black.png" />
+    <Resource Include="ui\img\icons\Sightstone_black_s.png" />
+    <Resource Include="ui\img\icons\sightstone_main_b.png" />
+    <Resource Include="ui\img\icons\sightstone_main_w.png" />
+    <Resource Include="ui\img\icons\Sightstone_white.png" />
+    <Resource Include="ui\img\icons\Sightstone_white_s.png" />
+    <Resource Include="ui\img\menubar\home.png" />
+    <Resource Include="ui\img\menubar\logout.png" />
+    <Resource Include="ui\img\menubar\plugins.png" />
+    <Resource Include="ui\img\menubar\profile.png" />
+    <Resource Include="ui\img\menubar\replays.png" />
+    <Resource Include="ui\img\menubar\settings.png" />
+    <Resource Include="ui\img\menubar\shop.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

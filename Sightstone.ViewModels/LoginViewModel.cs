@@ -6,7 +6,7 @@ namespace Sightstone.ViewModels
 {
     public class LoginViewModel : Screen, IShell
     {
-        bool _LoginGridIsVisible;
+        bool _LoginGridIsVisible = false;
         public bool LoginGridIsVisible {
             get
             {
@@ -22,6 +22,7 @@ namespace Sightstone.ViewModels
             }
 
         }
+
         public void Unlock(EventArgs args)
         {
             

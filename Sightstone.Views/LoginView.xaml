@@ -61,7 +61,7 @@
         </Grid>
 
         <!-- Card Template Start -->
-        <Grid x:Name="LoginGridIsVisible" Panel.ZIndex="1000" Visibility="Hidden">
+        <Grid x:Name="LoginGridIsVisible" Panel.ZIndex="998" Visibility="Hidden">
             <!-- Visibility="Hidden"-->
             <Grid Height="412" x:Name="HideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
                 <wpf:Card UniformCornerRadius="3" Height="412">
@@ -105,7 +105,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
+                                <Image Panel.ZIndex="999" Source="pack://application:,,,/Sightstone;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
                                 <TextBox x:Name="LoginUsernameBox" controls:TextBoxHelper.Watermark="Username" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35" Grid.Column="1"/>
                             </Grid>
 
@@ -119,7 +119,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
+                                <Image Panel.ZIndex="999" Source="pack://application:,,,/Sightstone;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
                                 <PasswordBox x:Name="LoginPasswordBox" controls:TextBoxHelper.Watermark="Password" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35"
                                                  Grid.Row="0" Grid.Column="1"/>
                             </Grid>
@@ -155,9 +155,8 @@
 
         <!-- Card Template Start -->
         <Grid x:Name="SightstoneAccountGridIsVisible" Panel.ZIndex="999">
-            <!-- Visibility="Hidden"-->
-            <Grid Height="412" x:Name="SightstoneAccountHideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
-                <wpf:Card UniformCornerRadius="3" Height="412">
+            <Grid Height="300" x:Name="SightstoneAccountHideGrid" HorizontalAlignment="Center" VerticalAlignment="Center" Width="350">
+                <wpf:Card UniformCornerRadius="3" Height="300">
                     <Grid>
                         <!-- Top Header / Button / Whatever you want -->
                         <Grid VerticalAlignment="Top" Height="41">
@@ -177,16 +176,6 @@
                                 <RowDefinition Height="Auto"/>
                             </Grid.RowDefinitions>
 
-                            <!-- Region and Server -->
-                            <Grid Grid.Row="0" Margin="50,8,8,8" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="10"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <ComboBox x:Name="SightstoneRegionComboBox" Visibility="Hidden" HorizontalAlignment="Stretch" VerticalAlignment="Top" SelectedIndex="3" Grid.Column="0" />
-                            </Grid>
-
                             <!-- Username -->
                             <Grid Grid.Row="1" Margin="10,8,8,0" Height="Auto" HorizontalAlignment="Stretch" VerticalAlignment="Top">
                                 <Grid.ColumnDefinitions>
@@ -197,7 +186,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
+                                <Image Panel.ZIndex="999" Source="pack://application:,,,/Sightstone;component/ui/img/icons/ic_account_circle_black_36dp.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"></Image>
                                 <TextBox x:Name="SightstoneLoginUsernameBox" controls:TextBoxHelper.Watermark="Username" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35" Grid.Column="1"/>
                             </Grid>
 
@@ -211,7 +200,7 @@
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
                                 </Grid.RowDefinitions>
-                                <Image Panel.ZIndex="999" Source="/Sightstone.Views;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
+                                <Image Panel.ZIndex="999" Source="pack://application:,,,/Sightstone;component/ui/img/icons/ic_vpn_key_36pt.png" Margin="4" Height="27" Grid.Column="0" VerticalAlignment="Top"/>
                                 <PasswordBox x:Name="SightstoneLoginPasswordBox" controls:TextBoxHelper.Watermark="Password" HorizontalAlignment="Stretch" VerticalAlignment="Top" FontSize="16" Height="35"
                                                  Grid.Row="0" Grid.Column="1"/>
                             </Grid>
@@ -237,7 +226,6 @@
                     </Grid>
                 </wpf:Card>
             </Grid>
-
         </Grid>
 
         <controls:ProgressRing x:Name="LoggingInProgressRing" Margin="0,0,0,100" HorizontalAlignment="Center" VerticalAlignment="Center" IsActive="True" Visibility="Collapsed">

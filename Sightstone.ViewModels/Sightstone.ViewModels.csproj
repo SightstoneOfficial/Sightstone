@@ -99,6 +99,28 @@
       <Name>Sightstone.Views</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="ui\img\bar\alert.png" />
+    <Content Include="ui\img\bar\chat.png" />
+    <Content Include="ui\img\bar\contacts.png" />
+    <Content Include="ui\img\bar\plugin.png" />
+    <Content Include="ui\img\icons\ic_account_circle_black_36dp.png" />
+    <Content Include="ui\img\icons\ic_volume_up_48px-128.png" />
+    <Content Include="ui\img\icons\ic_vpn_key_36pt.png" />
+    <Content Include="ui\img\icons\Sightstone_black.png" />
+    <Content Include="ui\img\icons\Sightstone_black_s.png" />
+    <Content Include="ui\img\icons\sightstone_main_b.png" />
+    <Content Include="ui\img\icons\sightstone_main_w.png" />
+    <Content Include="ui\img\icons\Sightstone_white.png" />
+    <Content Include="ui\img\icons\Sightstone_white_s.png" />
+    <Content Include="ui\img\menubar\home.png" />
+    <Content Include="ui\img\menubar\logout.png" />
+    <Content Include="ui\img\menubar\plugins.png" />
+    <Content Include="ui\img\menubar\profile.png" />
+    <Content Include="ui\img\menubar\replays.png" />
+    <Content Include="ui\img\menubar\settings.png" />
+    <Content Include="ui\img\menubar\shop.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

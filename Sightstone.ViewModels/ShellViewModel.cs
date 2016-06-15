@@ -6,6 +6,9 @@ using Caliburn.Micro;
 using MahApps.Metro.Controls;
 using MahApps.Metro.Controls.Dialogs;
 using Sightstone.Core;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
+using System.Windows.Controls;
 
 namespace Sightstone.ViewModels
 {
@@ -31,8 +34,8 @@ namespace Sightstone.ViewModels
         protected override void OnInitialize()
         {
             base.OnInitialize();
-            DisplayName = "Sightstone";
             WindowData.MainWindow = (Application.Current.MainWindow as MetroWindow);
+            DisplayName = "Sightstone";
             EnsureItem(new LoginViewModel());
             ActivateItem(new LoginViewModel());
             
