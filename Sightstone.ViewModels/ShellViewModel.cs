@@ -20,6 +20,10 @@ namespace Sightstone.ViewModels
         {
             WindowData.WindowManager = windowManager;
         }
+        /// <summary>
+        /// Stops the user from closing the client
+        /// </summary>
+        /// <param name="callback">Tells if the window should be closed</param>
         public override async void CanClose(Action<bool> callback)
         {
             var progressClose = await WindowData.MainWindow.ShowMessageAsync("Quit", "Are you sure you want to quit?", MessageDialogStyle.AffirmativeAndNegative);
@@ -36,9 +40,7 @@ namespace Sightstone.ViewModels
             base.OnInitialize();
             WindowData.MainWindow = (Application.Current.MainWindow as MetroWindow);
             DisplayName = "Sightstone";
-            EnsureItem(new LoginViewModel());
             ActivateItem(new LoginViewModel());
-            ActivateItem(new MultiViewModel());
         }
     }
 }

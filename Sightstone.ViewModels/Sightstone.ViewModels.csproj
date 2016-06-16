@@ -81,6 +81,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AboutViewModel.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MultiViewModel.cs" />

@@ -13,7 +13,7 @@
         <ContentControl x:Name="ChatContainer" Width="250" Margin="0,0,0,40" HorizontalAlignment="Right" cal:View.Model="{Binding ChatContainer}"
                         VerticalAlignment="Stretch" Panel.ZIndex="3" Visibility="Hidden"/>
         <ContentControl x:Name="StatusContainer" Height="40" HorizontalAlignment="Stretch" cal:View.Model="{Binding StatusContainer}"
-                        VerticalAlignment="Bottom" Panel.ZIndex="100" />
+                        VerticalAlignment="Bottom" Panel.ZIndex="100" Background="#E563BCD8"/>
         <ContentControl x:Name="NotificationContainer" Width="250" Margin="0,0,0,40" cal:View.Model="{Binding NotificationContainer}"
                         HorizontalAlignment="Right" VerticalAlignment="Stretch" Panel.ZIndex="3" Visibility="Hidden"/>
     </Grid>

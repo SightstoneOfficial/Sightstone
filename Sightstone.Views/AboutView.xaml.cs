@@ -18,9 +18,9 @@ namespace Sightstone.Views
     /// <summary>
     /// Interaction logic for About.xaml
     /// </summary>
-    public partial class About : UserControl
+    public partial class AboutView : UserControl
     {
-        public About()
+        public AboutView()
         {
             InitializeComponent();
         }
