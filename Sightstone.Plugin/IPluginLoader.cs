@@ -1,6 +1,10 @@
-﻿namespace Sightstone.Plugin
+﻿using System.AddIn.Contract;
+using System.AddIn.Pipeline;
+
+namespace Sightstone.Plugin
 {
-    public interface IPluginLoader
+    [AddInContract]
+    public interface IPluginLoader : IContract
     {
         /// <summary>
         /// The name of the application
@@ -8,8 +12,13 @@
         string Name { get; }
 
         /// <summary>
+        /// Name of the Author
+        /// </summary>
+        string Author { get; }
+
+        /// <summary>
         /// Put the starting code in here
         /// </summary>
-        void Action();
+        void Main();
     }
 }

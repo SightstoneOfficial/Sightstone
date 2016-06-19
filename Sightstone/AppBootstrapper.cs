@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
 using System.ComponentModel.Composition.Primitives;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Windows;
 using System.Windows.Media.Imaging;
 using Caliburn.Micro;
+using Sightstone.Helpers;
 using Sightstone.ViewModels;
 using SightStone.Helpers;
 
@@ -38,7 +40,7 @@ namespace SightStone
         /// </summary>
         protected override void Configure()
         {
-            //Allow us to load views and viewmodels from different location
+            //Allow us to load views and view models from different location
             var config = new TypeMappingConfiguration
             {
                 DefaultSubNamespaceForViews = "Sightstone.Views",
@@ -95,7 +97,9 @@ namespace SightStone
                 { "Icon", new BitmapImage(new Uri("pack://application:,,,/Sightstone;component/Icon.ico")) },
                 { "ResizeMode", ResizeMode.CanResize },
                 { "Width", 1200 },
-                { "Height", 850 }
+                { "Height", 850 },
+                { "MinWidth", 900 },
+                {"MinHeight", 650 }
             };
 
             DisplayRootViewFor<IShell>(settings);

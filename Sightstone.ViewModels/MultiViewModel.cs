@@ -57,7 +57,8 @@ namespace Sightstone.ViewModels
         }
         public MultiViewModel()
         {
-            //MainContainer = new AboutViewModel();
+            MainContainer = new AboutViewModel();
+            MainContainer = new SettingsViewModel();
         }
     }
 }

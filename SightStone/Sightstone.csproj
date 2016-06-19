@@ -176,10 +176,6 @@
       <Project>{5d134f9d-2b1b-4ac9-8a5d-27ab70acb764}</Project>
       <Name>Sightstone.RiotConnect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sightstone.Plugin\Sightstone.Plugin.csproj">
-      <Project>{6377eb9a-2693-44d3-856a-1ae328314a45}</Project>
-      <Name>Sightstone.Plugin</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Sightstone.ViewModels\Sightstone.ViewModels.csproj">
       <Project>{95d47198-a97d-4270-92de-3df535fa89d1}</Project>
       <Name>Sightstone.ViewModels</Name>
