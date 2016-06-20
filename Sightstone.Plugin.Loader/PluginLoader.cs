@@ -4,6 +4,7 @@ using System.AddIn.Hosting;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Security;
 using System.Security.Permissions;
@@ -12,7 +13,7 @@ namespace Sightstone.Plugin.Loader
 {
     public class PluginLoader
     {
-        public PluginLoader(string[] args)
+        public PluginLoader()
         {
             var directoryInfo = new DirectoryInfo(Assembly.GetExecutingAssembly().Location);
             var addInRootPath = Path.Combine(directoryInfo.Parent.FullName, "Plugin");
@@ -44,11 +45,10 @@ namespace Sightstone.Plugin.Loader
 
         private static void DisplayTokens(Collection<AddInToken> tokens)
         {
-            for (int i = 0; i < tokens.Count; ++i)
+            foreach(var token in tokens)
             {
-                var token = tokens[i];
                 Console.WriteLine(
-                    $"({i}) {token.Name} - {token.AddInFullName}\t {token.AssemblyName}\t {token.Description}\t {token.Version}");
+                    $"{token.Name} - {token.AddInFullName}\t {token.AssemblyName}\t {token.Description}\t {token.Version}");
             }
         }
     }

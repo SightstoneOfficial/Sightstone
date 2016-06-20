@@ -40,7 +40,10 @@ namespace Sightstone.ViewModels
             base.OnInitialize();
             WindowData.MainWindow = (Application.Current.MainWindow as MetroWindow);
             DisplayName = "Sightstone";
-            ActivateItem(new LoginViewModel());
+            var login = new LoginViewModel();
+            ActivateItem(login);
+            DeactivateItem(login, true);
+            ActivateItem(new MultiViewModel());
         }
     }
 }

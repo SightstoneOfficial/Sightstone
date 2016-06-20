@@ -7,18 +7,20 @@ It is aimed to all sort of setups, letting you choose from the below four option
   * Sightstone Ultra Light
 
 # Goals
-  * Have a beautiful secure stunning client that preforms as well
-  * Ability to run on a Surface 3, 4gb tablet without latancy issues (which I dont have)
-  * Be less memory and cpu intensive
+  * Have a powerful, beautiful, secure, stunning, and easy to use client
+  * Ability to run on a Surface 3, 4gb tablet (which I don't have so hopefully one of you guys have one) without latency issues
+  * Be less memory and CPU intensive than Riot
   * Ability to use multiple UIs
+  * Ability to install or create plugins to enhance your client experience
 
+# TODO
+  * Get the client working
+  * 
 
 # Sightstone Plus
 Sightstone Plus comes extras feature not present in Sightstone (see below) such as:
-  * Allows you to link social media and dropbox for sharing of replays and screenshots
+  * Allows you to link social media for sharing of replays and screen-shots
   * Has a server to allow you to play and chat while away from home and everything will be recorded (Windows, Android, Windows Phone)
-
-
 
 # Sightstone
 Sightstone comes with a few extra features not present in the original client such as:
@@ -26,12 +28,13 @@ Sightstone comes with a few extra features not present in the original client su
   * Record your games automatically and store them
   * Change client theme and UI
   * Store various accounts safely
+  * Use the Sightstone Official Server
 
 # Sightstone Light
 As mentioned by its name, this is a light version of Sightstone. It has nothing but the original League of Legends client's functions.
 
 # Sightstone Ultra Light
-From the three options available this is the lightest version. It comes down to the basic functionality of the League of Legends Client by  removing non-essencial features like:
+From the three options available this is the lightest version. It comes down to the basic functionality of the League of Legends Client by  removing non-essential features like:
   * News
   * Custom games
   * Featured games

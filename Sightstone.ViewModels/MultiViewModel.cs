@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Timers;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Animation;
 using Caliburn.Micro;
 using Sightstone.Views;
 
@@ -55,10 +58,35 @@ namespace Sightstone.ViewModels
                 NotifyOfPropertyChange(() => _notificationContainer);
             }
         }
+
+        private Grid _moveGrid;
+        public Grid MoveGrid
+        {
+            get { return _moveGrid; }
+            set
+            {
+                _moveGrid = value;
+                NotifyOfPropertyChange(() => _moveGrid);
+            }
+        }
         public MultiViewModel()
         {
             MainContainer = new AboutViewModel();
             MainContainer = new SettingsViewModel();
+            SendNotification();
+        }
+
+        public void SendNotification()
+        {
+            var moveAnimation = new ThicknessAnimation(new Thickness(100, 5, 100, 0), TimeSpan.FromSeconds(2.25));
+            MoveGrid.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+
+            var timer = new Timer {Interval = TimeSpan.FromSeconds(20).Milliseconds};
+            timer.Elapsed += (o, e) =>
+            {
+                moveAnimation = new ThicknessAnimation(new Thickness(100, -55, 100, 0), TimeSpan.FromSeconds(2.25));
+                MoveGrid.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+            };
         }
     }
 }

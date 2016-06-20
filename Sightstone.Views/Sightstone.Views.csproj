@@ -85,6 +85,9 @@
     <Compile Include="AboutView.xaml.cs">
       <DependentUpon>AboutView.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\TopSlideUserView.xaml.cs">
+      <DependentUpon>TopSlideUserView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LoginView.xaml.cs">
       <DependentUpon>LoginView.xaml</DependentUpon>
     </Compile>
@@ -104,6 +107,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="AboutView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\TopSlideUserView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

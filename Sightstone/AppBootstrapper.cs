@@ -97,9 +97,9 @@ namespace SightStone
                 { "Icon", new BitmapImage(new Uri("pack://application:,,,/Sightstone;component/Icon.ico")) },
                 { "ResizeMode", ResizeMode.CanResize },
                 { "Width", 1200 },
-                { "Height", 850 },
+                { "Height", 750 },
                 { "MinWidth", 900 },
-                {"MinHeight", 650 }
+                { "MinHeight", 650 }
             };
 
             DisplayRootViewFor<IShell>(settings);
