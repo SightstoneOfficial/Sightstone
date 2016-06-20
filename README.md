@@ -6,6 +6,13 @@ It is aimed to all sort of setups, letting you choose from the below four option
   * Sightstone Light
   * Sightstone Ultra Light
 
+# Goals
+  * Have a beautiful secure stunning client that preforms as well
+  * Ability to run on a Surface 3, 4gb tablet without latancy issues (which I dont have)
+  * Be less memory and cpu intensive
+  * Ability to use multiple UIs
+
+
 # Sightstone Plus
 Sightstone Plus comes extras feature not present in Sightstone (see below) such as:
   * Allows you to link social media and dropbox for sharing of replays and screenshots
