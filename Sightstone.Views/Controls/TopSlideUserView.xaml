@@ -4,9 +4,15 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:Sightstone.Views.Controls"
+             xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
+             d:DesignHeight="50" d:DesignWidth="824">
     <Grid>
-            
+        <materialDesign:Card UniformCornerRadius="3" Height="50" Background="LightYellow" ClipToBounds="True">
+            <Grid>
+                <Label Content="Replay is still recording" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="804"/>
+                <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" Height="10" VerticalAlignment="Top" />
+            </Grid>
+        </materialDesign:Card>
     </Grid>
 </UserControl>

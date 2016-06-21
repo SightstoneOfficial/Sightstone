@@ -19,13 +19,6 @@
                         HorizontalAlignment="Right" VerticalAlignment="Stretch" Panel.ZIndex="3" Visibility="Hidden"/>
         
         <!--Used to send notifications, slide out from top. Hopefully looks a lot nicer-->
-        <Grid x:Name="MoveGrid" cal:View.Model="{Binding MoveGrid}" Margin="100,5,100,0" ZIndex="99" HorizontalAlignment="Center" VerticalAlignment="Top">
-            <wpf:Card UniformCornerRadius="3" Height="50" Background="LightYellow" ClipToBounds="True">
-                <Grid>
-                    <Label Content="Replay is still recording" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="10,10,0,0" Height="30" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Width="804"/>
-                    <ProgressBar IsIndeterminate="True" HorizontalAlignment="Stretch" Height="10" VerticalAlignment="Top" />
-                </Grid>
-            </wpf:Card>
-        </Grid>
+        <ContentControl x:Name="MoveContainer" Height="50" Width="824" cal:View.Model="{Binding MoveContainer}" Margin="100, -55, 100, 0" Panel.ZIndex="99" HorizontalAlignment="Center" VerticalAlignment="Top"/>
     </Grid>
 </UserControl>

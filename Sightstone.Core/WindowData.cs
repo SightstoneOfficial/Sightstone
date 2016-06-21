@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Threading;
 using Caliburn.Micro;
 using MahApps.Metro.Controls;
 
@@ -21,6 +22,11 @@ namespace Sightstone.Core
             MainWindow.Topmost = false; // important
             MainWindow.Focus(); // important
             return true;
+        }
+
+        public static void RunOnUIThread(System.Action function)
+        {
+            MainWindow.Dispatcher.BeginInvoke(DispatcherPriority.Input, function);
         }
     }
 }

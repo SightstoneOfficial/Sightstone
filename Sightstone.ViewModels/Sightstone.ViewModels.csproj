@@ -82,6 +82,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AboutViewModel.cs" />
+    <Compile Include="Controls\TopSlideUserViewModel.cs" />
     <Compile Include="IShell.cs" />
     <Compile Include="LoginViewModel.cs" />
     <Compile Include="MultiViewModel.cs" />
@@ -124,6 +125,7 @@
     <Content Include="ui\img\menubar\settings.png" />
     <Content Include="ui\img\menubar\shop.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

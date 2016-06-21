@@ -8,7 +8,10 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
 using Caliburn.Micro;
+using Sightstone.Core;
+using Sightstone.ViewModels.Controls;
 using Sightstone.Views;
+using Sightstone.Views.Controls;
 
 namespace Sightstone.ViewModels
 {
@@ -59,14 +62,14 @@ namespace Sightstone.ViewModels
             }
         }
 
-        private Grid _moveGrid;
-        public Grid MoveGrid
+        private Grid _moveContainer;
+        public Grid MoveContainer
         {
-            get { return _moveGrid; }
+            get { return _moveContainer; }
             set
             {
-                _moveGrid = value;
-                NotifyOfPropertyChange(() => _moveGrid);
+                _moveContainer = value;
+                NotifyOfPropertyChange(() => _moveContainer);
             }
         }
         public MultiViewModel()
@@ -78,15 +81,24 @@ namespace Sightstone.ViewModels
 
         public void SendNotification()
         {
-            var moveAnimation = new ThicknessAnimation(new Thickness(100, 5, 100, 0), TimeSpan.FromSeconds(2.25));
-            MoveGrid.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+            MoveContainer = new Grid();
+            MoveContainer.Children.Add(new ContentControl {Content = new TopSlideUserView()});
+            WindowData.RunOnUIThread(() =>
+            {
+                var moveAnimation = new ThicknessAnimation(new Thickness(100, 5, 100, 0), TimeSpan.FromSeconds(2.25));
+                MoveContainer.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+            });
 
-            var timer = new Timer {Interval = TimeSpan.FromSeconds(20).Milliseconds};
+            var timer = new Timer {Interval = 20000};
             timer.Elapsed += (o, e) =>
             {
-                moveAnimation = new ThicknessAnimation(new Thickness(100, -55, 100, 0), TimeSpan.FromSeconds(2.25));
-                MoveGrid.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+                WindowData.RunOnUIThread(() =>
+                {
+                    var moveAnimation = new ThicknessAnimation(new Thickness(100, -55, 100, 0), TimeSpan.FromSeconds(2.25));
+                    MoveContainer.BeginAnimation(FrameworkElement.MarginProperty, moveAnimation);
+                });
             };
+            timer.Start();
         }
     }
 }
