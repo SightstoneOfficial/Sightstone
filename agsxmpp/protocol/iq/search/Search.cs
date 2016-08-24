@@ -17,12 +17,9 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.x.data;
-
 using agsXMPP.Xml.Dom;
 
 //	Example 1. Requesting Search Fields
@@ -59,100 +56,66 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.search
 {
-	/// <summary>
-	/// http://www.jabber.org/jeps/jep-0055.html
-	/// </summary>
-	public class Search : Element
-	{
-		public Search()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.IQ_SEARCH;
-		}
+    /// <summary>
+    ///     http://www.jabber.org/jeps/jep-0055.html
+    /// </summary>
+    public class Search : Element
+    {
+        public Search()
+        {
+            TagName = "query";
+            Namespace = Uri.IQ_SEARCH;
+        }
 
-		public string Instructions
-		{
-			get
-			{
-				return GetTag("instructions");
-			}
-			set
-			{
-				SetTag("instructions", value);
-			}
-		}
+        public string Instructions
+        {
+            get { return GetTag("instructions"); }
+            set { SetTag("instructions", value); }
+        }
 
-		public string Firstname
-		{
-			get
-			{
-				return GetTag("first");
-			}
-			set
-			{
-				SetTag("first", value);
-			}
-		}
-		
-		public string Lastname
-		{
-			get
-			{
-				return GetTag("last");
-			}
-			set
-			{
-				SetTag("last", value);
-			}
-		}
+        public string Firstname
+        {
+            get { return GetTag("first"); }
+            set { SetTag("first", value); }
+        }
 
-		public string Nickname
-		{
-			get
-			{
-				return GetTag("nick");
-			}
-			set
-			{
-				SetTag("nick", value);
-			}
-		}
+        public string Lastname
+        {
+            get { return GetTag("last"); }
+            set { SetTag("last", value); }
+        }
 
-		public string Email
-		{
-			get
-			{
-				return GetTag("email");
-			}
-			set
-			{
-				SetTag("email", value);
-			}
-		}
+        public string Nickname
+        {
+            get { return GetTag("nick"); }
+            set { SetTag("nick", value); }
+        }
+
+        public string Email
+        {
+            get { return GetTag("email"); }
+            set { SetTag("email", value); }
+        }
 
         /// <summary>
-        /// The X-Data Element
+        ///     The X-Data Element
         /// </summary>
         public Data Data
         {
-            get
-            {
-                return SelectSingleElement(typeof(Data)) as Data;
-
-            }
+            get { return SelectSingleElement(typeof(Data)) as Data; }
             set
             {
                 if (HasTag(typeof(Data)))
                     RemoveTag(typeof(Data));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
-		/// <summary>
-		/// Retrieve the result items of a search
-		/// </summary>
+        /// <summary>
+        ///     Retrieve the result items of a search
+        /// </summary>
         //public ElementList GetItems
         //{
         //    get
@@ -160,19 +123,17 @@ namespace agsXMPP.protocol.iq.search
         //        return this.SelectElements("item");
         //    }			
         //}
-
         public SearchItem[] GetItems()
         {
-            ElementList nl = SelectElements(typeof(SearchItem));
-            SearchItem[] items = new SearchItem[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(SearchItem));
+            var items = new SearchItem[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                items[i] = (SearchItem)e;
+                items[i] = (SearchItem) e;
                 i++;
             }
             return items;
         }
-	
-	}
+    }
 }

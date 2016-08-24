@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Globalization;
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.rpc
@@ -11,11 +12,11 @@ namespace agsXMPP.protocol.iq.rpc
         {
             if (Params != null && Params.Count > 0)
             {
-                Element elParams = new Element("params");
+                var elParams = new Element("params");
 
-                for (int i = 0; i < Params.Count; i++)
+                for (var i = 0; i < Params.Count; i++)
                 {
-                    Element param = new Element("param");
+                    var param = new Element("param");
                     WriteValue(Params[i], param);
                     elParams.AddChild(param);
                 }
@@ -25,42 +26,42 @@ namespace agsXMPP.protocol.iq.rpc
         }
 
         /// <summary>
-        /// Writes a single value to a call
+        ///     Writes a single value to a call
         /// </summary>
         /// <param name="param"></param>
         /// <param name="parent"></param>
         public static void WriteValue(object param, Element parent)
         {
-            Element value = new Element("value");
+            var value = new Element("value");
 
-            if (param is String)
+            if (param is string)
             {
                 value.AddChild(new Element("string", param as string));
             }
-            else if (param is Int32)
+            else if (param is int)
             {
-                value.AddChild(new Element("i4", ((Int32)param).ToString()));
+                value.AddChild(new Element("i4", ((int) param).ToString()));
             }
-            else if (param is Double)
+            else if (param is double)
             {
-                NumberFormatInfo numberInfo = new NumberFormatInfo();
+                var numberInfo = new NumberFormatInfo();
                 numberInfo.NumberDecimalSeparator = ".";
                 //numberInfo.NumberGroupSeparator = ",";
-                value.AddChild(new Element("double", ((Double)param).ToString(numberInfo)));
+                value.AddChild(new Element("double", ((double) param).ToString(numberInfo)));
             }
-            else if (param is Boolean)
+            else if (param is bool)
             {
-                value.AddChild(new Element("boolean", ((bool)param) ? "1" : "0"));
+                value.AddChild(new Element("boolean", (bool) param ? "1" : "0"));
             }
             // XML-RPC dates are formatted in iso8601 standard, same as xmpp,
             else if (param is DateTime)
             {
-                value.AddChild(new Element("dateTime.iso8601", Util.Time.ISO_8601Date((DateTime)param)));
+                value.AddChild(new Element("dateTime.iso8601", Time.ISO_8601Date((DateTime) param)));
             }
             // byte arrays must be encoded in Base64 encoding
             else if (param is byte[])
             {
-                byte[] b = (byte[])param;
+                var b = (byte[]) param;
                 value.AddChild(new Element("base64", Convert.ToBase64String(b, 0, b.Length)));
             }
             // Arraylist maps to an XML-RPC array
@@ -73,12 +74,12 @@ namespace agsXMPP.protocol.iq.rpc
                 //        <value>  <string>three</string></value>  
                 //    </data> 
                 //</array>
-                Element array = new Element("array");
-                Element data = new Element("data");
+                var array = new Element("array");
+                var data = new Element("data");
 
-                ArrayList list = param as ArrayList;
+                var list = param as ArrayList;
 
-                for (int i = 0; i < list.Count; i++)
+                for (var i = 0; i < list.Count; i++)
                 {
                     WriteValue(list[i], data);
                 }
@@ -89,14 +90,14 @@ namespace agsXMPP.protocol.iq.rpc
             // java.util.Hashtable maps to an XML-RPC struct
             else if (param is Hashtable)
             {
-                Element elStruct = new Element("struct");
+                var elStruct = new Element("struct");
 
-                Hashtable ht = (Hashtable)param;
-                IEnumerator myEnumerator = ht.Keys.GetEnumerator();
+                var ht = (Hashtable) param;
+                var myEnumerator = ht.Keys.GetEnumerator();
                 while (myEnumerator.MoveNext())
                 {
-                    Element member = new Element("member");
-                    object key = myEnumerator.Current;
+                    var member = new Element("member");
+                    var key = myEnumerator.Current;
 
                     if (key != null)
                     {

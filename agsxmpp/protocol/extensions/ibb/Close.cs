@@ -19,11 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
-
 namespace agsXMPP.protocol.extensions.ibb
 {
     /*
@@ -31,25 +26,22 @@ namespace agsXMPP.protocol.extensions.ibb
     */
 
     /// <summary>
-    /// 
     /// </summary>
     public class Close : Base
     {
         /// <summary>
-        /// 
         /// </summary>
         public Close()
         {
-            this.TagName = "close";           
+            TagName = "close";
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sid"></param>
         public Close(string sid) : this()
         {
-            this.Sid = sid;            
-        }       
+            Sid = sid;
+        }
     }
 }

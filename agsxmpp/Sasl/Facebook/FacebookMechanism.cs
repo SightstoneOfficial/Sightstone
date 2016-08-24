@@ -18,21 +18,21 @@
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 using System;
 using System.Collections.Generic;
 using System.Text;
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.sasl;
+using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.Sasl.Facebook
 {
     public class FacebookMechanism : Mechanism
     {
-        private readonly string callId = new Random().Next().ToString();
         private const string VERSION = "1.0";
+        private readonly string callId = new Random().Next().ToString();
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="con"></param>
         public override void Init(XmppClientConnection con)
@@ -42,7 +42,6 @@ namespace agsXMPP.Sasl.Facebook
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="e"></param>
         public override void Parse(Node e)
@@ -50,11 +49,11 @@ namespace agsXMPP.Sasl.Facebook
             if (e is Challenge)
             {
                 var c = e as Challenge;
-                
-                byte[] bytes = Convert.FromBase64String(c.Value);
-                string msg = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
+
+                var bytes = Convert.FromBase64String(c.Value);
+                var msg = Encoding.UTF8.GetString(bytes, 0, bytes.Length);
                 var pairs = ParseMessage(msg);
-                string res = BuildResponse(pairs);
+                var res = BuildResponse(pairs);
 
                 XmppClientConnection.Send(new Response(res));
             }
@@ -67,9 +66,9 @@ namespace agsXMPP.Sasl.Facebook
             var str = msg.Split('&');
 
             var dict = new Dictionary<string, string>();
-            foreach (string s in str)
+            foreach (var s in str)
             {
-                int equalPos = s.IndexOf('=');
+                var equalPos = s.IndexOf('=');
 
                 var key = s.Substring(0, equalPos - 0);
                 var val = s.Substring(equalPos + 1);
@@ -108,7 +107,7 @@ namespace agsXMPP.Sasl.Facebook
 
             var extData = ExtentedData as FacebookExtendedData;
 
-            string res = "";
+            var res = "";
             res = res + "method=" + System.Uri.EscapeDataString(pairs["method"]);
             res = res + "&api_key=" + System.Uri.EscapeDataString(extData.ApiKey);
             res = res + "&access_token=" + System.Uri.EscapeDataString(extData.AccessToken);

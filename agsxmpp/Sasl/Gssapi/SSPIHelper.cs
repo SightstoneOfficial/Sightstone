@@ -13,7 +13,7 @@ namespace agsXMPP.Sasl.Gssapi
         SECBUFFER_PADDING = 9,
         SECBUFFER_STREAM = 10
     }
-   
+
     [StructLayout(LayoutKind.Sequential)]
     internal struct SecBuffer : IDisposable
     {
@@ -25,21 +25,21 @@ namespace agsXMPP.Sasl.Gssapi
         public SecBuffer(int bufferSize)
         {
             cbBuffer = bufferSize;
-            BufferType = (int)SecBufferType.SECBUFFER_TOKEN;
+            BufferType = (int) SecBufferType.SECBUFFER_TOKEN;
             pvBuffer = Marshal.AllocHGlobal(bufferSize);
         }
 
         public SecBuffer(byte[] secBufferBytes)
         {
             cbBuffer = secBufferBytes.Length;
-            BufferType = (int)SecBufferType.SECBUFFER_TOKEN;
+            BufferType = (int) SecBufferType.SECBUFFER_TOKEN;
             pvBuffer = Marshal.AllocHGlobal(cbBuffer);
             Marshal.Copy(secBufferBytes, 0, pvBuffer, cbBuffer);
         }
 
         public SecBuffer(byte[] secBufferBytes, SecBufferType bufferType)
         {
-            BufferType = (int)bufferType;
+            BufferType = (int) bufferType;
 
             if (secBufferBytes != null && secBufferBytes.Length != 0)
             {
@@ -74,30 +74,29 @@ namespace agsXMPP.Sasl.Gssapi
             Buffer = buffer;
             BufferType = bufferType;
         }
-    };
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SecBufferDesc : IDisposable
     {
-
         public int ulVersion;
         public int cBuffers;
         public IntPtr pBuffers; //Point to SecBuffer
 
         public SecBufferDesc(int bufferSize)
         {
-            ulVersion = (int)SecBufferType.SECBUFFER_VERSION;
+            ulVersion = (int) SecBufferType.SECBUFFER_VERSION;
             cBuffers = 1;
-            SecBuffer ThisSecBuffer = new SecBuffer(bufferSize);
+            var ThisSecBuffer = new SecBuffer(bufferSize);
             pBuffers = Marshal.AllocHGlobal(Marshal.SizeOf(ThisSecBuffer));
             Marshal.StructureToPtr(ThisSecBuffer, pBuffers, false);
         }
 
         public SecBufferDesc(byte[] secBufferBytes)
         {
-            ulVersion = (int)SecBufferType.SECBUFFER_VERSION;
+            ulVersion = (int) SecBufferType.SECBUFFER_VERSION;
             cBuffers = 1;
-            SecBuffer ThisSecBuffer = new SecBuffer(secBufferBytes);
+            var ThisSecBuffer = new SecBuffer(secBufferBytes);
             pBuffers = Marshal.AllocHGlobal(Marshal.SizeOf(ThisSecBuffer));
             Marshal.StructureToPtr(ThisSecBuffer, pBuffers, false);
         }
@@ -109,17 +108,17 @@ namespace agsXMPP.Sasl.Gssapi
                 throw new ArgumentException("secBufferBytesArray cannot be null or 0 length");
             }
 
-            ulVersion = (int)SecBufferType.SECBUFFER_VERSION;
+            ulVersion = (int) SecBufferType.SECBUFFER_VERSION;
             cBuffers = secBufferBytesArray.Length;
 
             //Allocate memory for SecBuffer Array....
-            pBuffers = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SecBuffer)) * cBuffers);
+            pBuffers = Marshal.AllocHGlobal(Marshal.SizeOf(typeof(SecBuffer))*cBuffers);
 
-            for (int Index = 0; Index < secBufferBytesArray.Length; Index++)
+            for (var Index = 0; Index < secBufferBytesArray.Length; Index++)
             {
                 //Super hack: Now allocate memory for the individual SecBuffers
                 //and just copy the bit values to the SecBuffer array!!!
-                SecBuffer ThisSecBuffer = new SecBuffer(secBufferBytesArray[Index].Buffer,
+                var ThisSecBuffer = new SecBuffer(secBufferBytesArray[Index].Buffer,
                     secBufferBytesArray[Index].BufferType);
 
                 //We will write out bits in the following order:
@@ -128,10 +127,10 @@ namespace agsXMPP.Sasl.Gssapi
                 //pvBuffer;
                 //Note: that we won't be releasing the memory allocated by ThisSecBuffer until we
                 //are disposed...
-                int CurrentOffset = Index * Marshal.SizeOf(typeof(SecBuffer));
+                var CurrentOffset = Index*Marshal.SizeOf(typeof(SecBuffer));
                 Marshal.WriteInt32(pBuffers, CurrentOffset, ThisSecBuffer.cbBuffer);
 
-                int length = CurrentOffset + Marshal.SizeOf(ThisSecBuffer.cbBuffer);
+                var length = CurrentOffset + Marshal.SizeOf(ThisSecBuffer.cbBuffer);
                 Marshal.WriteInt32(pBuffers, length, ThisSecBuffer.BufferType);
 
                 length = CurrentOffset + Marshal.SizeOf(ThisSecBuffer.cbBuffer) +
@@ -146,15 +145,15 @@ namespace agsXMPP.Sasl.Gssapi
             {
                 if (cBuffers == 1)
                 {
-                    SecBuffer ThisSecBuffer =
-                        (SecBuffer)Marshal.PtrToStructure(pBuffers, typeof(SecBuffer));
+                    var ThisSecBuffer =
+                        (SecBuffer) Marshal.PtrToStructure(pBuffers, typeof(SecBuffer));
                     ThisSecBuffer.Dispose();
                 }
                 else
                 {
                     // Since we aren't sending any messages using the kerberos encrypt/decrypt.
                     // The 1st buffer is going to be empty. We can skip it.
-                    for (int Index = 1; Index < cBuffers; Index++)
+                    for (var Index = 1; Index < cBuffers; Index++)
                     {
                         //The bits were written out the following order:
                         //int cbBuffer;
@@ -162,11 +161,11 @@ namespace agsXMPP.Sasl.Gssapi
                         //pvBuffer;
                         //What we need to do here is to grab a hold of the pvBuffer allocate by the individual
                         //SecBuffer and release it...
-                        int CurrentOffset = Index * Marshal.SizeOf(typeof(SecBuffer));
+                        var CurrentOffset = Index*Marshal.SizeOf(typeof(SecBuffer));
 
-                        int totalLength = CurrentOffset + Marshal.SizeOf(typeof(int)) +
+                        var totalLength = CurrentOffset + Marshal.SizeOf(typeof(int)) +
                                           Marshal.SizeOf(typeof(int));
-                        IntPtr SecBufferpvBuffer = Marshal.ReadIntPtr(pBuffers, totalLength);
+                        var SecBufferpvBuffer = Marshal.ReadIntPtr(pBuffers, totalLength);
                         Marshal.FreeHGlobal(SecBufferpvBuffer);
                     }
                 }
@@ -187,7 +186,7 @@ namespace agsXMPP.Sasl.Gssapi
 
             if (cBuffers == 1)
             {
-                SecBuffer ThisSecBuffer = (SecBuffer)Marshal.PtrToStructure(pBuffers, typeof(SecBuffer));
+                var ThisSecBuffer = (SecBuffer) Marshal.PtrToStructure(pBuffers, typeof(SecBuffer));
 
                 if (ThisSecBuffer.cbBuffer > 0)
                 {
@@ -197,16 +196,16 @@ namespace agsXMPP.Sasl.Gssapi
             }
             else
             {
-                int BytesToAllocate = 0;
+                var BytesToAllocate = 0;
 
-                for (int Index = 0; Index < cBuffers; Index++)
+                for (var Index = 0; Index < cBuffers; Index++)
                 {
                     //The bits were written out the following order:
                     //int cbBuffer;
                     //int BufferType;
                     //pvBuffer;
                     //What we need to do here calculate the total number of bytes we need to copy...
-                    int CurrentOffset = Index * Marshal.SizeOf(typeof(SecBuffer));
+                    var CurrentOffset = Index*Marshal.SizeOf(typeof(SecBuffer));
                     BytesToAllocate += Marshal.ReadInt32(pBuffers, CurrentOffset);
                 }
 
@@ -220,16 +219,16 @@ namespace agsXMPP.Sasl.Gssapi
                     //pvBuffer;
                     //Now iterate over the individual buffers and put them together into a
                     //byte array...
-                    int CurrentOffset = Index * Marshal.SizeOf(typeof(SecBuffer));
-                    int BytesToCopy = Marshal.ReadInt32(pBuffers, CurrentOffset);
-                    int length = CurrentOffset + Marshal.SizeOf(typeof(int)) + Marshal.SizeOf(typeof(int));
-                    IntPtr SecBufferpvBuffer = Marshal.ReadIntPtr(pBuffers, length);
+                    var CurrentOffset = Index*Marshal.SizeOf(typeof(SecBuffer));
+                    var BytesToCopy = Marshal.ReadInt32(pBuffers, CurrentOffset);
+                    var length = CurrentOffset + Marshal.SizeOf(typeof(int)) + Marshal.SizeOf(typeof(int));
+                    var SecBufferpvBuffer = Marshal.ReadIntPtr(pBuffers, length);
                     Marshal.Copy(SecBufferpvBuffer, Buffer, BufferIndex, BytesToCopy);
                     BufferIndex += BytesToCopy;
                 }
             }
 
-            return (Buffer);
+            return Buffer;
         }
     }
 
@@ -239,12 +238,13 @@ namespace agsXMPP.Sasl.Gssapi
     {
         public uint LowPart;
         public int HighPart;
+
         public SECURITY_INTEGER(int dummy)
         {
             LowPart = 0;
             HighPart = 0;
         }
-    };
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SECURITY_HANDLE
@@ -252,11 +252,12 @@ namespace agsXMPP.Sasl.Gssapi
         //both changed from uint - crucial for 64 bit platforms
         public IntPtr LowPart;
         public IntPtr HighPart;
+
         public SECURITY_HANDLE(int dummy)
         {
             LowPart = HighPart = IntPtr.Zero;
         }
-    };
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SecPkgContext_Sizes
@@ -265,7 +266,7 @@ namespace agsXMPP.Sasl.Gssapi
         public uint cbMaxSignature;
         public uint cbBlockSize;
         public uint cbSecurityTrailer;
-    };
+    }
 
     [StructLayout(LayoutKind.Sequential)]
     internal struct SEC_WINNT_AUTH_IDENTITY
@@ -291,13 +292,9 @@ namespace agsXMPP.Sasl.Gssapi
 
         public const uint SECQOP_WRAP_NO_ENCRYPT = 0x80000001;
 
-        const int SECPKG_CRED_OUTBOUND = 2;
+        private const int SECPKG_CRED_OUTBOUND = 2;
         private const int SECURITY_NETWORK_DREP = 0x0;
-        const int MAX_TOKEN_SIZE = 12288;
-        //For AcquireCredentialsHandle in 3er Parameter "fCredentialUse"
-
-        SECURITY_HANDLE _hOutboundCred = new SECURITY_HANDLE(0);
-        public SECURITY_HANDLE _hClientContext = new SECURITY_HANDLE(0);
+        private const int MAX_TOKEN_SIZE = 12288;
 
         public const int ISC_REQ_DELEGATE = 0x00000001;
         public const int ISC_REQ_MUTUAL_AUTH = 0x00000002;
@@ -326,97 +323,16 @@ namespace agsXMPP.Sasl.Gssapi
 
         public const int STANDARD_CONTEXT_ATTRIBUTES = ISC_REQ_MUTUAL_AUTH;
 
-        bool _bGotClientCredentials;
+        private readonly string _sRemotePrincipal = WindowsIdentity.GetCurrent().Name;
 
+        private bool _bGotClientCredentials;
+        public SECURITY_HANDLE _hClientContext = new SECURITY_HANDLE(0);
+        //For AcquireCredentialsHandle in 3er Parameter "fCredentialUse"
 
-        #region << dll imports >>
-        #region << AcquireCredentialsHandle >>
-        // http://msdn.microsoft.com/en-us/library/aa374712%28VS.85%29.aspx
-        [DllImport("secur32", CharSet = CharSet.Auto)]
-        static extern uint AcquireCredentialsHandle(
-            string pszPrincipal, //SEC_CHAR*
-            string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
-            int fCredentialUse,
-            IntPtr PAuthenticationID,//_LUID AuthenticationID,//pvLogonID, //PLUID
-            IntPtr pAuthData,//PVOID
-            IntPtr pGetKeyFn, //SEC_GET_KEY_FN
-            IntPtr pvGetKeyArgument, //PVOID
-            ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
-            ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
-        
-        #endregion
+        private SECURITY_HANDLE _hOutboundCred = new SECURITY_HANDLE(0);
 
-        #region << InitializeSecurityContext >>
-        // http://msdn.microsoft.com/en-us/library/aa375506%28VS.85%29.aspx
-        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern uint InitializeSecurityContext(
-            ref SECURITY_HANDLE phCredential,//PCredHandle
-            IntPtr phContext, //PCtxtHandle
-            string pszTargetName,
-            int fContextReq,
-            int Reserved1,
-            int TargetDataRep,
-            IntPtr pInput, //PSecBufferDesc SecBufferDesc
-            int Reserved2,
-            out SECURITY_HANDLE phNewContext, //PCtxtHandle
-            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
-            out uint pfContextAttr, //managed ulong == 64 bits!!!
-            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
+        private bool InitializeKerberosStage { get; set; } = true;
 
-        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
-        static extern uint InitializeSecurityContext(
-            ref SECURITY_HANDLE phCredential,//PCredHandle
-            ref SECURITY_HANDLE phContext, //PCtxtHandle
-            string pszTargetName,
-            int fContextReq,
-            int Reserved1,
-            int TargetDataRep,
-            ref SecBufferDesc SecBufferDesc, //PSecBufferDesc SecBufferDesc
-            int Reserved2,
-            out SECURITY_HANDLE phNewContext, //PCtxtHandle
-            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
-            out uint pfContextAttr, //managed ulong == 64 bits!!!
-            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
-        
-        #endregion
-
-        #region << QueryContextAttributes >>
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern int QueryContextAttributes(ref SECURITY_HANDLE phContext,
-                                                        uint ulAttribute,
-                                                        out SecPkgContext_Sizes pContextAttributes);
-        #endregion
-
-        #region << EncryptMessage >>
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern int EncryptMessage(ref SECURITY_HANDLE phContext,
-                                                uint fQOP,        //managed ulong == 64 bits!!!
-                                                ref SecBufferDesc pMessage,
-                                                uint MessageSeqNo);    //managed ulong == 64 bits!!!
-        #endregion
-
-        #region << DecryptMessage >>
-        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
-        public static extern int DecryptMessage(ref SECURITY_HANDLE phContext,
-                                                 ref SecBufferDesc pMessage,
-                                                 uint MessageSeqNo,
-                                                 out uint pfQOP);
-        #endregion
-        #endregion
-        
-        readonly string _sRemotePrincipal = WindowsIdentity.GetCurrent().Name;
-
-        #region << Constructors >>
-        public SSPIHelper()
-        {
-        }
-
-        public SSPIHelper(string sRemotePrincipal)
-        {
-            _sRemotePrincipal = sRemotePrincipal;
-        }
-        #endregion
-        
         public void Process(byte[] inToken, out byte[] outToken)
         {
             if (InitializeKerberosStage)
@@ -432,7 +348,7 @@ namespace agsXMPP.Sasl.Gssapi
 
                 DecryptMessage(0, inToken, out outToken);
 
-                inToken = new byte[] { 0x01, 0x00, 0x00, 0x00 };
+                inToken = new byte[] {0x01, 0x00, 0x00, 0x00};
                 EncryptMessage(inToken, out outToken);
             }
         }
@@ -441,14 +357,14 @@ namespace agsXMPP.Sasl.Gssapi
         {
             clientToken = null;
 
-            SECURITY_INTEGER ClientLifeTime = new SECURITY_INTEGER(0);
+            var ClientLifeTime = new SECURITY_INTEGER(0);
 
             if (!_bGotClientCredentials)
             {
-                uint returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
-                                                            IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
-                                                            ref _hOutboundCred, ref ClientLifeTime);
-                
+                var returnValue = AcquireCredentialsHandle(null, "Kerberos", SECPKG_CRED_OUTBOUND,
+                    IntPtr.Zero, IntPtr.Zero, IntPtr.Zero, IntPtr.Zero,
+                    ref _hOutboundCred, ref ClientLifeTime);
+
                 if (returnValue != SEC_E_OK)
                 {
                     throw new Exception("Couldn't acquire client credentials");
@@ -459,7 +375,7 @@ namespace agsXMPP.Sasl.Gssapi
 
             uint ss;
 
-            SecBufferDesc ClientToken = new SecBufferDesc(MAX_TOKEN_SIZE);
+            var ClientToken = new SecBufferDesc(MAX_TOKEN_SIZE);
 
             try
             {
@@ -479,11 +395,10 @@ namespace agsXMPP.Sasl.Gssapi
                         out ClientToken,
                         out ContextAttributes,
                         out ClientLifeTime);
-                    
                 }
                 else
                 {
-                    SecBufferDesc ServerToken = new SecBufferDesc(serverToken);
+                    var ServerToken = new SecBufferDesc(serverToken);
 
                     try
                     {
@@ -499,7 +414,6 @@ namespace agsXMPP.Sasl.Gssapi
                             out ClientToken,
                             out ContextAttributes,
                             out ClientLifeTime);
-                        
                     }
                     finally
                     {
@@ -526,42 +440,35 @@ namespace agsXMPP.Sasl.Gssapi
             InitializeKerberosStage = ss != SEC_E_OK;
         }
 
-        private bool bInitializeKerberosStage = true;
-        private bool InitializeKerberosStage
-        {
-            get { return bInitializeKerberosStage; }
-            set { bInitializeKerberosStage = value; }
-        }
-
         public void EncryptMessage(byte[] message, out byte[] encryptedBuffer)
         {
             encryptedBuffer = null;
 
-            SECURITY_HANDLE EncryptionContext = _hClientContext;
+            var EncryptionContext = _hClientContext;
 
             SecPkgContext_Sizes ContextSizes;
 
             if (QueryContextAttributes(ref EncryptionContext,
-                   SECPKG_ATTR_SIZES, out ContextSizes) != SEC_E_OK)
+                SECPKG_ATTR_SIZES, out ContextSizes) != SEC_E_OK)
             {
                 throw new Exception("QueryContextAttribute() failed!!!");
             }
 
-            MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
-                    {
-                        new MultipleSecBufferHelper(new byte[ContextSizes.cbSecurityTrailer],
-                                                    SecBufferType.SECBUFFER_TOKEN),
-                        new MultipleSecBufferHelper(message, SecBufferType.SECBUFFER_DATA),
-                        new MultipleSecBufferHelper(new byte[ContextSizes.cbBlockSize],
-                                                    SecBufferType.SECBUFFER_PADDING)
-                    };
+            MultipleSecBufferHelper[] ThisSecHelper =
+            {
+                new MultipleSecBufferHelper(new byte[ContextSizes.cbSecurityTrailer],
+                    SecBufferType.SECBUFFER_TOKEN),
+                new MultipleSecBufferHelper(message, SecBufferType.SECBUFFER_DATA),
+                new MultipleSecBufferHelper(new byte[ContextSizes.cbBlockSize],
+                    SecBufferType.SECBUFFER_PADDING)
+            };
 
-            SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
+            var DescBuffer = new SecBufferDesc(ThisSecHelper);
 
             try
             {
                 if (EncryptMessage(ref EncryptionContext,
-                        SECQOP_WRAP_NO_ENCRYPT, ref DescBuffer, 0) != SEC_E_OK)
+                    SECQOP_WRAP_NO_ENCRYPT, ref DescBuffer, 0) != SEC_E_OK)
                 {
                     throw new Exception("EncryptMessage() failed!!!");
                 }
@@ -578,23 +485,23 @@ namespace agsXMPP.Sasl.Gssapi
         {
             decryptedBuffer = null;
 
-            SECURITY_HANDLE DecryptionContext = _hClientContext;
+            var DecryptionContext = _hClientContext;
 
-            byte[] EncryptedMessage = new byte[messageLength];
+            var EncryptedMessage = new byte[messageLength];
             Array.Copy(encryptedBuffer, 0, EncryptedMessage, 0, messageLength);
 
-            int SecurityTrailerLength = encryptedBuffer.Length - messageLength;
+            var SecurityTrailerLength = encryptedBuffer.Length - messageLength;
 
-            byte[] SecurityTrailer = new byte[SecurityTrailerLength];
+            var SecurityTrailer = new byte[SecurityTrailerLength];
             Array.Copy(encryptedBuffer, messageLength, SecurityTrailer, 0, SecurityTrailerLength);
 
-            MultipleSecBufferHelper[] ThisSecHelper = new MultipleSecBufferHelper[]
-                    {
-                        new MultipleSecBufferHelper(EncryptedMessage, SecBufferType.SECBUFFER_DATA),
-                        new MultipleSecBufferHelper(SecurityTrailer, SecBufferType.SECBUFFER_STREAM)
-                    };
+            MultipleSecBufferHelper[] ThisSecHelper =
+            {
+                new MultipleSecBufferHelper(EncryptedMessage, SecBufferType.SECBUFFER_DATA),
+                new MultipleSecBufferHelper(SecurityTrailer, SecBufferType.SECBUFFER_STREAM)
+            };
 
-            SecBufferDesc DescBuffer = new SecBufferDesc(ThisSecHelper);
+            var DescBuffer = new SecBufferDesc(ThisSecHelper);
             try
             {
                 uint EncryptionQuality;
@@ -612,5 +519,103 @@ namespace agsXMPP.Sasl.Gssapi
                 DescBuffer.Dispose();
             }
         }
+
+        #region << dll imports >>
+
+        #region << AcquireCredentialsHandle >>
+
+        // http://msdn.microsoft.com/en-us/library/aa374712%28VS.85%29.aspx
+        [DllImport("secur32", CharSet = CharSet.Auto)]
+        private static extern uint AcquireCredentialsHandle(
+            string pszPrincipal, //SEC_CHAR*
+            string pszPackage, //SEC_CHAR* //"Kerberos","NTLM","Negotiative"
+            int fCredentialUse,
+            IntPtr PAuthenticationID, //_LUID AuthenticationID,//pvLogonID, //PLUID
+            IntPtr pAuthData, //PVOID
+            IntPtr pGetKeyFn, //SEC_GET_KEY_FN
+            IntPtr pvGetKeyArgument, //PVOID
+            ref SECURITY_HANDLE phCredential, //SecHandle //PCtxtHandle ref
+            ref SECURITY_INTEGER ptsExpiry); //PTimeStamp //TimeStamp ref
+
+        #endregion
+
+        #region << InitializeSecurityContext >>
+
+        // http://msdn.microsoft.com/en-us/library/aa375506%28VS.85%29.aspx
+        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern uint InitializeSecurityContext(
+            ref SECURITY_HANDLE phCredential, //PCredHandle
+            IntPtr phContext, //PCtxtHandle
+            string pszTargetName,
+            int fContextReq,
+            int Reserved1,
+            int TargetDataRep,
+            IntPtr pInput, //PSecBufferDesc SecBufferDesc
+            int Reserved2,
+            out SECURITY_HANDLE phNewContext, //PCtxtHandle
+            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
+            out uint pfContextAttr, //managed ulong == 64 bits!!!
+            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
+
+        [DllImport("secur32", CharSet = CharSet.Auto, SetLastError = true)]
+        private static extern uint InitializeSecurityContext(
+            ref SECURITY_HANDLE phCredential, //PCredHandle
+            ref SECURITY_HANDLE phContext, //PCtxtHandle
+            string pszTargetName,
+            int fContextReq,
+            int Reserved1,
+            int TargetDataRep,
+            ref SecBufferDesc SecBufferDesc, //PSecBufferDesc SecBufferDesc
+            int Reserved2,
+            out SECURITY_HANDLE phNewContext, //PCtxtHandle
+            out SecBufferDesc pOutput, //PSecBufferDesc SecBufferDesc
+            out uint pfContextAttr, //managed ulong == 64 bits!!!
+            out SECURITY_INTEGER ptsExpiry); //PTimeStamp
+
+        #endregion
+
+        #region << QueryContextAttributes >>
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int QueryContextAttributes(ref SECURITY_HANDLE phContext,
+            uint ulAttribute,
+            out SecPkgContext_Sizes pContextAttributes);
+
+        #endregion
+
+        #region << EncryptMessage >>
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int EncryptMessage(ref SECURITY_HANDLE phContext,
+            uint fQOP, //managed ulong == 64 bits!!!
+            ref SecBufferDesc pMessage,
+            uint MessageSeqNo); //managed ulong == 64 bits!!!
+
+        #endregion
+
+        #region << DecryptMessage >>
+
+        [DllImport("secur32.Dll", CharSet = CharSet.Auto, SetLastError = false)]
+        public static extern int DecryptMessage(ref SECURITY_HANDLE phContext,
+            ref SecBufferDesc pMessage,
+            uint MessageSeqNo,
+            out uint pfQOP);
+
+        #endregion
+
+        #endregion
+
+        #region << Constructors >>
+
+        public SSPIHelper()
+        {
+        }
+
+        public SSPIHelper(string sRemotePrincipal)
+        {
+            _sRemotePrincipal = sRemotePrincipal;
+        }
+
+        #endregion
     }
 }

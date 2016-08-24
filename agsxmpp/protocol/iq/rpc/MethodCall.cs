@@ -23,10 +23,9 @@ using System.Collections;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.rpc
-{    
-
+{
     /// <summary>
-    /// The methodCall element.     
+    ///     The methodCall element.
     /// </summary>
     public class MethodCall : Element
     {
@@ -42,35 +41,32 @@ namespace agsXMPP.protocol.iq.rpc
         */
 
         /// <summary>
-        /// 
         /// </summary>
         public MethodCall()
         {
-            TagName    = "methodCall";
-            Namespace  = Uri.IQ_RPC;
+            TagName = "methodCall";
+            Namespace = Uri.IQ_RPC;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="methodName"></param>
         /// <param name="Params"></param>
         public MethodCall(string methodName, ArrayList Params) : this()
         {
-            WriteCall(methodName, Params);            
+            WriteCall(methodName, Params);
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string MethodName
-		{
-			set	{ SetTag("methodName", value); }
+        {
+            set { SetTag("methodName", value); }
             get { return GetTag("methodName"); }
-		}
+        }
 
         /// <summary>
-        /// Write the functions call with params to this Element
+        ///     Write the functions call with params to this Element
         /// </summary>
         /// <param name="name"></param>
         /// <param name="Params"></param>
@@ -81,12 +77,11 @@ namespace agsXMPP.protocol.iq.rpc
             // remove this tag if exists, in case this function gets
             // calles multiple times by some guys
             RemoveTag("params");
-            
+
             var elParams = RpcHelper.WriteParams(Params);
 
             if (elParams != null)
                 AddChild(elParams);
         }
-        
     }
 }

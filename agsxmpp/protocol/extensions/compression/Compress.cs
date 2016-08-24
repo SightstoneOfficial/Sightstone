@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.compression
@@ -32,37 +29,36 @@ namespace agsXMPP.protocol.extensions.compression
 
     public class Compress : Element
     {
+        /// <summary>
+        ///     method/algorithm used to compressing the stream
+        /// </summary>
+        public CompressionMethod Method
+        {
+            set
+            {
+                if (value != CompressionMethod.Unknown)
+                    SetTag("method", value.ToString());
+            }
+            get { return (CompressionMethod) GetTagEnum("method", typeof(CompressionMethod)); }
+        }
+
         #region << Constructors >>
+
         public Compress()
         {
-            this.TagName = "compress";
-            this.Namespace = Uri.COMPRESS;
+            TagName = "compress";
+            Namespace = Uri.COMPRESS;
         }
 
         /// <summary>
-        /// Constructor with a given method/algorithm for Stream compression
+        ///     Constructor with a given method/algorithm for Stream compression
         /// </summary>
         /// <param name="method">method/algorithm used to compressing the stream</param>
         public Compress(CompressionMethod method) : this()
         {
-            this.Method = method;
+            Method = method;
         }
-        #endregion
 
-        /// <summary>
-        /// method/algorithm used to compressing the stream
-        /// </summary>
-        public CompressionMethod Method
-        {
-            set 
-            {
-                if (value != CompressionMethod.Unknown)
-					SetTag("method", value.ToString());  
-            }
-            get 
-            {
-                return (CompressionMethod) GetTagEnum("method", typeof(CompressionMethod));            
-            }
-        }
+        #endregion
     }
 }

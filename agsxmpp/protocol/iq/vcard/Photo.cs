@@ -17,63 +17,70 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 #if !CF
 using System;
 using System.IO;
+using System.Net;
+using agsXMPP.Xml.Dom;
 #if !SL
 using System.Drawing;
 using System.Drawing.Imaging;
 #endif
-using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.vcard
 {
-	/// <summary>
-	/// Vcard Photo
-	/// When you dont want System.Drawing in the Lib just remove the photo stuff
-	/// </summary>
-	public class Photo : Element
-	{
-		// <!-- Photograph property. Value is either a BASE64 encoded
-		// binary value or a URI to the external content. -->
-		// <!ELEMENT PHOTO ((TYPE, BINVAL) | EXTVAL)>	
-		#region << Constructors >>
-		public Photo()
-		{
-			this.TagName	= "PHOTO";
-			this.Namespace	= Uri.VCARD;
-		}
-#if !SL
-		public Photo(Image image, ImageFormat format) : this()
-		{
-			SetImage(image, format);
-		}
-#endif	
-		public Photo(string url) : this()
-		{
-			SetImage(url);
-		}
-		#endregion
-				
-		/// <summary>
-		/// The Media Type, Only available when BINVAL
-		/// </summary>
-		public string Type
-		{
-			//<TYPE>image</TYPE>
-			get { return GetTag("TYPE"); }
-			set { SetTag("TYPE", value); }
-		}
+    /// <summary>
+    ///     Vcard Photo
+    ///     When you dont want System.Drawing in the Lib just remove the photo stuff
+    /// </summary>
+    public class Photo : Element
+    {
+        /// <summary>
+        ///     The Media Type, Only available when BINVAL
+        /// </summary>
+        public string Type
+        {
+            //<TYPE>image</TYPE>
+            get { return GetTag("TYPE"); }
+            set { SetTag("TYPE", value); }
+        }
 
-		/// <summary>
-		/// Sets the URL of an external image
-		/// </summary>
-		/// <param name="url"></param>
-		public void SetImage(string url)
-		{
-			SetTag("EXTVAL", url);
-		}
+        /// <summary>
+        ///     Sets the URL of an external image
+        /// </summary>
+        /// <param name="url"></param>
+        public void SetImage(string url)
+        {
+            SetTag("EXTVAL", url);
+        }
+
+        // <!-- Photograph property. Value is either a BASE64 encoded
+        // binary value or a URI to the external content. -->
+        // <!ELEMENT PHOTO ((TYPE, BINVAL) | EXTVAL)>	
+
+        #region << Constructors >>
+
+        public Photo()
+        {
+            TagName = "PHOTO";
+            Namespace = Uri.VCARD;
+        }
+
+#if !SL
+        public Photo(Image image, ImageFormat format) : this()
+        {
+            SetImage(image, format);
+        }
+#endif
+
+        public Photo(string url) : this()
+        {
+            SetImage(url);
+        }
+
+        #endregion
 
         /*
 		/// <summary>
@@ -95,8 +102,8 @@ namespace agsXMPP.protocol.iq.vcard
 
             // 17.05.2006 
             // fixed GDI+ bug see also http://www.bobpowell.net/imagefileconvert.htm
-            string sType = "image";
-            
+            var sType = "image";
+
             if (format == ImageFormat.Jpeg)
                 sType = "image/jpeg";
             else if (format == ImageFormat.Png)
@@ -108,79 +115,78 @@ namespace agsXMPP.protocol.iq.vcard
                 sType = "image/tiff";
 #endif
 
-            SetTag("TYPE", sType);            
+            SetTag("TYPE", sType);
             //create temporary
-            Image temp = new Bitmap(image.Width, image.Height);            
+            Image temp = new Bitmap(image.Width, image.Height);
             //get graphics
-            Graphics g = Graphics.FromImage(temp);
-            
+            var g = Graphics.FromImage(temp);
+
             //copy image
             // i hope this overload of DrawImage works now on all Frameworks, also CF2
-            g.DrawImage(image, new Rectangle(0, 0, temp.Width, temp.Height), new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
+            g.DrawImage(image, new Rectangle(0, 0, temp.Width, temp.Height),
+                new Rectangle(0, 0, image.Width, image.Height), GraphicsUnit.Pixel);
             //g.DrawImage(image, 0, 0, image.Width, image.Height);
             g.Dispose();
 
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
             temp.Save(ms, format);
-            byte[] buf = ms.GetBuffer();
+            var buf = ms.GetBuffer();
             SetTagBase64("BINVAL", buf);
         }
 
         /// <summary>
-        /// returns the image format or null for unknown formats or TYPES
+        ///     returns the image format or null for unknown formats or TYPES
         /// </summary>
         public ImageFormat ImageFormat
         {
             get
             {
-                string sType = GetTag("TYPE");
+                var sType = GetTag("TYPE");
 
                 if (sType == "image/jpeg")
                     return ImageFormat.Jpeg;
-                else if (sType == "image/png")
+                if (sType == "image/png")
                     return ImageFormat.Png;
-                else if (sType == "image/gif")
+                if (sType == "image/gif")
                     return ImageFormat.Gif;
 #if!CF_2
-                else if (sType == "image/tiff")
+                if (sType == "image/tiff")
                     return ImageFormat.Tiff;
 #endif
-                else
-                    return null;
+                return null;
             }
         }
 
-		/// <summary>
-		/// gets or sets the from internal (binary) or external source
-		/// When external then it trys to get the image with a Webrequest
-		/// </summary>
-		public System.Drawing.Image Image
-		{
-			get
-			{
-				try
-				{
-					if (HasTag("BINVAL"))
-					{
-						byte[] pic = Convert.FromBase64String(GetTag("BINVAL"));
-						System.IO.MemoryStream ms = new System.IO.MemoryStream(pic, 0, pic.Length);
-						return new System.Drawing.Bitmap(ms);
-					}
-					else if (HasTag("EXTVAL"))
-					{
-						System.Net.WebRequest req = System.Net.WebRequest.Create(GetTag("EXTVAL"));
-						System.Net.WebResponse response = req.GetResponse();
-						return new System.Drawing.Bitmap(response.GetResponseStream());
-					}
-					else
-						return null;
-				}
-				catch
-				{
-					return null;
-				}
-			}
-			/*
+        /// <summary>
+        ///     gets or sets the from internal (binary) or external source
+        ///     When external then it trys to get the image with a Webrequest
+        /// </summary>
+        public Image Image
+        {
+            get
+            {
+                try
+                {
+                    if (HasTag("BINVAL"))
+                    {
+                        var pic = Convert.FromBase64String(GetTag("BINVAL"));
+                        var ms = new MemoryStream(pic, 0, pic.Length);
+                        return new Bitmap(ms);
+                    }
+                    if (HasTag("EXTVAL"))
+                    {
+                        var req = WebRequest.Create(GetTag("EXTVAL"));
+                        var response = req.GetResponse();
+                        return new Bitmap(response.GetResponseStream());
+                    }
+                    return null;
+                }
+                catch
+                {
+                    return null;
+                }
+            }
+            /*
             set
 			{
 				SetTag("TYPE", "image");
@@ -191,8 +197,9 @@ namespace agsXMPP.protocol.iq.vcard
 				SetTagBase64("BINVAL", buf);
 			}
             */
-		}
+        }
 #endif
     }
 }
+
 #endif

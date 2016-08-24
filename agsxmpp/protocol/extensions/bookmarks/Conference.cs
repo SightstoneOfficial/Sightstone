@@ -19,15 +19,13 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// One of the most common uses of bookmarks will likely be to bookmark 
-    /// conference rooms on various Jabber servers
+    ///     One of the most common uses of bookmarks will likely be to bookmark
+    ///     conference rooms on various Jabber servers
     /// </summary>
     public class Conference : Element
     {
@@ -45,21 +43,22 @@ namespace agsXMPP.protocol.extensions.bookmarks
                </query>
              </iq>   
          */
+
         public Conference()
         {
-            this.TagName    = "conference";
-            this.Namespace  = Uri.STORAGE_BOOKMARKS;   
+            TagName = "conference";
+            Namespace = Uri.STORAGE_BOOKMARKS;
         }
 
         public Conference(Jid jid, string name) : this()
         {
-            Jid     = jid;
-            Name    = name;
+            Jid = jid;
+            Name = name;
         }
 
-        public Conference(Jid jid, string name, string nickname) : this( jid, name)
+        public Conference(Jid jid, string name, string nickname) : this(jid, name)
         {
-            Nickname = nickname;            
+            Nickname = nickname;
         }
 
         public Conference(Jid jid, string name, string nickname, string password) : this(jid, name, nickname)
@@ -67,13 +66,14 @@ namespace agsXMPP.protocol.extensions.bookmarks
             Password = password;
         }
 
-        public Conference(Jid jid, string name, string nickname, string password, bool autojoin) : this(jid, name, nickname, password)
+        public Conference(Jid jid, string name, string nickname, string password, bool autojoin)
+            : this(jid, name, nickname, password)
         {
             AutoJoin = autojoin;
         }
 
         /// <summary>
-        /// A name/description for this bookmarked room
+        ///     A name/description for this bookmarked room
         /// </summary>
         public string Name
         {
@@ -82,7 +82,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Should the client join this room automatically after successfuil login?
+        ///     Should the client join this room automatically after successfuil login?
         /// </summary>
         public bool AutoJoin
         {
@@ -91,7 +91,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// The Jid of the bookmarked room
+        ///     The Jid of the bookmarked room
         /// </summary>
         public Jid Jid
         {
@@ -100,7 +100,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// The Nickname for this room
+        ///     The Nickname for this room
         /// </summary>
         public string Nickname
         {
@@ -109,7 +109,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// The password for password protected rooms
+        ///     The password for password protected rooms
         /// </summary>
         public string Password
         {

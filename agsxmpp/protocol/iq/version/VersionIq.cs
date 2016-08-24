@@ -17,44 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.version
-{	
-	/// <summary>
-	/// Summary description for VersionIq.
-	/// </summary>
-	public class VersionIq : IQ
-	{
-		private Version m_Version = new Version();
+{
+    /// <summary>
+    ///     Summary description for VersionIq.
+    /// </summary>
+    public class VersionIq : IQ
+    {
+        public VersionIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public VersionIq()
-		{		
-			base.Query = m_Version;
-			this.GenerateId();
-		}
+        public VersionIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public VersionIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public VersionIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public VersionIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public VersionIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public VersionIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Version Query
-		{
-			get { return m_Version;	}
-		}
-	}
+        public new Version Query { get; } = new Version();
+    }
 }

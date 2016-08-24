@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -41,27 +38,23 @@ namespace agsXMPP.protocol.extensions.html
     {
         public Html()
         {
-            this.TagName    = "html";
-            this.Namespace  = Uri.XHTML_IM;
+            TagName = "html";
+            Namespace = Uri.XHTML_IM;
         }
-        
+
         /// <summary>
-        /// The Body Element of the XHTML Message
+        ///     The Body Element of the XHTML Message
         /// </summary>
         public Body Body
         {
-            get
-            {
-                return SelectSingleElement(typeof(Body)) as Body;
-
-            }
+            get { return SelectSingleElement(typeof(Body)) as Body; }
             set
             {
                 if (HasTag(typeof(Body)))
                     RemoveTag(typeof(Body));
-                
+
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
     }

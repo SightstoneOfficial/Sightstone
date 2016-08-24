@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -30,7 +27,7 @@ namespace agsXMPP.protocol.extensions.pubsub
     {
         public PubSubAction()
         {
-            this.Namespace = Uri.PUBSUB;
+            Namespace = Uri.PUBSUB;
         }
 
         public string Node
@@ -41,10 +38,7 @@ namespace agsXMPP.protocol.extensions.pubsub
 
         public Type Type
         {
-            get
-            {
-                return (Type)GetAttributeEnum("type", typeof(Type));
-            }
+            get { return (Type) GetAttributeEnum("type", typeof(Type)); }
             set
             {
                 if (value == Type.NONE)

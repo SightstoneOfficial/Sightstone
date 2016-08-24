@@ -23,13 +23,13 @@ using System;
 
 namespace agsXMPP.Net
 {
-	/// <summary>
-	/// Summary description for PollingSocketException.
-	/// </summary>
-	public class PollSocketException : Exception
-	{
-		public PollSocketException(string msg) : base(msg)
-		{			
-		}
-	}
+    /// <summary>
+    ///     Summary description for PollingSocketException.
+    /// </summary>
+    public class PollSocketException : Exception
+    {
+        public PollSocketException(string msg) : base(msg)
+        {
+        }
+    }
 }

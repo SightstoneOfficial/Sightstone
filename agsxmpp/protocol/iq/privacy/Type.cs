@@ -17,29 +17,23 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.iq.privacy
 {
     public enum Type
     {
         NONE = -1,
-       
+
         /// <summary>
-        /// 
         /// </summary>
         jid,
 
         /// <summary>
-        /// 
         /// </summary>
         group,
 
         /// <summary>
-        /// 
         /// </summary>
         subscription
     }

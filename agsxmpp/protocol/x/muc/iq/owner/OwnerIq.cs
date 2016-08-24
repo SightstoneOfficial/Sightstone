@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
@@ -41,39 +39,30 @@ namespace agsXMPP.protocol.x.muc.iq.owner
     */
 
     /// <summary>
-    /// 
     /// </summary>
     public class OwnerIq : IQ
     {
-        private Owner m_Owner = new Owner();
-
         public OwnerIq()
         {
-            base.Query = m_Owner;
-            this.GenerateId();
+            base.Query = Query;
+            GenerateId();
         }
 
         public OwnerIq(IqType type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public OwnerIq(IqType type, Jid to) : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public OwnerIq(IqType type, Jid to, Jid from) : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public new Owner Query
-        {
-            get
-            {
-                return m_Owner;
-            }
-        }
+        public new Owner Query { get; } = new Owner();
     }
 }

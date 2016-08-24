@@ -17,63 +17,57 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
-using agsXMPP.protocol.iq.disco;
 
 namespace agsXMPP.protocol.iq.disco
 {
     public class DiscoManager
     {
-        private XmppClientConnection	xmppConnection	= null;
+        private readonly XmppClientConnection xmppConnection;
 
         /// <summary>
-        /// Constructor
+        ///     Constructor
         /// </summary>
         /// <param name="con"></param>
         public DiscoManager(XmppClientConnection con)
         {
             xmppConnection = con;
-            xmppConnection.OnIq += new IqHandler(OnIq);
+            xmppConnection.OnIq += OnIq;
         }
-
-        #region << Properties >>
-        private bool m_AutoAnswerDiscoInfoRequests = true;  
-
-        /// <summary>
-        /// Automatically answer DiscoInfo requests.
-        /// Set disco information (identties and features) in the DiscoInfo property object.        
-        /// </summary>
-        public bool AutoAnswerDiscoInfoRequests
-        {
-            get { return m_AutoAnswerDiscoInfoRequests; }
-            set { m_AutoAnswerDiscoInfoRequests = value; }
-        }
-        #endregion
 
         private void OnIq(object sender, IQ iq)
         {
             // DiscoInfo
-            if (m_AutoAnswerDiscoInfoRequests && iq.Query is DiscoInfo && iq.Type == IqType.get)
+            if (AutoAnswerDiscoInfoRequests && iq.Query is DiscoInfo && iq.Type == IqType.get)
                 ProcessDiscoInfo(iq);
         }
 
         private void ProcessDiscoInfo(IQ iq)
-        {            
-            IQ diiq = new IQ();
+        {
+            var diiq = new IQ();
             diiq.To = iq.From;
             diiq.Id = iq.Id;
             diiq.Type = IqType.result;
 
             diiq.Query = xmppConnection.DiscoInfo;
 
-            xmppConnection.Send(diiq);        
+            xmppConnection.Send(diiq);
         }
 
+        #region << Properties >>
+
+        /// <summary>
+        ///     Automatically answer DiscoInfo requests.
+        ///     Set disco information (identties and features) in the DiscoInfo property object.
+        /// </summary>
+        public bool AutoAnswerDiscoInfoRequests { get; set; } = true;
+
+        #endregion
+
         #region << Discover Info >>
+
         public void DiscoverInformation(Jid to)
         {
             DiscoverInformation(to, null, null, null, null);
@@ -128,6 +122,7 @@ namespace agsXMPP.protocol.iq.disco
         {
             DiscoverInformation(to, null, node, cb, cbArgs);
         }
+
         public void DiscoverInformation(Jid to, Jid from, string node, IqCB cb, object cbArgs)
         {
             /*
@@ -157,7 +152,7 @@ namespace agsXMPP.protocol.iq.disco
               </query>
             </iq>
             */
-            DiscoInfoIq discoIq = new DiscoInfoIq(IqType.get);
+            var discoIq = new DiscoInfoIq(IqType.get);
             discoIq.To = to;
 
             if (from != null)
@@ -165,12 +160,14 @@ namespace agsXMPP.protocol.iq.disco
 
             if (node != null && node.Length > 0)
                 discoIq.Query.Node = node;
-            
+
             xmppConnection.IqGrabber.SendIq(discoIq, cb, cbArgs);
         }
+
         #endregion
 
         #region << Discover Items >>
+
         public void DiscoverItems(Jid to)
         {
             DiscoverItems(to, null, null, null);
@@ -228,9 +225,9 @@ namespace agsXMPP.protocol.iq.disco
 
         public void DiscoverItems(Jid to, Jid from, string node, IqCB cb, object cbArgs)
         {
-            DiscoItemsIq discoIq = new DiscoItemsIq(IqType.get);
+            var discoIq = new DiscoItemsIq(IqType.get);
             discoIq.To = to;
-            
+
             if (from != null)
                 discoIq.From = from;
 
@@ -239,7 +236,7 @@ namespace agsXMPP.protocol.iq.disco
 
             xmppConnection.IqGrabber.SendIq(discoIq, cb, cbArgs);
         }
+
         #endregion
-                        
     }
 }

@@ -17,12 +17,9 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
-
 
 namespace agsXMPP.protocol.x.muc
 {
@@ -30,8 +27,8 @@ namespace agsXMPP.protocol.x.muc
     {
         public Actor()
         {
-            this.TagName    = "actor";
-            this.Namespace  = Uri.MUC_USER;
+            TagName = "actor";
+            Namespace = Uri.MUC_USER;
         }
 
         public Jid Jid

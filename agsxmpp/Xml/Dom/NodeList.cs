@@ -17,30 +17,30 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
 using System.Collections;
+
 namespace agsXMPP.Xml.Dom
 {
-	/// <summary>
-	/// 
-	/// </summary>	
-	public class NodeList : CollectionBase
+    /// <summary>
+    /// </summary>
+    public class NodeList : CollectionBase
     {
-		/// <summary>
-		/// Owner (Parent) of the ChildElement Collection
-		/// </summary>
-		private Node m_Owner		= null;
+        /// <summary>
+        ///     Owner (Parent) of the ChildElement Collection
+        /// </summary>
+        private readonly Node m_Owner;
 
-		public NodeList()
-		{			
-		}
+        public NodeList()
+        {
+        }
 
-		public NodeList(Node owner) 
-		{
-			m_Owner = owner;            
-		}
+        public NodeList(Node owner)
+        {
+            m_Owner = owner;
+        }
 
         public void Add(Node e)
         {
@@ -60,55 +60,55 @@ namespace agsXMPP.Xml.Dom
 
             List.Add(e);
         }
-	
-		// Method implementation from the CollectionBase class
-		public void Remove(int index)
-		{				
-			if (index > Count - 1 || index < 0) 
-			{
-				// Handle the error that occurs if the valid page index is       
-				// not supplied.    
-				// This exception will be written to the calling function             
-				throw new Exception("Index out of bounds");            
-			}        
-			List.RemoveAt(index);
-			RebuildIndex(index);
-		}
-	
-		public void Remove(Element e)
-		{
-			int idx = e.Index;
-			List.Remove(e);
-			RebuildIndex(idx);
-		}
-	
-		public Node Item(int index) 
-		{
-			return (Node) this.List[index];
-		}
+
+        // Method implementation from the CollectionBase class
+        public void Remove(int index)
+        {
+            if (index > Count - 1 || index < 0)
+            {
+                // Handle the error that occurs if the valid page index is       
+                // not supplied.    
+                // This exception will be written to the calling function             
+                throw new Exception("Index out of bounds");
+            }
+            List.RemoveAt(index);
+            RebuildIndex(index);
+        }
+
+        public void Remove(Element e)
+        {
+            var idx = e.Index;
+            List.Remove(e);
+            RebuildIndex(idx);
+        }
+
+        public Node Item(int index)
+        {
+            return (Node) List[index];
+        }
 
         public object[] ToArray()
         {
-            object[] ar = new object[this.List.Count];
-            for (int i = 0; i < this.List.Count; i++)
+            var ar = new object[List.Count];
+            for (var i = 0; i < List.Count; i++)
             {
-                ar[i] = this.List[i];
+                ar[i] = List[i];
             }
             return ar;
         }
 
-		internal void RebuildIndex()
-		{
+        internal void RebuildIndex()
+        {
             RebuildIndex(0);
-		}
+        }
 
-		internal void RebuildIndex(int start)
-		{
-			for (int i = start; i < Count; i++)
-			{
-                Node node = (Node) List[i];
-				node.m_Index = i;
-			}			
-		}       
+        internal void RebuildIndex(int start)
+        {
+            for (var i = start; i < Count; i++)
+            {
+                var node = (Node) List[i];
+                node.m_Index = i;
+            }
+        }
     }
 }

@@ -19,20 +19,18 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol
 {
-	/// <summary>
-	/// stream:stream Element
-	/// This is the first Element we receive from the server.
-	/// It encloses our whole xmpp session.
-	/// </summary>
-	public class Stream : Base.Stream
-	{
-		public Stream()
-		{			
-			this.Namespace	= Uri.STREAM;
-		}		
-	}
+    /// <summary>
+    ///     stream:stream Element
+    ///     This is the first Element we receive from the server.
+    ///     It encloses our whole xmpp session.
+    /// </summary>
+    public class Stream : Base.Stream
+    {
+        public Stream()
+        {
+            Namespace = Uri.STREAM;
+        }
+    }
 }

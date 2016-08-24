@@ -17,48 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.extensions.geoloc
 {
     /// <summary>
-    /// a GeoLoc InfoQuery
+    ///     a GeoLoc InfoQuery
     /// </summary>
     public class GeoLocIq : IQ
-    {       
-        private GeoLoc m_GeoLoc = new GeoLoc();
-
+    {
         public GeoLocIq()
         {
-            base.Query = m_GeoLoc;
-            this.GenerateId();
+            base.Query = Query;
+            GenerateId();
         }
 
         public GeoLocIq(IqType type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public GeoLocIq(IqType type, Jid to) : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public GeoLocIq(IqType type, Jid to, Jid from) : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public new GeoLoc Query
-        {
-            get
-            {
-                return m_GeoLoc;
-            }
-        }
-    }   
+        public new GeoLoc Query { get; } = new GeoLoc();
+    }
 }

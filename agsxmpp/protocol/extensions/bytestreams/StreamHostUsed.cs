@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bytestreams
@@ -38,45 +35,43 @@ namespace agsXMPP.protocol.extensions.bytestreams
     */
 
     /// <summary>
-    /// The <streamhost-used/> element indicates the StreamHost connected to. 
-    /// This element has a single attribute for the JID of the StreamHost to which the Target connected. 
-    /// This element MUST NOT contain any content node.
-    /// The "jid" attribute specifies the full JID of the StreamHost. 
-    /// This attribute MUST be present, and MUST be a valid JID for use with an &lt;iq/&gt;.
+    ///     The <streamhost-used /> element indicates the StreamHost connected to.
+    ///     This element has a single attribute for the JID of the StreamHost to which the Target connected.
+    ///     This element MUST NOT contain any content node.
+    ///     The "jid" attribute specifies the full JID of the StreamHost.
+    ///     This attribute MUST be present, and MUST be a valid JID for use with an &lt;iq/&gt;.
     /// </summary>
     public class StreamHostUsed : Element
     {
         public StreamHostUsed()
         {
-            this.TagName    = "streamhost-used";
-            this.Namespace  = Uri.BYTESTREAMS;
+            TagName = "streamhost-used";
+            Namespace = Uri.BYTESTREAMS;
         }
-        
+
         public StreamHostUsed(Jid jid) : this()
         {
             Jid = jid;
-        }        
+        }
 
         /// <summary>
-        /// Jid of the streamhost
+        ///     Jid of the streamhost
         /// </summary>
         public Jid Jid
-		{
-			get 
-			{ 
-				if (HasAttribute("jid"))
-					return new Jid(this.GetAttribute("jid"));
-				else
-					return null;
-			}
-			set 
-			{ 
-				if (value!=null)
-					this.SetAttribute("jid", value.ToString());
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
                 else
                     RemoveAttribute("jid");
-			}
-		}
-        
+            }
+        }
     }
 }

@@ -21,20 +21,19 @@
 
 namespace agsXMPP.Xml.Dom
 {
-	/// <summary>
-	/// Summary description for Comment.
-	/// </summary>
-	public class Comment : Node
-	{
-		public Comment()
-		{
-			NodeType = NodeType.Comment;
-		}
-		
-		public Comment(string text) : this()
-		{
-			Value = text;
-		}
-	}
-	
+    /// <summary>
+    ///     Summary description for Comment.
+    /// </summary>
+    public class Comment : Node
+    {
+        public Comment()
+        {
+            NodeType = NodeType.Comment;
+        }
+
+        public Comment(string text) : this()
+        {
+            Value = text;
+        }
+    }
 }

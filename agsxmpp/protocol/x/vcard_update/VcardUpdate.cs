@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.vcard_update
@@ -33,21 +30,21 @@ namespace agsXMPP.protocol.x.vcard_update
           </x>
         </presence>
     */
+
     public class VcardUpdate : Element
     {
-
         /// <summary>
-        /// Initializes a new instance of the <see cref="VcardUpdate"/> class.
+        ///     Initializes a new instance of the <see cref="VcardUpdate" /> class.
         /// </summary>
         public VcardUpdate()
         {
-            this.TagName    = "x";
-            this.Namespace  = Uri.VCARD_UPDATE;
+            TagName = "x";
+            Namespace = Uri.VCARD_UPDATE;
         }
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="VcardUpdate"/> class.
+        ///     Initializes a new instance of the <see cref="VcardUpdate" /> class.
         /// </summary>
         /// <param name="photo">The photo.</param>
         public VcardUpdate(string photo) : this()
@@ -56,12 +53,16 @@ namespace agsXMPP.protocol.x.vcard_update
         }
 
         /// <summary>
-        /// SHA1 hash of the avatar image data
-        /// <para>if no image/avatar should be advertised, or other clients should be forced
-        /// to remove the image set it to a empty string value ("")</para>
-        /// <para>if this protocol is supported but you ae not ready o advertise a imaeg yet
-        /// set teh value to null.</para>
-        /// <para>Otherwise teh value must the SHA1 hash of the image data.</para>
+        ///     SHA1 hash of the avatar image data
+        ///     <para>
+        ///         if no image/avatar should be advertised, or other clients should be forced
+        ///         to remove the image set it to a empty string value ("")
+        ///     </para>
+        ///     <para>
+        ///         if this protocol is supported but you ae not ready o advertise a imaeg yet
+        ///         set teh value to null.
+        ///     </para>
+        ///     <para>Otherwise teh value must the SHA1 hash of the image data.</para>
         /// </summary>
         public string Photo
         {

@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -44,16 +42,18 @@ namespace agsXMPP.protocol.extensions.pubsub
     public class Affiliations : Element
     {
         #region << Consrtuctors >>
+
         public Affiliations()
         {
-            this.TagName    = "affiliations";
-            this.Namespace  = Uri.PUBSUB;
+            TagName = "affiliations";
+            Namespace = Uri.PUBSUB;
         }
+
         #endregion
 
         public Affiliation AddAffiliation()
         {
-            Affiliation aff = new Affiliation();
+            var aff = new Affiliation();
             AddChild(aff);
             return aff;
         }
@@ -67,9 +67,9 @@ namespace agsXMPP.protocol.extensions.pubsub
 
         public Affiliation[] GetAffiliations()
         {
-            ElementList nl = SelectElements(typeof(Affiliation));
-            Affiliation[] items = new Affiliation[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Affiliation));
+            var items = new Affiliation[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
                 items[i] = (Affiliation) e;

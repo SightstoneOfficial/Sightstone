@@ -17,18 +17,29 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.extensions.compression;
+using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.stream.feature.compression
 {
     public class Method : Element
     {
+        public CompressionMethod CompressionMethod
+        {
+            get
+            {
+#if CF
+				return (CompressionMethod) util.Enum.Parse(typeof(CompressionMethod), this.Value, true);
+#else
+                return (CompressionMethod) Enum.Parse(typeof(CompressionMethod), Value, true);
+#endif
+            }
+            set { Value = value.ToString(); }
+        }
+
         /*
          *  <compression xmlns='http://jabber.org/features/compress'>
          *      <method>zlib</method>
@@ -42,31 +53,20 @@ namespace agsXMPP.protocol.stream.feature.compression
          *      </compression>
          * </stream:features>
          */
+
         #region << Constructors >>
+
         public Method()
         {
-            this.TagName    = "method";
-            this.Namespace  = Uri.FEATURE_COMPRESS;
+            TagName = "method";
+            Namespace = Uri.FEATURE_COMPRESS;
         }
 
         public Method(CompressionMethod method) : this()
         {
-            this.Value      = method.ToString();
+            Value = method.ToString();
         }
+
         #endregion
-
-        public CompressionMethod CompressionMethod
-        {
-            get
-            {
-#if CF
-				return (CompressionMethod) util.Enum.Parse(typeof(CompressionMethod), this.Value, true);
-#else
-                return (CompressionMethod) Enum.Parse(typeof(CompressionMethod), this.Value, true);
-#endif
-            }
-            set { this.Value = value.ToString(); }
-        }
     }
-
 }

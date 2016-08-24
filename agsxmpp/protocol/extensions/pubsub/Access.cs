@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
@@ -36,9 +34,10 @@ namespace agsXMPP.protocol.extensions.pubsub
             </xs:simpleType>
         </xs:attribute>
     */
+
     public enum Access
     {
-        NONE        = -1,
+        NONE = -1,
         open,
         authorize,
         presence,

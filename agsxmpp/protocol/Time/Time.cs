@@ -27,7 +27,7 @@ namespace agsXMPP.protocol.time
     public class Time : Element
     {
         /// <summary>
-        /// XEP-0202: Entity Time
+        ///     XEP-0202: Entity Time
         /// </summary>
         public Time()
         {
@@ -36,7 +36,7 @@ namespace agsXMPP.protocol.time
         }
 
         /// <summary>
-        /// Gets or sets the UTC offset.
+        ///     Gets or sets the UTC offset.
         /// </summary>
         /// <value>The UTC offset.</value>
         public TimeSpan UtcOffset
@@ -62,17 +62,17 @@ namespace agsXMPP.protocol.time
         }
 
         /// <summary>
-        /// Gets or sets the date time.
+        ///     Gets or sets the date time.
         /// </summary>
         /// <value>The date time.</value>
         public DateTime DateTime
         {
-            get { return  Util.Time.ISO_8601Date(GetTag("utc")); }
+            get { return Util.Time.ISO_8601Date(GetTag("utc")); }
             set { SetTag("utc", Util.Time.ISO_8601Date(value)); }
         }
 
         /// <summary>
-        /// Sets the utc offset and time automatically.
+        ///     Sets the utc offset and time automatically.
         /// </summary>
         public void SetDateTimeNow()
         {
@@ -80,9 +80,9 @@ namespace agsXMPP.protocol.time
             DateTime = DateTime.Now;
         }
 
-        static string FormatOffset(TimeSpan ts)
+        private static string FormatOffset(TimeSpan ts)
         {
-            return String.Format("{0:00}:{1:00}", ts.Hours, Math.Abs(ts.Minutes));
+            return string.Format("{0:00}:{1:00}", ts.Hours, Math.Abs(ts.Minutes));
         }
     }
 }

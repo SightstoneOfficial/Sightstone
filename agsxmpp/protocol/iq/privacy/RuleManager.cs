@@ -24,12 +24,12 @@ using agsXMPP.protocol.iq.roster;
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// Helper class for creating rules for communication blocking
+    ///     Helper class for creating rules for communication blocking
     /// </summary>
     public class RuleManager
     {
         /// <summary>
-        /// Block stanzas by Jid
+        ///     Block stanzas by Jid
         /// </summary>
         /// <param name="jidToBlock"></param>
         /// <param name="order"></param>
@@ -39,10 +39,10 @@ namespace agsXMPP.protocol.iq.privacy
         {
             return new Item(Action.deny, order, Type.jid, jidToBlock.ToString(), stanza);
         }
-                
+
 
         /// <summary>
-        /// Block stanzas for a given roster group
+        ///     Block stanzas for a given roster group
         /// </summary>
         /// <param name="group"></param>
         /// <param name="order"></param>
@@ -52,9 +52,9 @@ namespace agsXMPP.protocol.iq.privacy
         {
             return new Item(Action.deny, order, Type.group, group, stanza);
         }
-                
+
         /// <summary>
-        /// Block stanzas by subscription type
+        ///     Block stanzas by subscription type
         /// </summary>
         /// <param name="subType"></param>
         /// <param name="order"></param>
@@ -66,7 +66,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Block globally (all users) the given stanzas
+        ///     Block globally (all users) the given stanzas
         /// </summary>
         /// <param name="order"></param>
         /// <param name="stanza">stanzas you want to block</param>
@@ -77,7 +77,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Allow stanzas by Jid
+        ///     Allow stanzas by Jid
         /// </summary>
         /// <param name="jidToBlock"></param>
         /// <param name="order"></param>
@@ -89,7 +89,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Allow stanzas for a given roster group
+        ///     Allow stanzas for a given roster group
         /// </summary>
         /// <param name="group"></param>
         /// <param name="order"></param>
@@ -101,7 +101,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Allow stanzas by subscription type
+        ///     Allow stanzas by subscription type
         /// </summary>
         /// <param name="subType"></param>
         /// <param name="order"></param>
@@ -111,6 +111,5 @@ namespace agsXMPP.protocol.iq.privacy
         {
             return new Item(Action.allow, order, Type.subscription, subType.ToString(), stanza);
         }
-        
     }
 }

@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bytestreams
@@ -30,8 +27,8 @@ namespace agsXMPP.protocol.extensions.bytestreams
     {
         public Activate()
         {
-            this.TagName    = "activate";
-            this.Namespace  = Uri.BYTESTREAMS;
+            TagName = "activate";
+            Namespace = Uri.BYTESTREAMS;
         }
 
         public Activate(Jid jid) : this()
@@ -40,7 +37,7 @@ namespace agsXMPP.protocol.extensions.bytestreams
         }
 
         /// <summary>
-        /// the full JID of the Target to activate
+        ///     the full JID of the Target to activate
         /// </summary>
         public Jid Jid
         {
@@ -48,8 +45,7 @@ namespace agsXMPP.protocol.extensions.bytestreams
             {
                 if (Value == null)
                     return null;
-                else
-                    return new Jid(Value);
+                return new Jid(Value);
             }
             set
             {

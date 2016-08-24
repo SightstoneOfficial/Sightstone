@@ -19,13 +19,11 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol.extensions.amp
 {
     public enum Condition
     {
-        Unknown         = -1,
+        Unknown = -1,
         Deliver,
         ExprireAt,
         MatchResource

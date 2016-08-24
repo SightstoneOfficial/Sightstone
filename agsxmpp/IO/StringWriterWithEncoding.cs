@@ -19,33 +19,23 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using System.IO;
 using System.Text;
 
 namespace agsXMPP.IO
 {
-	/// <summary>
-	/// This class is inherited from the StringWriter Class
-	/// The standard StringWriter class supports no encoding
-	/// With this Class we can set the Encoding of a StringWriter in the Constructor
-	/// </summary>
-	public class StringWriterWithEncoding : StringWriter
-	{
-		Encoding m_Encoding;
+    /// <summary>
+    ///     This class is inherited from the StringWriter Class
+    ///     The standard StringWriter class supports no encoding
+    ///     With this Class we can set the Encoding of a StringWriter in the Constructor
+    /// </summary>
+    public class StringWriterWithEncoding : StringWriter
+    {
+        public StringWriterWithEncoding(Encoding encoding)
+        {
+            Encoding = encoding;
+        }
 
-		public StringWriterWithEncoding (Encoding encoding)
-		{
-			this.m_Encoding = encoding;
-			
-		}
-
-		public override Encoding Encoding
-		{
-			get
-			{
-				return m_Encoding; 
-			}
-		}
-	}
+        public override Encoding Encoding { get; }
+    }
 }

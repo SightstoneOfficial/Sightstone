@@ -17,7 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -35,8 +35,8 @@ namespace agsXMPP.protocol.x.muc.iq.owner
     {
         public Owner()
         {
-            TagName    = "query";
-            Namespace  = Uri.MUC_OWNER;           
-        }        
+            TagName = "query";
+            Namespace = Uri.MUC_OWNER;
+        }
     }
 }

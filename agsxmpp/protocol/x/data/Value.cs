@@ -17,34 +17,31 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.data
 {
-	/// <summary>
-	/// Summary description for Value.
-	/// </summary>
-	public class Value : Element
-	{
-		public Value()
-		{
-			this.TagName	= "value";
-			this.Namespace	= Uri.X_DATA;
-		}
+    /// <summary>
+    ///     Summary description for Value.
+    /// </summary>
+    public class Value : Element
+    {
+        public Value()
+        {
+            TagName = "value";
+            Namespace = Uri.X_DATA;
+        }
 
-		public Value(string val) : this()
-		{
-            Value = val;			
-		}
+        public Value(string val) : this()
+        {
+            Value = val;
+        }
 
-		public Value(bool val) : this()
-		{
-			Value = val ? "1" : "0";
-		}
-		
-	}
+        public Value(bool val) : this()
+        {
+            Value = val ? "1" : "0";
+        }
+    }
 }

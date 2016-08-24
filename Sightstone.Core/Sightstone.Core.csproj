@@ -156,10 +156,6 @@
       <Project>{5d134f9d-2b1b-4ac9-8a5d-27ab70acb764}</Project>
       <Name>Sightstone.RiotConnect</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Sightstone.Views\Sightstone.Views.csproj">
-      <Project>{ee5f1704-7f68-4265-94b3-fa27c0103ef6}</Project>
-      <Name>Sightstone.Views</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Include="Languages\English.xaml">

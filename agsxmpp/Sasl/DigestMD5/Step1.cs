@@ -17,7 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
 
@@ -30,85 +30,13 @@ using System;
 //
 //realm="somerealm",nonce="OA6MG9tEQGm2hh",qop="auth",charset=utf-8,algorithm=md5-sess
 
-
 namespace agsXMPP.Sasl.DigestMD5
 {
-	/// <summary>
-	/// Summary description for Step1.
-	/// </summary>
-	public class Step1 : DigestMD5Mechanism // Mechanism 
-	{
-        /// <summary>
-        /// Exception occurs when we were unable to parse the challenge
-        /// </summary>
-        public class ChallengeParseException : Exception
-        {
-            public ChallengeParseException(string message) : base(message)
-            {
-            }
-        }
-
-		#region << Constructors >>
-		public Step1()
-		{
-			
-		}
-
-		public Step1(string message)
-		{
-			m_Message = message;
-			Parse(message);
-		}
-		#endregion
-		
-		#region << Properties >>
-		private string	m_Realm;		
-		private string	m_Nonce;		
-		private string	m_Qop;//			= "auth";		
-		private string	m_Charset		= "utf-8";		
-		private string	m_Algorithm;
-		
-		private string	m_Rspauth		= null;
-
-		private string	m_Message;
-
-		public string Realm
-		{
-			get { return m_Realm; }
-			set { m_Realm = value; }
-		}
-
-		public string Nonce
-		{
-			get { return m_Nonce; }
-			set { m_Nonce = value; }
-		}
-
-		public string Qop
-		{
-			get { return m_Qop; }
-			set { m_Qop = value; }
-		}
-
-		public string Charset
-		{
-			get { return m_Charset; }
-			set { m_Charset = value; }
-		}
-
-		public string Algorithm
-		{
-			get { return m_Algorithm; }
-			set { m_Algorithm = value; }
-		}
-		
-		public string Rspauth
-		{
-			get { return m_Rspauth; }
-			set { m_Rspauth = value; }
-		}
-		#endregion
-
+    /// <summary>
+    ///     Summary description for Step1.
+    /// </summary>
+    public class Step1 : DigestMD5Mechanism // Mechanism 
+    {
         /*
             nonce="deqOGux/N6hDPtf9vkGMU5Vzae+zfrqpBIvh6LovbBM=",
             realm="amessage.de",
@@ -118,15 +46,16 @@ namespace agsXMPP.Sasl.DigestMD5
             charset=utf-8,
             algorithm=md5-sess
         */
+
         private void Parse(string message)
         {
             try
             {
-                int start = 0;
-                int end = 0;
+                var start = 0;
+                var end = 0;
                 while (start < message.Length)
                 {
-                    int equalPos = message.IndexOf('=', start);
+                    var equalPos = message.IndexOf('=', start);
                     if (equalPos > 0)
                     {
                         // look if the next char is a quote
@@ -143,7 +72,7 @@ namespace agsXMPP.Sasl.DigestMD5
                             end = message.IndexOf(',', equalPos + 1);
                             if (end == -1)
                                 end = message.Length;
-                            
+
                             ParsePair(message.Substring(start, end - start));
 
                             start = end + 1;
@@ -159,10 +88,10 @@ namespace agsXMPP.Sasl.DigestMD5
 
         private void ParsePair(string pair)
         {
-            int equalPos = pair.IndexOf("=");
+            var equalPos = pair.IndexOf("=");
             if (equalPos > 0)
             {
-                string key = pair.Substring(0, equalPos);
+                var key = pair.Substring(0, equalPos);
                 string data;
                 // is the value quoted?
                 if (pair.Substring(equalPos + 1, 1) == "\"")
@@ -173,25 +102,67 @@ namespace agsXMPP.Sasl.DigestMD5
                 switch (key)
                 {
                     case "realm":
-                        m_Realm = data;
+                        Realm = data;
                         break;
                     case "nonce":
-                        m_Nonce = data;
+                        Nonce = data;
                         break;
                     case "qop":
-                        m_Qop = data;
+                        Qop = data;
                         break;
                     case "charset":
-                        m_Charset = data;
+                        Charset = data;
                         break;
                     case "algorithm":
-                        m_Algorithm = data;
+                        Algorithm = data;
                         break;
                     case "rspauth":
-                        m_Rspauth = data;
+                        Rspauth = data;
                         break;
                 }
             }
         }
-	}
+
+        /// <summary>
+        ///     Exception occurs when we were unable to parse the challenge
+        /// </summary>
+        public class ChallengeParseException : Exception
+        {
+            public ChallengeParseException(string message) : base(message)
+            {
+            }
+        }
+
+        #region << Constructors >>
+
+        public Step1()
+        {
+        }
+
+        public Step1(string message)
+        {
+            m_Message = message;
+            Parse(message);
+        }
+
+        #endregion
+
+        #region << Properties >>
+
+        private string m_Message;
+
+        public string Realm { get; set; }
+
+        public string Nonce { get; set; }
+
+        public string Qop { get; set; }
+
+        public string Charset { get; set; } = "utf-8";
+
+        public string Algorithm { get; set; }
+
+        public string Rspauth { get; set; }
+
+        #endregion
+    }
 }

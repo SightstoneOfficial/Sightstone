@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol.extensions.amp
 {
     public enum Action

@@ -17,20 +17,17 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Reflection;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.Util
 {
-	/// <summary>
-	/// Provides helper functions for Enumerations.
-	/// </summary>
-	/// <remarks>Extends the <see cref="T:System.Enum">System.Enum Class</see>.</remarks>
-	/// <seealso cref="T:System.Enum">System.Enum Class</seealso>
-	public class Enum
-	{
+    /// <summary>
+    ///     Provides helper functions for Enumerations.
+    /// </summary>
+    /// <remarks>Extends the <see cref="T:System.Enum">System.Enum Class</see>.</remarks>
+    /// <seealso cref="T:System.Enum">System.Enum Class</seealso>
+    public class Enum
+    {
 #if CF
 		#region << Enum.Parse() for CF, credits to OpenNetCF.net for this function>>
 		/// <summary>
@@ -135,8 +132,5 @@ namespace agsXMPP.Util
 			}
 		}
 #endif
-		
-
-	}
-	
+    }
 }

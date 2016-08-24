@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 namespace agsXMPP.protocol.extensions.commands
 {
     /*
@@ -37,13 +34,14 @@ namespace agsXMPP.protocol.extensions.commands
         </xs:simpleType>
       </xs:attribute>
     */
+
     public enum Action
     {
-        NONE        = -1,
-        next        = 1,
-        prev        = 2,
-        complete    = 4,
-        execute     = 8,
-        cancel      = 16       
+        NONE = -1,
+        next = 1,
+        prev = 2,
+        complete = 4,
+        execute = 8,
+        cancel = 16
     }
 }

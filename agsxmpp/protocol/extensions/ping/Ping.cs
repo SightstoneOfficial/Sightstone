@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -30,12 +28,13 @@ namespace agsXMPP.protocol.extensions.ping
      *   <ping xmlns='urn:xmpp:ping'/>
      * </iq>
      */
+
     public class Ping : Element
     {
         public Ping()
         {
-            this.TagName    = "ping";
-            this.Namespace  = Uri.PING;
+            TagName = "ping";
+            Namespace = Uri.PING;
         }
     }
 }

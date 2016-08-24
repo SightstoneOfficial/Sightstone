@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -62,19 +60,6 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
 
     public class Items : Element
     {
-        #region << Constructors >>
-        public Items()
-        {
-            this.TagName    = "items";
-            this.Namespace  = Uri.PUBSUB_EVENT;
-        }
-
-        public Items(string node) : this()
-        {
-            this.Node = node;
-        }
-        #endregion
-
         public string Node
         {
             get { return GetAttribute("node"); }
@@ -82,18 +67,17 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
         }
 
         /// <summary>
-        /// Add a payload Item
+        ///     Add a payload Item
         /// </summary>
         /// <returns>returns the added Item</returns>
         public Item AddItem()
         {
-            Item item = new Item();
+            var item = new Item();
             AddChild(item);
             return item;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns>returns the added item</returns>
@@ -104,21 +88,36 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
         }
 
         /// <summary>
-        /// This will return all payload items. Multiple items are possible, but doe the most implementaions one item 
-        /// should be enough
+        ///     This will return all payload items. Multiple items are possible, but doe the most implementaions one item
+        ///     should be enough
         /// </summary>
         /// <returns>returns an Array of Items</returns>
         public Item[] GetItems()
         {
-            ElementList nl = SelectElements(typeof(Item));
-            Item[] items = new Item[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Item));
+            var items = new Item[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                items[i] = (Item)e;
+                items[i] = (Item) e;
                 i++;
             }
             return items;
         }
-	}
+
+        #region << Constructors >>
+
+        public Items()
+        {
+            TagName = "items";
+            Namespace = Uri.PUBSUB_EVENT;
+        }
+
+        public Items(string node) : this()
+        {
+            Node = node;
+        }
+
+        #endregion
+    }
 }

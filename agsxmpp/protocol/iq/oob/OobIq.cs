@@ -17,47 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.oob
 {
-	/// <summary>
-	/// Summary description for OobIq.
-	/// </summary>
-	public class OobIq : IQ
-	{
-		private Oob m_Oob = new Oob();
+    /// <summary>
+    ///     Summary description for OobIq.
+    /// </summary>
+    public class OobIq : IQ
+    {
+        public OobIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public OobIq()
-		{		
-			base.Query = m_Oob;
-			this.GenerateId();
-		}
+        public OobIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public OobIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public OobIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public OobIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public OobIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public OobIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Oob Query
-		{
-			get
-			{
-				return m_Oob;
-			}
-		}
-	}
+        public new Oob Query { get; } = new Oob();
+    }
 }

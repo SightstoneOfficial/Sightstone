@@ -17,39 +17,33 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using agsXMPP.protocol;
 using agsXMPP.protocol.client;
 
 // Request Roster:
 // <iq id='someid' to='myjabber.net' type='get'>
 //		<query xmlns='jabber:iq:roster'/>
 // </iq>
+
 namespace agsXMPP.protocol.iq.roster
 {
-	/// <summary>
-	/// Build a new roster query, jabber:iq:roster
-	/// </summary>
-	public class RosterIq : IQ
-	{
-		private Roster m_Roster = new Roster();
+    /// <summary>
+    ///     Build a new roster query, jabber:iq:roster
+    /// </summary>
+    public class RosterIq : IQ
+    {
+        public RosterIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public RosterIq()
-		{
-			base.Query = m_Roster;
-			this.GenerateId();
-		}
+        public RosterIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public RosterIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}	
-
-		public new Roster Query
-		{
-			get { return m_Roster; }            
-		}
-	}
+        public new Roster Query { get; } = new Roster();
+    }
 }

@@ -17,9 +17,8 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.extensions.si
@@ -40,42 +39,33 @@ namespace agsXMPP.protocol.extensions.si
     */
 
     /// <summary>
-    /// 
     /// </summary>
     public class SIIq : IQ
     {
-        private SI m_SI = new SI();
-
         public SIIq()
-        {            
-            this.GenerateId();
-            this.AddChild(m_SI);
+        {
+            GenerateId();
+            AddChild(SI);
         }
 
         public SIIq(IqType type)
             : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public SIIq(IqType type, Jid to)
             : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public SIIq(IqType type, Jid to, Jid from)
             : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public SI SI
-        {
-            get
-            {
-                return m_SI;
-            }
-        }
+        public SI SI { get; } = new SI();
     }
 }

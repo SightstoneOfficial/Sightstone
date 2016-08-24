@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -57,25 +55,24 @@ namespace agsXMPP.protocol.extensions.pubsub
             </iq>
     
         */
+
         public Subscriptions()
         {
-            this.TagName    = "subscriptions";
-            this.Namespace  = Uri.PUBSUB;
+            TagName = "subscriptions";
+            Namespace = Uri.PUBSUB;
         }
-               
+
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Subscription AddSubscription()
         {
-            Subscription sub = new Subscription();
+            var sub = new Subscription();
             AddChild(sub);
             return sub;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         /// <returns></returns>
@@ -84,12 +81,12 @@ namespace agsXMPP.protocol.extensions.pubsub
             AddChild(sub);
             return sub;
         }
-        
+
         public Subscription[] GetSubscriptions()
         {
-            ElementList nl = SelectElements(typeof(Subscription));
-            Subscription[] items = new Subscription[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Subscription));
+            var items = new Subscription[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
                 items[i] = (Subscription) e;

@@ -19,48 +19,48 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
+using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.component
 {
     /// <summary>
-    /// Summary description for Error.
+    ///     Summary description for Error.
     /// </summary>
-    public class Error : agsXMPP.protocol.client.Error
+    public class Error : client.Error
     {
-        public Error() : base()
+        public Error()
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
-                
+
         public Error(int code)
             : base(code)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
 
-        public Error(agsXMPP.protocol.client.ErrorCode code)
+        public Error(ErrorCode code)
             : base(code)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
 
-        public Error(agsXMPP.protocol.client.ErrorType type)
+        public Error(ErrorType type)
             : base(type)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
 
         /// <summary>
-        /// Creates an error Element according the the condition
-        /// The type attrib as added automatically as decribed in the XMPP specs
-        /// This is the prefered way to create error Elements
+        ///     Creates an error Element according the the condition
+        ///     The type attrib as added automatically as decribed in the XMPP specs
+        ///     This is the prefered way to create error Elements
         /// </summary>
         /// <param name="condition"></param>
-        public Error(agsXMPP.protocol.client.ErrorCondition condition)
+        public Error(ErrorCondition condition)
             : base(condition)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
     }
 }

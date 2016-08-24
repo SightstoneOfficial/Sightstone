@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -35,18 +32,16 @@ namespace agsXMPP.protocol.x.muc.iq.admin
     */
 
     /// <summary>
-    /// 
     /// </summary>
     public class Admin : Element
     {
         public Admin()
-        {           
-			this.TagName	= "query";
-			this.Namespace	= Uri.MUC_ADMIN;		
+        {
+            TagName = "query";
+            Namespace = Uri.MUC_ADMIN;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="item"></param>
         public void AddItem(Item item)
@@ -55,26 +50,25 @@ namespace agsXMPP.protocol.x.muc.iq.admin
         }
 
         /// <summary>
-        /// Adds the items.
+        ///     Adds the items.
         /// </summary>
         /// <param name="items">The items.</param>
         public void AddItems(Item[] items)
         {
-            foreach (Item itm in items)
+            foreach (var itm in items)
             {
                 AddItem(itm);
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Item[] GetItems()
         {
-            ElementList nl = SelectElements(typeof(Item));
-            Item[] items = new Item[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Item));
+            var items = new Item[nl.Count];
+            var i = 0;
             foreach (Item itm in nl)
             {
                 items[i] = itm;

@@ -19,11 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
-
 namespace agsXMPP.protocol.extensions.ibb
 {
     /*
@@ -48,31 +43,28 @@ namespace agsXMPP.protocol.extensions.ibb
     */
 
     /// <summary>
-    /// 
     /// </summary>
     public class Data : Base
     {
         /// <summary>
-        /// 
         /// </summary>
         public Data()
         {
-            this.TagName    = "data";            
+            TagName = "data";
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sid"></param>
         /// <param name="seq"></param>
-        public Data(string sid, int seq)  : this()
+        public Data(string sid, int seq) : this()
         {
-            this.Sid        = sid;
-            this.Sequence   = seq;
+            Sid = sid;
+            Sequence = seq;
         }
 
         /// <summary>
-        /// the sequence
+        ///     the sequence
         /// </summary>
         public int Sequence
         {

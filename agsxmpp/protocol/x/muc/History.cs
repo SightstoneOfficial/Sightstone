@@ -17,10 +17,10 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.muc
@@ -60,42 +60,12 @@ namespace agsXMPP.protocol.x.muc
     */
 
     /// <summary>
-    /// This is used to get the history of a muc room
+    ///     This is used to get the history of a muc room
     /// </summary>
     public class History : Element
     {
-        #region << Constructors >>
         /// <summary>
-        /// Empty default constructor
-        /// </summary>
-        public History()
-        {
-            this.TagName    = "history";
-            this.Namespace  = Uri.MUC;
-        }
-
-        /// <summary>
-        /// get the history starting from a given date when available
-        /// </summary>
-        /// <param name="date"></param>
-        public History(DateTime date) : this()
-        {
-            this.Since = date;
-        }
-
-        /// <summary>
-        /// Specify the maximum nunber of messages to retrieve from the history
-        /// </summary>
-        /// <param name="max"></param>
-        public History(int max) : this()
-        {
-            this.MaxStanzas = max;
-        }
-        #endregion
-
-
-        /// <summary>
-        /// request the last xxx seconds of history when available
+        ///     request the last xxx seconds of history when available
         /// </summary>
         public int Seconds
         {
@@ -104,7 +74,7 @@ namespace agsXMPP.protocol.x.muc
         }
 
         /// <summary>
-        /// Request maximum stanzas of history when available
+        ///     Request maximum stanzas of history when available
         /// </summary>
         public int MaxStanzas
         {
@@ -113,26 +83,54 @@ namespace agsXMPP.protocol.x.muc
         }
 
         /// <summary>
-        /// Request history from a given date when available
+        ///     Request history from a given date when available
         /// </summary>
         public DateTime Since
         {
-            get { return Util.Time.ISO_8601Date(GetAttribute("since")); }
-            set { SetAttribute("since", Util.Time.ISO_8601Date(value)); }
+            get { return Time.ISO_8601Date(GetAttribute("since")); }
+            set { SetAttribute("since", Time.ISO_8601Date(value)); }
         }
 
         /// <summary>
-        /// Limit the total number of characters in the history to "X" 
-        /// (where the character count is the characters of the complete XML stanzas, 
-        /// not only their XML character data).
+        ///     Limit the total number of characters in the history to "X"
+        ///     (where the character count is the characters of the complete XML stanzas,
+        ///     not only their XML character data).
         /// </summary>
         public int MaxCharacters
         {
             get { return GetAttributeInt("maxchars"); }
             set { SetAttribute("maxchars", value); }
         }
+
+        #region << Constructors >>
+
+        /// <summary>
+        ///     Empty default constructor
+        /// </summary>
+        public History()
+        {
+            TagName = "history";
+            Namespace = Uri.MUC;
+        }
+
+        /// <summary>
+        ///     get the history starting from a given date when available
+        /// </summary>
+        /// <param name="date"></param>
+        public History(DateTime date) : this()
+        {
+            Since = date;
+        }
+
+        /// <summary>
+        ///     Specify the maximum nunber of messages to retrieve from the history
+        /// </summary>
+        /// <param name="max"></param>
+        public History(int max) : this()
+        {
+            MaxStanzas = max;
+        }
+
+        #endregion
     }
-
 }
-
-

@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -35,21 +33,22 @@ namespace agsXMPP.protocol.extensions.pubsub
         </xs:complexType>
       </xs:element>
     */
+
     public class Item : Element
     {
         public Item()
         {
-            this.TagName    = "item";
-            this.Namespace  = Uri.PUBSUB;
+            TagName = "item";
+            Namespace = Uri.PUBSUB;
         }
 
         public Item(string id) : this()
         {
-            this.Id = id;
+            Id = id;
         }
 
         /// <summary>
-        /// The optional id
+        ///     The optional id
         /// </summary>
         public string Id
         {

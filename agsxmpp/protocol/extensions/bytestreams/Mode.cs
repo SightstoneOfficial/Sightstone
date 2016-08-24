@@ -19,12 +19,10 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol.extensions.bytestreams
 {
     /// <summary>
-    /// The Mode for the bytestream socket layer (tcp or udp)
+    ///     The Mode for the bytestream socket layer (tcp or udp)
     /// </summary>
     public enum Mode
     {

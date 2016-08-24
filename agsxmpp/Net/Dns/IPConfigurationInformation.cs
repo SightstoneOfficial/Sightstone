@@ -27,7 +27,7 @@ using System.Net.NetworkInformation;
 namespace agsXMPP.Net.Dns
 {
     /// <summary>
-    /// Summary description for IPConfigurationInformation.
+    ///     Summary description for IPConfigurationInformation.
     /// </summary>
     public class IPConfigurationInformation
     {

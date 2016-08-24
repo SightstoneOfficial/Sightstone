@@ -17,20 +17,20 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.filetransfer
 {
-	/// <summary>
-	/// Summary description for File.
-	/// </summary>
-	public class File : Element
-	{
-		/*
+    /// <summary>
+    ///     Summary description for File.
+    /// </summary>
+    public class File : Element
+    {
+        /*
 		Example 1:
 		<file xmlns='http://jabber.org/protocol/si/profile/file-transfer'
 			name='test.txt' 
@@ -64,86 +64,80 @@ namespace agsXMPP.protocol.extensions.filetransfer
 			</xs:complexType>
 		</xs:element>
 		*/
-		public File()
-		{
-			this.TagName	= "file";
-			this.Namespace	= Uri.SI_FILE_TRANSFER;
-		}
 
-		public File(string name, long size) : this()
-		{
-			Name	= name;
-			Size	= size;
-		}
+        public File()
+        {
+            TagName = "file";
+            Namespace = Uri.SI_FILE_TRANSFER;
+        }
 
-		/// <summary>
-		/// The file name. Its required
-		/// </summary>
-		public string Name
-		{
-			get { return GetAttribute("name"); }
-			set { SetAttribute("name", value); }
-		}
+        public File(string name, long size) : this()
+        {
+            Name = name;
+            Size = size;
+        }
 
-		/// <summary>
-		/// Size of the file. This is required
-		/// </summary>
-		public long Size
-		{
-			get { return GetAttributeLong("size"); }
-			set { SetAttribute("size", value.ToString()); }
-		}
+        /// <summary>
+        ///     The file name. Its required
+        /// </summary>
+        public string Name
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
 
-		/// <summary>
-		/// a Hash checksum of the file
-		/// </summary>
-		public string Hash
-		{
-			get { return GetAttribute("hash"); }
-			set { SetAttribute("hash", value); }
-		}
+        /// <summary>
+        ///     Size of the file. This is required
+        /// </summary>
+        public long Size
+        {
+            get { return GetAttributeLong("size"); }
+            set { SetAttribute("size", value.ToString()); }
+        }
 
-		/// <summary>
-		/// file date
-		/// </summary>
-		public DateTime Date
-		{
-			get
-			{
-				return Util.Time.ISO_8601Date(GetAttribute("date"));
-			}
-			set
-			{
-				SetAttribute("date", Util.Time.ISO_8601Date(value));
-			}
-		}
+        /// <summary>
+        ///     a Hash checksum of the file
+        /// </summary>
+        public string Hash
+        {
+            get { return GetAttribute("hash"); }
+            set { SetAttribute("hash", value); }
+        }
 
-		/// <summary>
-		/// is used to provide a sender-generated description of the file so the receiver can better understand what is being sent. 
-		/// It MUST NOT be sent in the result.
-		/// </summary>		 
-		public string Description
-		{
-			get { return GetTag("desc"); }
-			set { SetTag("desc", value);}
-		}
+        /// <summary>
+        ///     file date
+        /// </summary>
+        public DateTime Date
+        {
+            get { return Time.ISO_8601Date(GetAttribute("date")); }
+            set { SetAttribute("date", Time.ISO_8601Date(value)); }
+        }
 
-		public Range Range
-		{
-			get 
-			{ 
-				Element range =SelectSingleElement(typeof(Range));
-				if (range != null)				
-					return range as Range;
-				else
-					return null;
+        /// <summary>
+        ///     is used to provide a sender-generated description of the file so the receiver can better understand what is being
+        ///     sent.
+        ///     It MUST NOT be sent in the result.
+        /// </summary>
+        public string Description
+        {
+            get { return GetTag("desc"); }
+            set { SetTag("desc", value); }
+        }
 
-			}
-			set 
-			{ 
-				RemoveTag(typeof(Range));
-				AddChild(value);
-			}
-		}
-	}
+        public Range Range
+        {
+            get
+            {
+                var range = SelectSingleElement(typeof(Range));
+                if (range != null)
+                    return range as Range;
+                return null;
+            }
+            set
+            {
+                RemoveTag(typeof(Range));
+                AddChild(value);
+            }
+        }
+    }
 }

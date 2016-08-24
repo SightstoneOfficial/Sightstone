@@ -19,35 +19,32 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.Base
 {
-	/// <summary>
-	/// Summary description for Group.
-	/// </summary>
-	public class Group : Element
-	{
-		public Group()
-		{
-			this.TagName = "group";
-		}
+    /// <summary>
+    ///     Summary description for Group.
+    /// </summary>
+    public class Group : Element
+    {
+        public Group()
+        {
+            TagName = "group";
+        }
 
-		public Group(string groupname) : this()
-		{
-			this.Name	= groupname;
-		}
+        public Group(string groupname) : this()
+        {
+            Name = groupname;
+        }
 
-		/// <summary>
-		/// gets or sets the Name of the contact group
-		/// </summary>
-		public string Name
-		{
-			set	{ this.Value = value; }
-			get	{ return this.Value; }
-		}
-
-	}
+        /// <summary>
+        ///     gets or sets the Name of the contact group
+        /// </summary>
+        public string Name
+        {
+            set { Value = value; }
+            get { return Value; }
+        }
+    }
 }

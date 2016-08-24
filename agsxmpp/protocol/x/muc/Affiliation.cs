@@ -17,24 +17,22 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.x.muc
 {
-	/// <summary>
-	/// There are five defined affiliations that a user may have in relation to a room
-	/// </summary>
-	public enum Affiliation
-	{
-		/// <summary>
-		/// the absence of an affiliation
-		/// </summary>
-		none,
-		owner,
-		admin,
-		member,
-		outcast
-	}
+    /// <summary>
+    ///     There are five defined affiliations that a user may have in relation to a room
+    /// </summary>
+    public enum Affiliation
+    {
+        /// <summary>
+        ///     the absence of an affiliation
+        /// </summary>
+        none,
+        owner,
+        admin,
+        member,
+        outcast
+    }
 }

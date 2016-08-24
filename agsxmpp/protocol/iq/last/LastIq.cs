@@ -19,45 +19,36 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.last
 {
-	/// <summary>
-	/// Summary description for LastIq.
-	/// </summary>
-	public class LastIq : IQ
-	{
-		private Last m_Last = new Last();
+    /// <summary>
+    ///     Summary description for LastIq.
+    /// </summary>
+    public class LastIq : IQ
+    {
+        public LastIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public LastIq()
-		{		
-			base.Query = m_Last;
-			this.GenerateId();			
-		}
+        public LastIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public LastIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public LastIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public LastIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public LastIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public LastIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Last Query
-		{
-			get
-			{
-				return m_Last;
-			}
-		}
-	}
+        public new Last Query { get; } = new Last();
+    }
 }

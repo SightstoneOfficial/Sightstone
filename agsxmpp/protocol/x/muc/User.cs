@@ -24,11 +24,11 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.muc
 {
-	/// <summary>
-	/// Summary description for MucUser.
-	/// </summary>
-	public class User : Element
-	{
+    /// <summary>
+    ///     Summary description for MucUser.
+    /// </summary>
+    public class User : Element
+    {
         /*
         <x xmlns='http://jabber.org/protocol/muc#user'>
              <item affiliation='admin' role='moderator'/>
@@ -73,27 +73,25 @@ namespace agsXMPP.protocol.x.muc
         </message>
         
         */
+
         public User()
-		{
-			TagName	= "x";
-			Namespace	= Uri.MUC_USER;
-		}
+        {
+            TagName = "x";
+            Namespace = Uri.MUC_USER;
+        }
 
         public Item Item
         {
-            get
-            {
-                return SelectSingleElement(typeof(Item)) as Item;
-            }
+            get { return SelectSingleElement(typeof(Item)) as Item; }
             set
             {
                 RemoveTag(typeof(Item));
                 AddChild(value);
             }
         }
-        
+
         /// <summary>
-        /// Gets or sets the status codes.
+        ///     Gets or sets the status codes.
         /// </summary>
         /// <value>The status codes.</value>
         public List<Status> StatusCodes
@@ -102,13 +100,13 @@ namespace agsXMPP.protocol.x.muc
             set
             {
                 RemoveTags<Status>();
-                foreach (Status status in value)
+                foreach (var status in value)
                     AddChild(status);
             }
         }
 
         /// <summary>
-        /// The Status Element
+        ///     The Status Element
         /// </summary>
         public Status Status
         {
@@ -117,14 +115,14 @@ namespace agsXMPP.protocol.x.muc
             {
                 if (HasTag(typeof(Status)))
                     RemoveTag(typeof(Status));
-                
+
                 if (value != null)
                     AddChild(value);
             }
         }
 
         /// <summary>
-        /// The Invite Element
+        ///     The Invite Element
         /// </summary>
         public Invite Invite
         {
@@ -140,7 +138,7 @@ namespace agsXMPP.protocol.x.muc
         }
 
         /// <summary>
-        /// The Decline Element
+        ///     The Decline Element
         /// </summary>
         public Decline Decline
         {
@@ -160,5 +158,5 @@ namespace agsXMPP.protocol.x.muc
             set { SetTag("password", value); }
             get { return GetTag("password"); }
         }
-	}
+    }
 }

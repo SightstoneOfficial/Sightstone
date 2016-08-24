@@ -17,27 +17,25 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using agsXMPP.protocol;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.extensions.ping
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class PingIq : IQ
-	{
-		private Ping m_Ping = new Ping();
+    /// <summary>
+    /// </summary>
+    public class PingIq : IQ
+    {
+        public new Ping Query { get; } = new Ping();
 
         #region << Constructors >>
+
         public PingIq()
-		{		
-			base.Query = m_Ping;
-			this.GenerateId();
-		}
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
         public PingIq(Jid to) : this()
         {
@@ -46,15 +44,10 @@ namespace agsXMPP.protocol.extensions.ping
 
         public PingIq(Jid to, Jid from) : this()
         {
-            To      = to;
-            From    = from;
+            To = to;
+            From = from;
         }
-        #endregion
 
-    
-        public new Ping Query
-        {
-            get { return m_Ping; }
-        }
-	}
+        #endregion
+    }
 }

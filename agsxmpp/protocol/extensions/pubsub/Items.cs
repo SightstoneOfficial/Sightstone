@@ -17,11 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-
-using agsXMPP.Xml.Dom;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
@@ -46,30 +42,9 @@ namespace agsXMPP.protocol.extensions.pubsub
           </pubsub>
         </iq>
     */
+
     public class Items : Publish
     {
-        #region << Constructors >>
-        public Items() : base()
-        {
-            this.TagName    = "items";            
-        }
-
-        public Items(string node) : this()
-        {
-            this.Node = node;
-        }
-
-        public Items(string node, string subId) : this(node)
-        {
-            this.SubId = subId;
-        }
-
-        public Items(string node, string subId, int maxItems) : this(node, subId)
-        {
-            this.MaxItems = maxItems;
-        }
-        #endregion
-
         //public string Node
         //{
         //    get { return GetAttribute("node"); }
@@ -87,5 +62,29 @@ namespace agsXMPP.protocol.extensions.pubsub
             get { return GetAttributeInt("max_items"); }
             set { SetAttribute("max_items", value); }
         }
+
+        #region << Constructors >>
+
+        public Items()
+        {
+            TagName = "items";
+        }
+
+        public Items(string node) : this()
+        {
+            Node = node;
+        }
+
+        public Items(string node, string subId) : this(node)
+        {
+            SubId = subId;
+        }
+
+        public Items(string node, string subId, int maxItems) : this(node, subId)
+        {
+            MaxItems = maxItems;
+        }
+
+        #endregion
     }
 }

@@ -23,7 +23,6 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.rpc
 {
-    
     /*         
 
         Example 1. A typical request
@@ -57,24 +56,23 @@ namespace agsXMPP.protocol.iq.rpc
         </iq>
 
     */
-      
+
     /// <summary>
-    /// JEP-0009: Jabber-RPC, transport RPC over Jabber/XMPP
+    ///     JEP-0009: Jabber-RPC, transport RPC over Jabber/XMPP
     /// </summary>
     public class Rpc : Element
     {
         public Rpc()
         {
-            TagName    = "query";
-            Namespace  = Uri.IQ_RPC;
+            TagName = "query";
+            Namespace = Uri.IQ_RPC;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public MethodCall MethodCall
         {
-            get { return (MethodCall)SelectSingleElement(typeof(MethodCall)); }
+            get { return (MethodCall) SelectSingleElement(typeof(MethodCall)); }
             set
             {
                 RemoveTag(typeof(MethodCall));
@@ -84,11 +82,10 @@ namespace agsXMPP.protocol.iq.rpc
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public MethodResponse MethodResponse
         {
-            get { return (MethodResponse)SelectSingleElement(typeof(MethodResponse)); }
+            get { return (MethodResponse) SelectSingleElement(typeof(MethodResponse)); }
             set
             {
                 RemoveTag(typeof(MethodResponse));
@@ -96,6 +93,5 @@ namespace agsXMPP.protocol.iq.rpc
                     AddChild(value);
             }
         }
-        
     }
 }

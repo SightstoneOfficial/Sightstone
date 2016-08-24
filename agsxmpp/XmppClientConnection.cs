@@ -20,141 +20,97 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-using System.IO;
-using System.Text;
 using System.Collections;
-using System.Collections.Specialized;
-using System.Threading;
-using System.Net;
 using System.Net.Sockets;
-
-using agsXMPP.Xml;
-using agsXMPP.Xml.Dom;
-
-using agsXMPP.protocol;
-using agsXMPP.protocol.iq;
-using agsXMPP.protocol.iq.auth;
-using agsXMPP.protocol.iq.agent;
-using agsXMPP.protocol.iq.disco;
-using agsXMPP.protocol.iq.roster;
-using agsXMPP.protocol.iq.register;
-using agsXMPP.protocol.iq.version;
-using agsXMPP.protocol.stream;
-using agsXMPP.protocol.stream.feature.compression;
-using agsXMPP.protocol.client;
-using agsXMPP.protocol.tls;
-
-using agsXMPP.protocol.extensions.caps;
-using agsXMPP.protocol.extensions.compression;
-
+using System.Text;
 using agsXMPP.Exceptions;
-
-using agsXMPP.Sasl;
+using agsXMPP.Idn;
 using agsXMPP.Net;
 using agsXMPP.Net.Dns;
-
-
-using agsXMPP.Idn;
+using agsXMPP.protocol;
+using agsXMPP.protocol.client;
+using agsXMPP.protocol.extensions.caps;
+using agsXMPP.protocol.extensions.compression;
+using agsXMPP.protocol.iq.agent;
+using agsXMPP.protocol.iq.auth;
+using agsXMPP.protocol.iq.disco;
+using agsXMPP.protocol.iq.register;
+using agsXMPP.protocol.iq.roster;
+using agsXMPP.protocol.stream;
+using agsXMPP.protocol.tls;
+using agsXMPP.Sasl;
+using agsXMPP.Util;
+using agsXMPP.Xml.Dom;
+using Error = agsXMPP.protocol.Error;
 
 namespace agsXMPP
 {
-	public delegate void ObjectHandler		(object sender);	
-	public delegate void XmppElementHandler	(object sender, Element e);
-	
-	/// <summary>
-	/// Summary description for XmppClient.
-	/// </summary>
-	public class XmppClientConnection : XmppConnection
-	{       
-        
-        const string SRV_RECORD_PREFIX = "_xmpp-client._tcp.";
+    public delegate void ObjectHandler(object sender);
 
-		// Delegates		
-		public delegate void RosterHandler				(object sender, RosterItem item);
-		public delegate void AgentHandler				(object sender, Agent agent);     
-               
-		private SaslHandler					m_SaslHandler		= null;
-	
-		private bool						m_CleanUpDone;
-        private bool                        m_StreamStarted;
-        
-        private SRVRecord[]                 _SRVRecords;
-        private SRVRecord                   _currentSRVRecord;
-       
-        
-		#region << Properties and Member Variables >>
-        private     string                  m_ClientLanguage    = "en";
-        private     string                  m_ServerLanguage    = null;
-		private		string					m_Username			= "";
-		private		string					m_Password			= "";        
-		private		string					m_Resource			= "agsXMPP";		
-		private		string					m_Status			= "";
-		private		int						m_Priority			= 5;
-		private		ShowType				m_Show				= ShowType.NONE;
-		private		bool					m_AutoRoster		= true;
-		private		bool					m_AutoAgents		= true;
-        private     bool                    m_AutoPresence      = true;
+    public delegate void XmppElementHandler(object sender, Element e);
+
+    /// <summary>
+    ///     Summary description for XmppClient.
+    /// </summary>
+    public class XmppClientConnection : XmppConnection
+    {
+        private const string SRV_RECORD_PREFIX = "_xmpp-client._tcp.";
+
+        // Delegates		
+        public delegate void RosterHandler(object sender, RosterItem item);
+
+        public delegate void AgentHandler(object sender, Agent agent);
+
+        private SaslHandler m_SaslHandler;
+
+        private bool m_CleanUpDone;
+        private bool m_StreamStarted;
+
+        private SRVRecord[] _SRVRecords;
+        private SRVRecord _currentSRVRecord;
+
+        #region << Properties and Member Variables >>
+
+        private string m_Username = "";
+        private int m_Priority = 5;
 #if !(CF || CF_2)
-        private     bool                    m_UseSso            = false;
-        internal    string                  m_KerberosPrincipal;
+        private bool m_UseSso;
+        internal string m_KerberosPrincipal;
 #endif
-	  
-		private		bool					m_UseSSL			= false;
+
+        private bool m_UseSSL;
 #if (CF || CF_2) && !BCCRYPTO
         private     bool                    m_UseStartTLS       = false;
 #else
-        private		bool					m_UseStartTLS		= true;
+        private bool m_UseStartTLS = true;
 #endif
-        private     bool                    m_UseCompression    = false;
-		internal	bool					m_Binded			= false;
-		private		bool					m_Authenticated		= false;
-		
-		private		IqGrabber				m_IqGrabber			= null;
-		private		MessageGrabber			m_MessageGrabber	= null;
-        private     PresenceGrabber         m_PresenceGrabber   = null;
-		private		bool					m_RegisterAccount	= false;
-		private		PresenceManager			m_PresenceManager;
-		private		RosterManager			m_RosterManager;
-               
+        internal bool m_Binded;
 
-        private     Capabilities            m_Capabilities          = new Capabilities();
-        private     string                  m_ClientVersion         = "1.0";
-        private     bool                    m_EnableCapabilities    = false;
-
-        private     DiscoInfo               m_DiscoInfo             = new DiscoInfo();
-                     
 
         /// <summary>
-        /// The prefered Client Language Attribute
+        ///     The prefered Client Language Attribute
         /// </summary>
-        /// <seealso cref="agsXMPP.protocol.Base.XmppPacket.Language"/>
-        public string ClientLanguage
-        {
-            get { return m_ClientLanguage; }
-            set { m_ClientLanguage = value; }
-        }
+        /// <seealso cref="agsXMPP.protocol.Base.XmppPacket.Language" />
+        public string ClientLanguage { get; set; } = "en";
 
         /// <summary>
-        /// The language which the server decided to use.
+        ///     The language which the server decided to use.
         /// </summary>
-        /// <seealso cref="agsXMPP.protocol.Base.XmppPacket.Language"/>
-        public string ServerLanguage
-        {
-            get { return m_ServerLanguage; }            
-        }
+        /// <seealso cref="agsXMPP.protocol.Base.XmppPacket.Language" />
+        public string ServerLanguage { get; private set; }
 
-		/// <summary>
-		/// the username that is used to authenticate to the xmpp server
-		/// </summary>
-		public string Username
-		{
-			get { return m_Username; }
-			set
+        /// <summary>
+        ///     the username that is used to authenticate to the xmpp server
+        /// </summary>
+        public string Username
+        {
+            get { return m_Username; }
+            set
             {
                 // first Encode the user/node
                 m_Username = value;
 
-                string tmpUser = Jid.EscapeNode(value);
+                var tmpUser = Jid.EscapeNode(value);
 #if !STRINGPREP
                 if (value != null)
 				    m_Username = tmpUser.ToLower();
@@ -166,138 +122,100 @@ namespace agsXMPP
                 else
                     m_Username = null;
 #endif
-                
-            }                
-		}
-
-		/// <summary>
-		/// the password that is used to authenticate to the xmpp server
-		/// </summary>
-		public string Password
-		{
-			get { return m_Password; }
-			set	{ m_Password = value; }
-		}
-                
-		/// <summary>
-		/// the resource for this connection each connection to the server with the same jid needs a unique resource.
-        /// You can also set <code>Resource = null</code> and the server will assign a random Resource for you.
-		/// </summary>
-		public string Resource
-		{
-			get { return m_Resource;  }
-			set { m_Resource = value; }
-		}
-		
-		/// <summary>
-		/// our XMPP id build from Username, Server and Resource Property (user@server/resourcee)
-		/// </summary>
-		public Jid MyJID
-		{
-			get	
-			{ 
-				return BuildMyJid();               
-			}
-		}
+            }
+        }
 
         /// <summary>
-        /// The status message of this connection which is sent with the presence packets.
+        ///     the password that is used to authenticate to the xmpp server
+        /// </summary>
+        public string Password { get; set; } = "";
+
+        /// <summary>
+        ///     the resource for this connection each connection to the server with the same jid needs a unique resource.
+        ///     You can also set <code>Resource = null</code> and the server will assign a random Resource for you.
+        /// </summary>
+        public string Resource { get; set; } = "agsXMPP";
+
+        /// <summary>
+        ///     our XMPP id build from Username, Server and Resource Property (user@server/resourcee)
+        /// </summary>
+        public Jid MyJID
+        {
+            get { return BuildMyJid(); }
+        }
+
+        /// <summary>
+        ///     The status message of this connection which is sent with the presence packets.
         /// </summary>
         /// <remarks>
-        /// you have to call the method <b>SendMyPresence</b> to send your updated presence to the server.        
+        ///     you have to call the method <b>SendMyPresence</b> to send your updated presence to the server.
         /// </remarks>
-		public string Status
-		{
-			get
-			{
-				return m_Status;
-			}
-			set
-			{
-				m_Status = value;
-			}
-		}
+        public string Status { get; set; } = "";
 
-		/// <summary>
-		/// The priority of this connection send with the presence packets.
-        /// The OPTIONAL priority element contains non-human-readable XML character data that specifies the priority level 
-        /// of the resource. The value MUST be an integer between -128 and +127. If no priority is provided, a server 
-        /// SHOULD consider the priority to be zero.        
-		/// </summary>
+        /// <summary>
+        ///     The priority of this connection send with the presence packets.
+        ///     The OPTIONAL priority element contains non-human-readable XML character data that specifies the priority level
+        ///     of the resource. The value MUST be an integer between -128 and +127. If no priority is provided, a server
+        ///     SHOULD consider the priority to be zero.
+        /// </summary>
         /// <remarks>you have to call the method <b>SendMyPresence</b> to send your updated presence to the server.</remarks>
-		public int Priority
-		{
-			get { return m_Priority; }
-			set
+        public int Priority
+        {
+            get { return m_Priority; }
+            set
             {
                 if ((value < -127) || (value > 127))
                     throw new ArgumentException("The value MUST be an integer between -128 and +127");
-                
+
                 m_Priority = value;
-			}
-		}
+            }
+        }
 
         /// <summary>
-        /// change the showtype. 
+        ///     change the showtype.
         /// </summary>
         /// <remarks>you have to call the method <b>SendMyPresence</b> to send your updated presence to the server.</remarks>
-		public ShowType Show
-		{
-			get { return m_Show; }
-			set { m_Show = value; }
-		}
+        public ShowType Show { get; set; } = ShowType.NONE;
 
         /// <summary>
-        /// If set to true then the Roster (contact list) is requested automatically after sucessful login. 
-        /// Set this property to false if you don't want to receive your contact list, or request it manual. 
-        /// To save bandwidth is makes sense to cache the contact list and don't receive it on each login.
+        ///     If set to true then the Roster (contact list) is requested automatically after sucessful login.
+        ///     Set this property to false if you don't want to receive your contact list, or request it manual.
+        ///     To save bandwidth is makes sense to cache the contact list and don't receive it on each login.
         /// </summary>
         /// <remarks>default value is <b>true</b></remarks>
-		public bool AutoRoster
-		{
-			get	{ return m_AutoRoster; }
-			set	{ m_AutoRoster = value;	}
-		}
+        public bool AutoRoster { get; set; } = true;
 
         /// <summary>
-        /// Sends the presence Automatically after successful login.
-        /// This property works only in combination with AutoRoster (AutoRoster = true).
+        ///     Sends the presence Automatically after successful login.
+        ///     This property works only in combination with AutoRoster (AutoRoster = true).
         /// </summary>
-        public bool AutoPresence
-        {
-            get { return m_AutoPresence; }
-            set { m_AutoPresence = value; }
-        }
-        
-		/// <summary>
-        /// If set to true then the Agents are requested automatically after sucessful login. 
-        /// Set this property to false if you don't use agents at all, or if you request them manual.
-		/// </summary>
+        public bool AutoPresence { get; set; } = true;
+
+        /// <summary>
+        ///     If set to true then the Agents are requested automatically after sucessful login.
+        ///     Set this property to false if you don't use agents at all, or if you request them manual.
+        /// </summary>
         /// <remarks>default value is <b>true</b></remarks>
-		public bool AutoAgents
-		{
-			get	{ return m_AutoAgents; }
-			set	{ m_AutoAgents = value;	}
-        }
+        public bool AutoAgents { get; set; } = true;
 
 #if !(CF || CF_2)
         /// <summary>
-        /// Use Single sign on (GSSAPI/KERBEROS)
+        ///     Use Single sign on (GSSAPI/KERBEROS)
         /// </summary>
         public bool UseSso
         {
             get { return m_UseSso; }
             set
             {
-                if (Util.Runtime.IsMono() && Util.Runtime.IsUnix())
+                if (Runtime.IsMono() && Runtime.IsUnix())
                     throw new NotImplementedException();
-                
+
                 m_UseSso = value;
             }
         }
 
         /// <summary>
-        /// Gets the kerberos principal.
+        ///     Gets the kerberos principal.
         /// </summary>
         /// <value>The kerberos principal.</value>
         public string KerberosPrincipal
@@ -306,416 +224,385 @@ namespace agsXMPP
             set { m_KerberosPrincipal = value; }
         }
 #endif
-	    
+
 
         /// <summary>
-		/// use "old style" ssl for this connection (Port 5223).
-		/// </summary>
-		public bool UseSSL
-		{
-			get	{ return m_UseSSL; }
+        ///     use "old style" ssl for this connection (Port 5223).
+        /// </summary>
+        public bool UseSSL
+        {
+            get { return m_UseSSL; }
 
 #if SSL
-			set
-			{
+            set
+            {
                 // Only one of both can be true
-				m_UseSSL = value;
-                if (value == true)
+                m_UseSSL = value;
+                if (value)
                     m_UseStartTLS = false;
-			}
+            }
 #endif
-		}
+        }
 
-		/// <summary>
-		/// use Start-TLS on this connection when the server supports it. Make sure UseSSL is false when 
-		/// you want to use this feature.
-		/// </summary>
-		public bool UseStartTLS
-		{
-			get { return m_UseStartTLS; }
+        /// <summary>
+        ///     use Start-TLS on this connection when the server supports it. Make sure UseSSL is false when
+        ///     you want to use this feature.
+        /// </summary>
+        public bool UseStartTLS
+        {
+            get { return m_UseStartTLS; }
 
 #if SSL || BCCRYPTO || CF_2
-			set
-			{
+            set
+            {
                 // Only one of both can be true
-				m_UseStartTLS = value;
-                if (value == true)
+                m_UseStartTLS = value;
+                if (value)
                     m_UseSSL = false;
-			}
+            }
 #endif
-		}
+        }
 
         /// <summary>
-        /// Use Stream compression to save bandwidth?
-        /// This should not be used in combination with StartTLS,
-        /// because TLS has build in compression (see RFC 2246, http://www.ietf.org/rfc/rfc2246.txt)
+        ///     Use Stream compression to save bandwidth?
+        ///     This should not be used in combination with StartTLS,
+        ///     because TLS has build in compression (see RFC 2246, http://www.ietf.org/rfc/rfc2246.txt)
         /// </summary>
-        public bool UseCompression
-        {
-            get { return m_UseCompression; }
-			set	{ m_UseCompression = value;	}
-        }
-
-		/// <summary>
-		/// Are we Authenticated to the server? This is readonly and set by the library
-		/// </summary>
-		public bool Authenticated
-		{
-			get { return m_Authenticated; }				
-		}
-
-		/// <summary>
-		/// is the resource binded? This is readonly and set by the library
-		/// </summary>
-		public bool Binded
-		{
-			get { return m_Binded; }				
-		}
-
-		/// <summary>
-		/// Should the library register a new account on the server
-		/// </summary>
-		public bool RegisterAccount
-		{
-			get { return m_RegisterAccount; }
-			set { m_RegisterAccount = value; }
-		}
-	
-		public IqGrabber IqGrabber
-		{
-			get { return m_IqGrabber; }
-		}
-
-        public MessageGrabber MessageGrabber
-		{
-			get { return m_MessageGrabber; }
-		}
-
-        public PresenceGrabber PresenceGrabber
-        {
-            get { return m_PresenceGrabber; }
-        }
-		
-		public RosterManager RosterManager
-		{
-			get { return m_RosterManager; }
-		}
-
-		public PresenceManager PresenceManager
-		{
-			get { return m_PresenceManager; }
-		}       
-       
-        public bool EnableCapabilities
-        {
-            get { return m_EnableCapabilities; }
-            set { m_EnableCapabilities = value; }
-        }
-
-        public string ClientVersion
-        {
-            get { return m_ClientVersion; }
-            set { m_ClientVersion = value; }
-        }
-
-        public Capabilities Capabilities
-        {
-            get { return m_Capabilities; }
-            set { m_Capabilities = value; }
-        }
+        public bool UseCompression { get; set; } = false;
 
         /// <summary>
-        /// The DiscoInfo object is used to respond to DiscoInfo request if AutoAnswerDiscoInfoRequests == true in DisoManager objects,
-        /// it's also used to build the Caps version when EnableCapabilities is set to true.
-        /// <remarks>
-        /// When EnableCapailities == true call UpdateCapsVersion after each update of the DiscoInfo object
-        /// </remarks>
+        ///     Are we Authenticated to the server? This is readonly and set by the library
         /// </summary>
-        public DiscoInfo DiscoInfo
+        public bool Authenticated { get; private set; }
+
+        /// <summary>
+        ///     is the resource binded? This is readonly and set by the library
+        /// </summary>
+        public bool Binded
         {
-            get { return m_DiscoInfo; }
-            set { m_DiscoInfo = value; }
+            get { return m_Binded; }
         }
-		#endregion
-		
-		#region << Events >>			
-		
-		/// <summary>
-		/// We are authenticated to the server now.
-		/// </summary>	
-		public event ObjectHandler				OnLogin;
-		/// <summary>
-		/// This event occurs after the resource was binded
-		/// </summary>
-		public event ObjectHandler				OnBinded;
 
         /// <summary>
-        /// Event that occurs on bind errors
+        ///     Should the library register a new account on the server
         /// </summary>
-        public event XmppElementHandler         OnBindError;
+        public bool RegisterAccount { get; set; } = false;
+
+        public IqGrabber IqGrabber { get; }
+
+        public MessageGrabber MessageGrabber { get; }
+
+        public PresenceGrabber PresenceGrabber { get; }
+
+        public RosterManager RosterManager { get; }
+
+        public PresenceManager PresenceManager { get; }
+
+        public bool EnableCapabilities { get; set; } = false;
+
+        public string ClientVersion { get; set; } = "1.0";
+
+        public Capabilities Capabilities { get; set; } = new Capabilities();
 
         /// <summary>
-        /// This event is fired when we get register information.
-        /// You ca use this event for custom registrations.
+        ///     The DiscoInfo object is used to respond to DiscoInfo request if AutoAnswerDiscoInfoRequests == true in DisoManager
+        ///     objects,
+        ///     it's also used to build the Caps version when EnableCapabilities is set to true.
+        ///     <remarks>
+        ///         When EnableCapailities == true call UpdateCapsVersion after each update of the DiscoInfo object
+        ///     </remarks>
         /// </summary>
-        public event RegisterEventHandler       OnRegisterInformation;
-		
+        public DiscoInfo DiscoInfo { get; set; } = new DiscoInfo();
+
+        #endregion
+
+        #region << Events >>			
+
         /// <summary>
-		/// This event gets fired after a new account is registered
-		/// </summary>
-		public event ObjectHandler				OnRegistered;
+        ///     We are authenticated to the server now.
+        /// </summary>
+        public event ObjectHandler OnLogin;
 
-		/// <summary>
-		/// This event ets fired after a ChangePassword Request was successful
-		/// </summary>
-		public event ObjectHandler				OnPasswordChanged;
+        /// <summary>
+        ///     This event occurs after the resource was binded
+        /// </summary>
+        public event ObjectHandler OnBinded;
 
-		/*
+        /// <summary>
+        ///     Event that occurs on bind errors
+        /// </summary>
+        public event XmppElementHandler OnBindError;
+
+        /// <summary>
+        ///     This event is fired when we get register information.
+        ///     You ca use this event for custom registrations.
+        /// </summary>
+        public event RegisterEventHandler OnRegisterInformation;
+
+        /// <summary>
+        ///     This event gets fired after a new account is registered
+        /// </summary>
+        public event ObjectHandler OnRegistered;
+
+        /// <summary>
+        ///     This event ets fired after a ChangePassword Request was successful
+        /// </summary>
+        public event ObjectHandler OnPasswordChanged;
+
+        /*
         was never used, comment ot until we need it
 		public event XmppElementHandler			OnXmppError;
 		*/
-         
-		/// <summary>
-		/// Event that occurs on registration errors
-		/// </summary>
-		public event XmppElementHandler			OnRegisterError;
 
         /// <summary>
-        /// Event occurs on Xmpp Stream error elements
+        ///     Event that occurs on registration errors
         /// </summary>
-        public event XmppElementHandler         OnStreamError;
-                		
-		/// <summary>
-		/// Event that occurs on authentication errors
-		/// e.g. wrong password, user doesnt exist etc...
-		/// </summary>
-		public event XmppElementHandler			OnAuthError;
+        public event XmppElementHandler OnRegisterError;
 
         /// <summary>
-        /// Event occurs on Socket Errors
+        ///     Event occurs on Xmpp Stream error elements
         /// </summary>
-        public event ErrorHandler               OnSocketError;
-        		
-		public event ObjectHandler				OnClose;
+        public event XmppElementHandler OnStreamError;
+
+        /// <summary>
+        ///     Event that occurs on authentication errors
+        ///     e.g. wrong password, user doesnt exist etc...
+        /// </summary>
+        public event XmppElementHandler OnAuthError;
+
+        /// <summary>
+        ///     Event occurs on Socket Errors
+        /// </summary>
+        public event ErrorHandler OnSocketError;
+
+        public event ObjectHandler OnClose;
 
 
         /// <summary>
-        /// This event is raised when a response to a roster query is received. The roster query contains the contact list.
-        /// This lost could be very large and could contain hundreds of contacts. The are all send in a single XML element from 
-        /// the server. Normally you show the contact list in a GUI control in you application (treeview, listview). 
-        /// When this event occurs you couls Suspend the GUI for faster drawing and show change the mousepointer to the hourglass
+        ///     This event is raised when a response to a roster query is received. The roster query contains the contact list.
+        ///     This lost could be very large and could contain hundreds of contacts. The are all send in a single XML element from
+        ///     the server. Normally you show the contact list in a GUI control in you application (treeview, listview).
+        ///     When this event occurs you couls Suspend the GUI for faster drawing and show change the mousepointer to the
+        ///     hourglass
         /// </summary>
         /// <remarks>see also OnRosterItem and OnRosterEnd</remarks>
-        public event ObjectHandler				OnRosterStart;
+        public event ObjectHandler OnRosterStart;
 
         /// <summary>
-        /// This event is raised when a response to a roster query is received. It notifies you that all RosterItems (contacts) are
-        /// received now.
-        /// When this event occurs you could Resume the GUI and show the normal mousepointer again.
+        ///     This event is raised when a response to a roster query is received. It notifies you that all RosterItems (contacts)
+        ///     are
+        ///     received now.
+        ///     When this event occurs you could Resume the GUI and show the normal mousepointer again.
         /// </summary>
         /// <remarks>see also OnRosterStart and OnRosterItem</remarks>
-        public event ObjectHandler				OnRosterEnd;
+        public event ObjectHandler OnRosterEnd;
 
         /// <summary>
-        /// This event is raised when a response to a roster query is received. This event always contains a single RosterItem. 
-        /// e.g. you have 150 friends on your contact list, then this event is called 150 times.
+        ///     This event is raised when a response to a roster query is received. This event always contains a single RosterItem.
+        ///     e.g. you have 150 friends on your contact list, then this event is called 150 times.
         /// </summary>
         /// <remarks>see also OnRosterItem and OnRosterEnd</remarks>
-        public event RosterHandler              OnRosterItem;
+        public event RosterHandler OnRosterItem;
 
         /// <summary>
-        /// This event is raised when a response to an agents query which could contain multiple agentitems.
-        /// Normally you show the items in a GUI. This event could be used to suspend the UI for faster drawing.
+        ///     This event is raised when a response to an agents query which could contain multiple agentitems.
+        ///     Normally you show the items in a GUI. This event could be used to suspend the UI for faster drawing.
         /// </summary>
         /// <remarks>see also OnAgentItem and OnAgentEnd</remarks>
-		public event ObjectHandler				OnAgentStart;
+        public event ObjectHandler OnAgentStart;
 
         /// <summary>
-        /// This event is raised when a response to an agents query which could contain multiple agentitems.
-        /// Normally you show the items in a GUI. This event could be used to resume the suspended userinterface.
+        ///     This event is raised when a response to an agents query which could contain multiple agentitems.
+        ///     Normally you show the items in a GUI. This event could be used to resume the suspended userinterface.
         /// </summary>
         /// <remarks>see also OnAgentStart and OnAgentItem</remarks>
-        public event ObjectHandler				OnAgentEnd;
+        public event ObjectHandler OnAgentEnd;
 
         /// <summary>
-        /// This event returns always a single AgentItem from a agents query result.
-        /// This is from the old jabber protocol. Instead of agents Disco (Service Discovery) should be used in modern
-        /// application. But still lots of servers use Agents.
-        /// <seealso cref=""/>
+        ///     This event returns always a single AgentItem from a agents query result.
+        ///     This is from the old jabber protocol. Instead of agents Disco (Service Discovery) should be used in modern
+        ///     application. But still lots of servers use Agents.
+        ///     <seealso cref="" />
         /// </summary>
         /// <remarks>see also OnAgentStart and OnAgentEnd</remarks>
-        public event AgentHandler				OnAgentItem;
+        public event AgentHandler OnAgentItem;
 
         /// <summary>
-        /// 
-        /// </summary>        
-        public event IqHandler                  OnIq;	
-
-		/// <summary>
-		/// We received a message. This could be a chat message, headline, normal message or a groupchat message. 
-        /// There are also XMPP extension which are embedded in messages. 
-        /// e.g. X-Data forms.
-		/// </summary>
-		public event MessageHandler				OnMessage;
-		
-        /// <summary>
-        /// We received a presence from a contact or chatroom.
-        /// Also subscriptions is handles in this event.
         /// </summary>
-        public event PresenceHandler			OnPresence;
-		
+        public event IqHandler OnIq;
+
+        /// <summary>
+        ///     We received a message. This could be a chat message, headline, normal message or a groupchat message.
+        ///     There are also XMPP extension which are embedded in messages.
+        ///     e.g. X-Data forms.
+        /// </summary>
+        public event MessageHandler OnMessage;
+
+        /// <summary>
+        ///     We received a presence from a contact or chatroom.
+        ///     Also subscriptions is handles in this event.
+        /// </summary>
+        public event PresenceHandler OnPresence;
+
         //public event ErrorHandler				OnError;
 
-		public event SaslEventHandler			OnSaslStart;
-		public event ObjectHandler				OnSaslEnd;
+        public event SaslEventHandler OnSaslStart;
+        public event ObjectHandler OnSaslEnd;
 
+        #endregion
 
-		#endregion
+        #region << Constructors >>
 
-		#region << Constructors >>
-		public XmppClientConnection() : base()
-		{			
-			m_IqGrabber			= new IqGrabber(this);
-			m_MessageGrabber	= new MessageGrabber(this);
-            m_PresenceGrabber   = new PresenceGrabber(this);
-			m_PresenceManager	= new PresenceManager(this);
-			m_RosterManager		= new RosterManager(this);            
-		}
+        public XmppClientConnection()
+        {
+            IqGrabber = new IqGrabber(this);
+            MessageGrabber = new MessageGrabber(this);
+            PresenceGrabber = new PresenceGrabber(this);
+            PresenceManager = new PresenceManager(this);
+            RosterManager = new RosterManager(this);
+        }
 
-		public XmppClientConnection(SocketConnectionType type) : this()
-		{
-			base.SocketConnectionType = type;
-		}
+        public XmppClientConnection(SocketConnectionType type) : this()
+        {
+            SocketConnectionType = type;
+        }
 
         /// <summary>
-        /// create a new XmppClientConnection with the given JabberId and password
+        ///     create a new XmppClientConnection with the given JabberId and password
         /// </summary>
         /// <param name="jid">JabberId (user@example.com)</param>
         /// <param name="pass">password</param>
         public XmppClientConnection(Jid jid, string pass)
             : this()
         {
-            base.Server     = jid.Server;
-            this.Username   = jid.User;
-            this.Password   = pass;
+            Server = jid.Server;
+            Username = jid.User;
+            Password = pass;
         }
 
         /// <summary>
-        /// create a new XmppClientConnection with the given server
-        /// Username and Password gets set later
+        ///     create a new XmppClientConnection with the given server
+        ///     Username and Password gets set later
         /// </summary>
         /// <param name="server"></param>
-		public XmppClientConnection(string server) : this()
-		{
-			base.Server = server;
-		}
+        public XmppClientConnection(string server) : this()
+        {
+            Server = server;
+        }
 
         /// <summary>
-        /// create a new XmppClientConnection with the given server and port number
-        /// Username and Password gets set later
+        ///     create a new XmppClientConnection with the given server and port number
+        ///     Username and Password gets set later
         /// </summary>
         /// <param name="server"></param>
-		public XmppClientConnection(string server, int port) : this(server)
-		{
-			base.Port = port;
-		}
-		#endregion
-                
-        /// <summary>
-        /// This method open the connections to the xmpp server and authenticates you to ther server.
-        /// This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin Event
-        /// </summary>
-		public void Open()
-		{
-			_Open();            
-		}       
+        public XmppClientConnection(string server, int port) : this(server)
+        {
+            Port = port;
+        }
+
+        #endregion
 
         /// <summary>
-        /// This method open the connections to the xmpp server and authenticates you to ther server.
-        /// This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin Event
+        ///     This method open the connections to the xmpp server and authenticates you to ther server.
+        ///     This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin
+        ///     Event
+        /// </summary>
+        public void Open()
+        {
+            _Open();
+        }
+
+        /// <summary>
+        ///     This method open the connections to the xmpp server and authenticates you to ther server.
+        ///     This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin
+        ///     Event
         /// </summary>
         /// <param name="username">your username</param>
         /// <param name="password">your password</param>
-		public void Open(string username, string password)
-		{            
-            this.Username   = username;
-            this.Password   = password;
+        public void Open(string username, string password)
+        {
+            Username = username;
+            Password = password;
 
-			_Open();
-		}
+            _Open();
+        }
 
         /// <summary>
-        /// This method open the connections to the xmpp server and authenticates you to ther server.
-        /// This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin Event
+        ///     This method open the connections to the xmpp server and authenticates you to ther server.
+        ///     This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin
+        ///     Event
         /// </summary>
         /// <param name="username">your username</param>
         /// <param name="password">your passowrd</param>
         /// <param name="resource">resource for this connection</param>
-		public void Open(string username, string password, string resource)
-		{
-			this.m_Username = username;
-			this.m_Password	= password;
-			this.m_Resource	= resource;
-			_Open();
-		}
+        public void Open(string username, string password, string resource)
+        {
+            m_Username = username;
+            Password = password;
+            Resource = resource;
+            _Open();
+        }
 
         /// <summary>
-        /// This method open the connections to the xmpp server and authenticates you to ther server.
-        /// This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin Event
+        ///     This method open the connections to the xmpp server and authenticates you to ther server.
+        ///     This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin
+        ///     Event
         /// </summary>
         /// <param name="username">your username</param>
         /// <param name="password">your password</param>
         /// <param name="resource">resource for this connection</param>
         /// <param name="priority">priority which will be sent with presence packets</param>
-		public void Open(string username, string password, string resource, int priority)
-		{
-			this.m_Username = username;
-			this.m_Password	= password;
-			this.m_Resource	= resource;
-			this.m_Priority	= priority;
-			_Open();
-		}
+        public void Open(string username, string password, string resource, int priority)
+        {
+            m_Username = username;
+            Password = password;
+            Resource = resource;
+            m_Priority = priority;
+            _Open();
+        }
 
         /// <summary>
-        /// This method open the connections to the xmpp server and authenticates you to ther server.
-        /// This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin Event
+        ///     This method open the connections to the xmpp server and authenticates you to ther server.
+        ///     This method is async, don't assume you are already connected when it returns. You have to wait for the OnLogin
+        ///     Event
         /// </summary>
         /// <param name="username">your username</param>
         /// <param name="password">your password</param>
         /// <param name="priority">priority which will be sent with presence packets</param>
-		public void Open(string username, string password, int priority)
-		{
-			this.m_Username = username;
-			this.m_Password	= password;			
-			this.m_Priority	= priority;
-			_Open();
-		}
-            
-		#region << Socket handers >>
-		public override void SocketOnConnect(object sender)
-		{
-			base.SocketOnConnect(sender);
+        public void Open(string username, string password, int priority)
+        {
+            m_Username = username;
+            Password = password;
+            m_Priority = priority;
+            _Open();
+        }
+
+        #region << Socket handers >>
+
+        public override void SocketOnConnect(object sender)
+        {
+            base.SocketOnConnect(sender);
 
             SendStreamHeader(true);
-		}
+        }
 
-		public override void SocketOnDisconnect(object sender)
-		{	
-			base.SocketOnDisconnect(sender);
+        public override void SocketOnDisconnect(object sender)
+        {
+            base.SocketOnDisconnect(sender);
 
-			if(!m_CleanUpDone)
-				CleanupSession();
-		}
+            if (!m_CleanUpDone)
+                CleanupSession();
+        }
 
         public override void SocketOnError(object sender, Exception ex)
         {
             base.SocketOnError(sender, ex);
 
-            if ((ex.GetType() == typeof(ConnectTimeoutException) 
-                || (ex.GetType() == typeof(SocketException) && ((SocketException)ex).ErrorCode == 10061))
+            if ((ex.GetType() == typeof(ConnectTimeoutException)
+                 || (ex.GetType() == typeof(SocketException) && ((SocketException) ex).ErrorCode == 10061))
                 && _SRVRecords != null
                 && _SRVRecords.Length > 1)
-            {         
+            {
                 // connect failed. We are using SRV records and have multiple results.
                 // remove the current record
                 RemoveSrvRecord(_currentSRVRecord);
@@ -733,42 +620,44 @@ namespace agsXMPP
                 // Only cleaneUp Session and raise on close if the stream already has started
                 // if teh stream gets closed because of a socket error we have to raise both errors fo course
                 if (m_StreamStarted && !m_CleanUpDone)
-                    CleanupSession();                
+                    CleanupSession();
             }
-        }		
-		#endregion
-               
-		private void _Open()
-		{
-            m_CleanUpDone   = false;
+        }
+
+        #endregion
+
+        private void _Open()
+        {
+            m_CleanUpDone = false;
             m_StreamStarted = false;
 
-			StreamParser.Reset();
+            StreamParser.Reset();
 #if SSL
-			if (ClientSocket.GetType() == typeof(ClientSocket))
-				((ClientSocket) ClientSocket).SSL = m_UseSSL;
-#endif		
+            if (ClientSocket.GetType() == typeof(ClientSocket))
+                ((ClientSocket) ClientSocket).SSL = m_UseSSL;
+#endif
             // this should start later
             //if (m_KeepAlive)
             //    CreateKeepAliveTimer();
-            
+
             if (SocketConnectionType == SocketConnectionType.Direct && AutoResolveConnectServer)
                 ResolveSrv();
 
-            OpenSocket();          
-		}
+            OpenSocket();
+        }
 
         private void OpenSocket()
         {
             if (ConnectServer == null)
-                SocketConnect(base.Server, base.Port);
+                SocketConnect(Server, Port);
             else
-                SocketConnect(this.ConnectServer, base.Port);
+                SocketConnect(ConnectServer, Port);
         }
 
         #region << SRV functions >>
+
         /// <summary>
-        /// Resolves the connection host of a xmpp domain when SRV records are set
+        ///     Resolves the connection host of a xmpp domain when SRV records are set
         /// </summary>
         private void ResolveSrv()
         {
@@ -784,7 +673,7 @@ namespace agsXMPP
                     {
                         try
                         {
-                            string queryDomain = SRV_RECORD_PREFIX + Server;
+                            var queryDomain = SRV_RECORD_PREFIX + Server;
 
                             _SRVRecords = Resolver.SRVLookup(queryDomain, dnsServer);
                             SetConnectServerFromSRVRecords();
@@ -792,7 +681,6 @@ namespace agsXMPP
                         }
                         catch (Exception)
                         {
-
                         }
                     }
                 }
@@ -812,22 +700,22 @@ namespace agsXMPP
                 //SRVRecord srv = _SRVRecords[0];
                 _currentSRVRecord = PickSRVRecord();
 
-                this.Port           = _currentSRVRecord.Port;
-                this.ConnectServer  = _currentSRVRecord.Target;
+                Port = _currentSRVRecord.Port;
+                ConnectServer = _currentSRVRecord.Target;
             }
             else
             {
                 // no SRV-Records set
                 _currentSRVRecord = null;
-                this.ConnectServer = null;
+                ConnectServer = null;
             }
         }
 
         private void RemoveSrvRecord(SRVRecord rec)
         {
-            int i = 0;
-            SRVRecord[] recs = new SRVRecord[_SRVRecords.Length - 1];
-            foreach (SRVRecord srv in _SRVRecords)
+            var i = 0;
+            var recs = new SRVRecord[_SRVRecords.Length - 1];
+            foreach (var srv in _SRVRecords)
             {
                 if (!srv.Equals(rec))
                 {
@@ -839,8 +727,8 @@ namespace agsXMPP
         }
 
         /// <summary>
-        /// Picks one of the SRV records.
-        /// priority and weight are evaluated by the following algorithm.
+        ///     Picks one of the SRV records.
+        ///     priority and weight are evaluated by the following algorithm.
         /// </summary>
         /// <returns>SRVRecord</returns>
         private SRVRecord PickSRVRecord()
@@ -848,15 +736,15 @@ namespace agsXMPP
             SRVRecord ret = null;
 
             // total weight of all servers with the same priority
-            int totalWeight = 0;
-            
+            var totalWeight = 0;
+
             // ArrayList for the servers with the lowest priority
-            ArrayList lowServers = new ArrayList();
+            var lowServers = new ArrayList();
             // check we have a response
             if (_SRVRecords != null && _SRVRecords.Length > 0)
             {
                 // Find server(s) with the highest priority (could be multiple)
-                foreach (SRVRecord srv in _SRVRecords)
+                foreach (var srv in _SRVRecords)
                 {
                     if (ret == null)
                     {
@@ -896,26 +784,23 @@ namespace agsXMPP
                 if (totalWeight > 0)
                 {
                     // Create a random value between 1 - total Weight
-                    int rnd = new Random().Next(1, totalWeight);
-                    int i = 0;
+                    var rnd = new Random().Next(1, totalWeight);
+                    var i = 0;
                     foreach (SRVRecord sr in lowServers)
                     {
-                        if (rnd > i && rnd <= (i + sr.Weight))
+                        if (rnd > i && rnd <= i + sr.Weight)
                         {
                             ret = sr;
                             break;
                         }
-                        else
-                        {
-                            i += sr.Weight;
-                        }
+                        i += sr.Weight;
                     }
                 }
                 else
                 {
                     // Servers have no weight, they are all equal, pick a random server
-                    int rnd = new Random().Next(lowServers.Count);                    
-                    ret = (SRVRecord) lowServers[rnd];                    
+                    var rnd = new Random().Next(lowServers.Count);
+                    ret = (SRVRecord) lowServers[rnd];
                 }
             }
 
@@ -926,19 +811,19 @@ namespace agsXMPP
 
         private void SendStreamHeader(bool startParser)
         {
-            StringBuilder sb = new StringBuilder();
+            var sb = new StringBuilder();
 
 
             sb.Append("<stream:stream");
-            sb.Append(" to='" + base.Server + "'");
+            sb.Append(" to='" + Server + "'");
             sb.Append(" xmlns='jabber:client'");
             sb.Append(" xmlns:stream='http://etherx.jabber.org/streams'");
 
             if (StreamVersion != null)
                 sb.Append(" version='" + StreamVersion + "'");
 
-            if (m_ClientLanguage != null)
-                sb.Append(" xml:lang='" + m_ClientLanguage + "'");
+            if (ClientLanguage != null)
+                sb.Append(" xml:lang='" + ClientLanguage + "'");
 
             // xml:lang="en"<stream:stream to="coversant.net" xmlns="jabber:client" xmlns:stream="http://etherx.jabber.org/streams"  xml:lang="en" version="1.0" >
             // sb.Append(" xml:lang='" + "en" + "' ");
@@ -947,58 +832,59 @@ namespace agsXMPP
             sb.Append(">");
 
             Open(sb.ToString());
-        }	
-               
+        }
 
-		/// <summary>
-		/// Sends our Presence, the packet is built of Status, Show and Priority
-		/// </summary>
-		public void SendMyPresence()
-		{
-            Presence pres = new Presence(m_Show, m_Status, m_Priority);
-
-            // Add client caps when enabled
-            if (m_EnableCapabilities)
-            {
-                if (m_Capabilities.Version == null)
-                    UpdateCapsVersion();
-
-                pres.AddChild(m_Capabilities);
-            }
-
-            this.Send(pres);
-		}
 
         /// <summary>
-        /// Sets the caps version automatically from the DiscoInfo object.
-        /// Call this member after each change of the DiscoInfo object
+        ///     Sends our Presence, the packet is built of Status, Show and Priority
+        /// </summary>
+        public void SendMyPresence()
+        {
+            var pres = new Presence(Show, Status, m_Priority);
+
+            // Add client caps when enabled
+            if (EnableCapabilities)
+            {
+                if (Capabilities.Version == null)
+                    UpdateCapsVersion();
+
+                pres.AddChild(Capabilities);
+            }
+
+            Send(pres);
+        }
+
+        /// <summary>
+        ///     Sets the caps version automatically from the DiscoInfo object.
+        ///     Call this member after each change of the DiscoInfo object
         /// </summary>
         public void UpdateCapsVersion()
         {
-            m_Capabilities.SetVersion(m_DiscoInfo);
+            Capabilities.SetVersion(DiscoInfo);
         }
 
-		internal void RequestLoginInfo()
-		{			
-			AuthIq iq = new AuthIq(IqType.get, new Jid(base.Server));
-			iq.Query.Username = this.m_Username;
+        internal void RequestLoginInfo()
+        {
+            var iq = new AuthIq(IqType.get, new Jid(Server));
+            iq.Query.Username = m_Username;
 
-			IqGrabber.SendIq(iq, new IqCB(OnGetAuthInfo), null);
-		}
+            IqGrabber.SendIq(iq, OnGetAuthInfo, null);
+        }
 
-		/// <summary>
-		/// Changing the Password. You should use this function only when connected with SSL or TLS
-		/// because the password is sent in plain text over the connection.		
-		/// </summary>
-		/// /// <remarks>
-		///		<para>
-		///			After this request was successful the new password is set automatically in the Username Property
-		///		</para>
-		/// </remarks>		
-		/// <param name="newPass">value of the new password</param>
-		public void ChangePassword(string newPass)
-		{
-			/*
+        /// <summary>
+        ///     Changing the Password. You should use this function only when connected with SSL or TLS
+        ///     because the password is sent in plain text over the connection.
+        /// </summary>
+        /// ///
+        /// <remarks>
+        ///     <para>
+        ///         After this request was successful the new password is set automatically in the Username Property
+        ///     </para>
+        /// </remarks>
+        /// <param name="newPass">value of the new password</param>
+        public void ChangePassword(string newPass)
+        {
+            /*
 			
 			Example 10. Password Change
 			<iq type='set' to='somehost' id='change1'>
@@ -1025,32 +911,31 @@ namespace agsXMPP
 			<iq type='result' id='change1'/>			
 			*/
 
-			RegisterIq regIq  = new RegisterIq(IqType.set, new Jid(base.Server));			
-			regIq.Query.Username = this.m_Username;
-			regIq.Query.Password = newPass;
-			
-			IqGrabber.SendIq(regIq, new IqCB(OnChangePasswordResult), newPass);
-		}
+            var regIq = new RegisterIq(IqType.set, new Jid(Server));
+            regIq.Query.Username = m_Username;
+            regIq.Query.Password = newPass;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="sender"></param>
-		/// <param name="iq"></param>
-		/// <param name="data">contains the new password</param>
-		private void OnChangePasswordResult(object sender, IQ iq, object data)
-		{
-			if (iq.Type == IqType.result)
-			{
-				if(OnPasswordChanged!=null)
-					OnPasswordChanged(this);
-				
-				// Set the new password in the Password property on sucess
-				m_Password = (string) data;
-			}
-			else if (iq.Type == IqType.error)
-			{
-				/*
+            IqGrabber.SendIq(regIq, OnChangePasswordResult, newPass);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="iq"></param>
+        /// <param name="data">contains the new password</param>
+        private void OnChangePasswordResult(object sender, IQ iq, object data)
+        {
+            if (iq.Type == IqType.result)
+            {
+                if (OnPasswordChanged != null)
+                    OnPasswordChanged(this);
+
+                // Set the new password in the Password property on sucess
+                Password = (string) data;
+            }
+            else if (iq.Type == IqType.error)
+            {
+                /*
 				The server or service SHOULD NOT return the original XML sent in 
 				IQ error stanzas related to password changes.
 
@@ -1082,16 +967,15 @@ namespace agsXMPP
 								  
 				*/
 
-				if(OnRegisterError!=null)
-					OnRegisterError(this, iq);
-			}
+                if (OnRegisterError != null)
+                    OnRegisterError(this, iq);
+            }
         }
 
         #region << Register new Account >>
-        
 
         /// <summary>
-        /// requests the registration fields
+        ///     requests the registration fields
         /// </summary>
         /// <param name="obj">object which contains the features node which we need later for login again</param>
         private void GetRegistrationFields(object data)
@@ -1100,8 +984,8 @@ namespace agsXMPP
             //  <query xmlns='jabber:iq:register'/>
             // </iq>
 
-            RegisterIq regIq = new RegisterIq(IqType.get, new Jid(base.Server));
-            IqGrabber.SendIq(regIq, new IqCB(OnRegistrationFieldsResult), data);
+            var regIq = new RegisterIq(IqType.get, new Jid(Server));
+            IqGrabber.SendIq(regIq, OnRegistrationFieldsResult, data);
         }
 
         private void OnRegistrationFieldsResult(object sender, IQ iq, object data)
@@ -1110,27 +994,27 @@ namespace agsXMPP
             {
                 if (iq.Query is Register)
                 {
-                    RegisterEventArgs args = new RegisterEventArgs(iq.Query as Register);
+                    var args = new RegisterEventArgs(iq.Query as Register);
                     if (OnRegisterInformation != null)
                         OnRegisterInformation(this, args);
 
                     DoChangeXmppConnectionState(XmppConnectionState.Registering);
 
-                    IQ regIq = new IQ(IqType.set);
+                    var regIq = new IQ(IqType.set);
                     regIq.GenerateId();
-                    regIq.To = new Jid(base.Server);
+                    regIq.To = new Jid(Server);
 
                     //RegisterIq regIq = new RegisterIq(IqType.set, new Jid(base.Server));
                     if (args.Auto)
                     {
-                        Register reg = new Register(this.m_Username, this.m_Password);
+                        var reg = new Register(m_Username, Password);
                         regIq.Query = reg;
                     }
                     else
                     {
                         regIq.Query = args.Register;
                     }
-                    IqGrabber.SendIq(regIq, new IqCB(OnRegisterResult), data);
+                    IqGrabber.SendIq(regIq, OnRegisterResult, data);
                 }
             }
             else
@@ -1139,10 +1023,10 @@ namespace agsXMPP
                     OnRegisterError(this, iq);
             }
         }
-        
+
         private void OnRegisterResult(object sender, IQ iq, object data)
-		{
-			/*
+        {
+            /*
 			Example 6. Host Informs Entity of Failed Registration (Username Conflict)
 
 			<iq type='error' id='reg2'>
@@ -1175,8 +1059,8 @@ namespace agsXMPP
                 if (OnRegistered != null)
                     OnRegistered(this);
 
-                if (this.StreamVersion != null && this.StreamVersion.StartsWith("1."))
-                { 
+                if (StreamVersion != null && StreamVersion.StartsWith("1."))
+                {
                     // init sasl login
                     InitSaslHandler();
                     m_SaslHandler.OnStreamElement(this, data as Node);
@@ -1193,117 +1077,122 @@ namespace agsXMPP
                     OnRegisterError(this, iq);
             }
         }
+
         #endregion
 
         private void OnGetAuthInfo(object sender, IQ iq, object data)
-		{
-			// We get smth like this and should add password (digest) and ressource
-			// Recv:<iq type="result" id="MX_7"><query xmlns="jabber:iq:auth"><username>gnauck</username><password/><digest/><resource/></query></iq>
-			// Send:<iq type='set' id='mx_login'>
-			//			<query xmlns='jabber:iq:auth'><username>gnauck</username><digest>27c05d464e3f908db3b2ca1729674bfddb28daf2</digest><resource>Office</resource></query>
-			//		</iq>
-			// Recv:<iq id="mx_login" type="result"/> 
-			
-			iq.GenerateId();
-			iq.SwitchDirection();
-			iq.Type = IqType.set;
+        {
+            // We get smth like this and should add password (digest) and ressource
+            // Recv:<iq type="result" id="MX_7"><query xmlns="jabber:iq:auth"><username>gnauck</username><password/><digest/><resource/></query></iq>
+            // Send:<iq type='set' id='mx_login'>
+            //			<query xmlns='jabber:iq:auth'><username>gnauck</username><digest>27c05d464e3f908db3b2ca1729674bfddb28daf2</digest><resource>Office</resource></query>
+            //		</iq>
+            // Recv:<iq id="mx_login" type="result"/> 
 
-			Auth auth = (Auth) iq.Query;
-			
-			auth.Resource = this.m_Resource;
-			auth.SetAuth(this.m_Username, this.m_Password, this.StreamId);
-			
-			IqGrabber.SendIq(iq, new IqCB(OnAuthenticate), null);
-		}
+            iq.GenerateId();
+            iq.SwitchDirection();
+            iq.Type = IqType.set;
 
-		/// <summary>
-		/// Refreshes the myJid Member Variable
-		/// </summary>
-		private Jid BuildMyJid()
-		{
-            Jid jid = new Jid(null);
-            
+            var auth = (Auth) iq.Query;
+
+            auth.Resource = Resource;
+            auth.SetAuth(m_Username, Password, StreamId);
+
+            IqGrabber.SendIq(iq, OnAuthenticate, null);
+        }
+
+        /// <summary>
+        ///     Refreshes the myJid Member Variable
+        /// </summary>
+        private Jid BuildMyJid()
+        {
+            var jid = new Jid(null);
+
             jid.m_User = m_Username;
             jid.m_Server = Server;
-            jid.m_Resource = m_Resource;
-            
+            jid.m_Resource = Resource;
+
             jid.BuildJid();
 
-            return jid;			
-		}
+            return jid;
+        }
 
-		#region << RequestAgents >>
-		public void RequestAgents()
-		{			
-			AgentsIq iq = new AgentsIq(IqType.get, new Jid(base.Server));
-			IqGrabber.SendIq(iq, new IqCB(OnAgents), null);
-		}
+        #region << RequestAgents >>
 
-		private void OnAgents(object sender, IQ iq, object data)
-		{	
-			if (OnAgentStart != null)
-				OnAgentStart(this);
-						
-			Agents agents = iq.Query as Agents;
-			if (agents != null)
-			{
-				foreach (Agent a in agents.GetAgents())
-				{
-					if (OnAgentItem != null)
-						OnAgentItem(this, a);				
-				}
-			}
+        public void RequestAgents()
+        {
+            var iq = new AgentsIq(IqType.get, new Jid(Server));
+            IqGrabber.SendIq(iq, OnAgents, null);
+        }
 
-			if (OnAgentEnd != null)
-				OnAgentEnd(this);			
-		}
-		#endregion
+        private void OnAgents(object sender, IQ iq, object data)
+        {
+            if (OnAgentStart != null)
+                OnAgentStart(this);
 
-		#region << RequestRoster >>
-		public void RequestRoster()
-		{		
-			RosterIq iq = new RosterIq(IqType.get);
-			Send(iq);
-		}
-		
-		private void OnRosterIQ(IQ iq)
-		{			
-			// if type == result then it must be the "FullRoster" we requested
-			// in this case we raise OnRosterStart and OnRosterEnd
-			// 
-			// if type == set its a new added r updated rosteritem. Here we dont raise
-			// OnRosterStart and OnRosterEnd
-			if (iq.Type == IqType.result && OnRosterStart != null)
-				OnRosterStart(this);
+            var agents = iq.Query as Agents;
+            if (agents != null)
+            {
+                foreach (Agent a in agents.GetAgents())
+                {
+                    if (OnAgentItem != null)
+                        OnAgentItem(this, a);
+                }
+            }
 
-			Roster r = iq.Query as Roster;
-			if (r != null)
-			{
-				foreach (RosterItem i in r.GetRoster())
-				{
-					if (OnRosterItem != null)
-						OnRosterItem(this, i);
-				}
-			}
+            if (OnAgentEnd != null)
+                OnAgentEnd(this);
+        }
 
-            if (iq.Type == IqType.result && OnRosterEnd != null)            
+        #endregion
+
+        #region << RequestRoster >>
+
+        public void RequestRoster()
+        {
+            var iq = new RosterIq(IqType.get);
+            Send(iq);
+        }
+
+        private void OnRosterIQ(IQ iq)
+        {
+            // if type == result then it must be the "FullRoster" we requested
+            // in this case we raise OnRosterStart and OnRosterEnd
+            // 
+            // if type == set its a new added r updated rosteritem. Here we dont raise
+            // OnRosterStart and OnRosterEnd
+            if (iq.Type == IqType.result && OnRosterStart != null)
+                OnRosterStart(this);
+
+            var r = iq.Query as Roster;
+            if (r != null)
+            {
+                foreach (var i in r.GetRoster())
+                {
+                    if (OnRosterItem != null)
+                        OnRosterItem(this, i);
+                }
+            }
+
+            if (iq.Type == IqType.result && OnRosterEnd != null)
                 OnRosterEnd(this);
-            
-            if (m_AutoPresence && iq.Type == IqType.result)
-                SendMyPresence();
-		}
-		#endregion       
 
-		private void OnAuthenticate(object sender, IQ iq, object data)
-		{			
-			if (iq.Type == IqType.result)
-			{
-                m_Authenticated = true;
-                RaiseOnLogin();                
-			}
-			else if(iq.Type == IqType.error)
-			{
-				/* 
+            if (AutoPresence && iq.Type == IqType.result)
+                SendMyPresence();
+        }
+
+        #endregion
+
+        private void OnAuthenticate(object sender, IQ iq, object data)
+        {
+            if (iq.Type == IqType.result)
+            {
+                Authenticated = true;
+                RaiseOnLogin();
+            }
+            else if (iq.Type == IqType.error)
+            {
+                /* 
 				 * <iq xmlns="jabber:client" id="agsXMPP_2" type="error">
 				 *		<query xmlns="jabber:iq:auth">
 				 *			<username>test</username>
@@ -1314,293 +1203,292 @@ namespace agsXMPP
 				 * </iq>
 				 * 
 				 */
-                if (OnAuthError!=null)
-					OnAuthError(this, iq);
-			}
-			
-		}
+                if (OnAuthError != null)
+                    OnAuthError(this, iq);
+            }
+        }
 
-		internal void FireOnAuthError(Element e)
-		{
-			if (OnAuthError!=null)
-				OnAuthError(this, e);
-		}
-        
-		#region << StreamParser Events >>
-		public override void StreamParserOnStreamStart(object sender, Node e)
-		{
-			base.StreamParserOnStreamStart(this, e);
+        internal void FireOnAuthError(Element e)
+        {
+            if (OnAuthError != null)
+                OnAuthError(this, e);
+        }
+
+        #region << StreamParser Events >>
+
+        public override void StreamParserOnStreamStart(object sender, Node e)
+        {
+            base.StreamParserOnStreamStart(this, e);
 
             m_StreamStarted = true;
 
-			//m_CleanUpDone = false; moved that to _Open();
-                            
-            protocol.Stream st = (protocol.Stream)e;
+            //m_CleanUpDone = false; moved that to _Open();
+
+            var st = (Stream) e;
             if (st == null)
                 return;
 
             // Read the server language string
-            m_ServerLanguage = st.Language;               
-        
+            ServerLanguage = st.Language;
 
-			// Auth stuff
-			if (!RegisterAccount)
-			{
-				if (this.StreamVersion != null && this.StreamVersion.StartsWith("1."))
-				{
-					if (!Authenticated)
-					{
-						// we assume server supports SASL here, because it advertised a StreamVersion 1.X
-						// and wait for the stream features and initialize the SASL Handler
-                        InitSaslHandler();						
-					}				
-				}
-				else
-				{
-					// old auth stuff
-					RequestLoginInfo();
-				}
-			}
-			else
-			{
+
+            // Auth stuff
+            if (!RegisterAccount)
+            {
+                if (StreamVersion != null && StreamVersion.StartsWith("1."))
+                {
+                    if (!Authenticated)
+                    {
+                        // we assume server supports SASL here, because it advertised a StreamVersion 1.X
+                        // and wait for the stream features and initialize the SASL Handler
+                        InitSaslHandler();
+                    }
+                }
+                else
+                {
+                    // old auth stuff
+                    RequestLoginInfo();
+                }
+            }
+            else
+            {
                 // Register on "old" jabber servers without stream features
-                if (this.StreamVersion == null)
+                if (StreamVersion == null)
                     GetRegistrationFields(null);
-			}
-			
-		}
+            }
+        }
 
         private void InitSaslHandler()
         {
             if (m_SaslHandler == null)
             {
                 m_SaslHandler = new SaslHandler(this);
-                m_SaslHandler.OnSaslStart += new SaslEventHandler(m_SaslHandler_OnSaslStart);
-                m_SaslHandler.OnSaslEnd += new ObjectHandler(m_SaslHandler_OnSaslEnd);
+                m_SaslHandler.OnSaslStart += m_SaslHandler_OnSaslStart;
+                m_SaslHandler.OnSaslEnd += m_SaslHandler_OnSaslEnd;
             }
         }
 
-		public override void StreamParserOnStreamEnd(object sender, Node e)
-		{
-			base.StreamParserOnStreamEnd(sender, e);			
-			
-			if (!m_CleanUpDone)
-				CleanupSession();
-		}
+        public override void StreamParserOnStreamEnd(object sender, Node e)
+        {
+            base.StreamParserOnStreamEnd(sender, e);
 
-		public override void StreamParserOnStreamElement(object sender, Node e)
-		{
-			base.StreamParserOnStreamElement(sender, e);
+            if (!m_CleanUpDone)
+                CleanupSession();
+        }
 
-			if (e is IQ)
-			{
-				if (OnIq != null)
-					OnIq(this, e as IQ);
-					
-				IQ iq = e as IQ;
-				if ( iq != null && iq.Query != null)
-				{
-					// Roster
+        public override void StreamParserOnStreamElement(object sender, Node e)
+        {
+            base.StreamParserOnStreamElement(sender, e);
+
+            if (e is IQ)
+            {
+                if (OnIq != null)
+                    OnIq(this, e as IQ);
+
+                var iq = e as IQ;
+                if (iq != null && iq.Query != null)
+                {
+                    // Roster
                     if (iq.Query is Roster)
-                        OnRosterIQ(iq);                   
-				}	
-			}
-			else if (e is Message)
-			{
-				if (OnMessage != null)
-					OnMessage(this, e as Message);
-			}
-			else if (e is Presence)
-			{
-				if (OnPresence != null)
-					OnPresence(this, e as Presence);
-			}
-			else if (e is Features)
-			{
-				// Stream Features
-				// StartTLS stuff
-				Features f = e as Features;
+                        OnRosterIQ(iq);
+                }
+            }
+            else if (e is Message)
+            {
+                if (OnMessage != null)
+                    OnMessage(this, e as Message);
+            }
+            else if (e is Presence)
+            {
+                if (OnPresence != null)
+                    OnPresence(this, e as Presence);
+            }
+            else if (e is Features)
+            {
+                // Stream Features
+                // StartTLS stuff
+                var f = e as Features;
 #if SSL || BCCRYPTO || CF_2
-				if (f.SupportsStartTls && m_UseStartTLS)
-				{
-					DoChangeXmppConnectionState(XmppConnectionState.Securing);
-					Send(new StartTls());
-				}
+                if (f.SupportsStartTls && m_UseStartTLS)
+                {
+                    DoChangeXmppConnectionState(XmppConnectionState.Securing);
+                    Send(new StartTls());
+                }
                 else
 #endif
-                if (m_UseCompression &&
-                    f.SupportsCompression &&
-                    f.Compression.SupportsMethod(CompressionMethod.zlib))
-                {
-                    // Check for Stream Compression
-                    // we support only ZLIB because its a free algorithm without patents
-                    // yes ePatents suck                                       
-                    DoChangeXmppConnectionState(XmppConnectionState.StartCompression);
-                    Send(new Compress(CompressionMethod.zlib));                    
-                }
-
-                else if (m_RegisterAccount)
-                {
-                    // Do registration after TLS when possible
-                    if (f.SupportsRegistration)
-                        GetRegistrationFields(e);
-                    else
+                    if (UseCompression &&
+                        f.SupportsCompression &&
+                        f.Compression.SupportsMethod(CompressionMethod.zlib))
                     {
-                        // registration is not enabled on this server                        
-                        FireOnError(this, new RegisterException("Registration is not allowed on this server"));
-                        Close();
-                        // Close the stream
+                        // Check for Stream Compression
+                        // we support only ZLIB because its a free algorithm without patents
+                        // yes ePatents suck                                       
+                        DoChangeXmppConnectionState(XmppConnectionState.StartCompression);
+                        Send(new Compress(CompressionMethod.zlib));
                     }
-                }
+
+                    else if (RegisterAccount)
+                    {
+                        // Do registration after TLS when possible
+                        if (f.SupportsRegistration)
+                            GetRegistrationFields(e);
+                        else
+                        {
+                            // registration is not enabled on this server                        
+                            FireOnError(this, new RegisterException("Registration is not allowed on this server"));
+                            Close();
+                            // Close the stream
+                        }
+                    }
             }
 #if SSL || BCCRYPTO || CF_2
             else if (e is Proceed)
-			{	
-				StreamParser.Reset();	
-		        if (ClientSocket.StartTls())
+            {
+                StreamParser.Reset();
+                if (ClientSocket.StartTls())
                 {
-				    SendStreamHeader(false);
-				    DoChangeXmppConnectionState(XmppConnectionState.Authenticating);
+                    SendStreamHeader(false);
+                    DoChangeXmppConnectionState(XmppConnectionState.Authenticating);
                 }
             }
 #endif
             else if (e is Compressed)
-			{
+            {
                 //DoChangeXmppConnectionState(XmppConnectionState.StartCompression);
-				StreamParser.Reset();
-                ClientSocket.StartCompression();                
+                StreamParser.Reset();
+                ClientSocket.StartCompression();
                 // Start new Stream Header compressed.
                 SendStreamHeader(false);
 
                 DoChangeXmppConnectionState(XmppConnectionState.Compressed);
-			}
-            else if (e is agsXMPP.protocol.Error)
+            }
+            else if (e is Error)
             {
                 if (OnStreamError != null)
                     OnStreamError(this, e as Element);
             }
+        }
 
-		}
+        public override void StreamParserOnStreamError(object sender, Exception ex)
+        {
+            base.StreamParserOnStreamError(sender, ex);
 
-		public override void StreamParserOnStreamError(object sender, Exception ex)
-		{
-			base.StreamParserOnStreamError(sender, ex);
+            SocketDisconnect();
+            CleanupSession();
 
-			SocketDisconnect();
-			CleanupSession();
-			
-			//this._NetworkStream.Close();
-			
-			FireOnError(this, ex);
+            //this._NetworkStream.Close();
+
+            FireOnError(this, ex);
 
             if (!m_CleanUpDone)
-                CleanupSession();           
-		}                
-        #endregion
+                CleanupSession();
+        }
 
-       
+        #endregion
 
         public override void Send(Element e)
         {
             if (!(ClientSocket is BoshClientSocket))
             {
                 // this is a hack to not send the xmlns="jabber:client" with all packets
-                Element dummyEl = new Element("a");
+                var dummyEl = new Element("a");
                 dummyEl.Namespace = Uri.CLIENT;
 
                 dummyEl.AddChild(e);
-                string toSend = dummyEl.ToString();
+                var toSend = dummyEl.ToString();
 
                 Send(toSend.Substring(25, toSend.Length - 25 - 4));
             }
             else
                 base.Send(e);
         }
-		
-		/// <summary>
-		/// Does the Clieanup of the Session and sends the OnClose Event
-		/// </summary>
-		private void CleanupSession()
-		{		
-			m_CleanUpDone = true;
-           
+
+        /// <summary>
+        ///     Does the Clieanup of the Session and sends the OnClose Event
+        /// </summary>
+        private void CleanupSession()
+        {
+            m_CleanUpDone = true;
+
             // TODO, check if this is always OK
             if (ClientSocket.Connected)
-			    ClientSocket.Disconnect();
-			
+                ClientSocket.Disconnect();
+
             DoChangeXmppConnectionState(XmppConnectionState.Disconnected);
-			
-			StreamParser.Reset();
-			
-			m_IqGrabber.Clear();
-			m_MessageGrabber.Clear();
 
-			if (m_SaslHandler != null)
-			{
-				m_SaslHandler.Dispose();
-				m_SaslHandler = null;
-			}
+            StreamParser.Reset();
 
-			m_Authenticated		= false;
-			m_Binded			= false;
+            IqGrabber.Clear();
+            MessageGrabber.Clear();
 
-			DestroyKeepAliveTimer();
-			
-			if (OnClose!=null)
-				OnClose(this);			
-		}
+            if (m_SaslHandler != null)
+            {
+                m_SaslHandler.Dispose();
+                m_SaslHandler = null;
+            }
 
-		internal void Reset()
-		{
+            Authenticated = false;
+            m_Binded = false;
+
+            DestroyKeepAliveTimer();
+
+            if (OnClose != null)
+                OnClose(this);
+        }
+
+        internal void Reset()
+        {
             // tell also the socket that we need to reset the stream, this is needed for BOSH
             ClientSocket.Reset();
 
             StreamParser.Reset();
-            SendStreamHeader(false);        
-		}
-		
-		internal void DoRaiseEventBinded()
-		{
-			if (OnBinded!=null)
-				OnBinded(this);
-		}
+            SendStreamHeader(false);
+        }
+
+        internal void DoRaiseEventBinded()
+        {
+            if (OnBinded != null)
+                OnBinded(this);
+        }
 
         internal void DoRaiseEventBindError(Element iq)
         {
             if (OnBindError != null)
                 OnBindError(this, iq);
         }
-        
-		#region << SASL Handler Events >>
-		private void m_SaslHandler_OnSaslStart(object sender, SaslEventArgs args)
-		{
-			// This acts only as a tunnel to the client
-			if (OnSaslStart!=null)
-				OnSaslStart(this, args);
-		}
 
-		internal void RaiseOnLogin()
-		{
+        #region << SASL Handler Events >>
+
+        private void m_SaslHandler_OnSaslStart(object sender, SaslEventArgs args)
+        {
+            // This acts only as a tunnel to the client
+            if (OnSaslStart != null)
+                OnSaslStart(this, args);
+        }
+
+        internal void RaiseOnLogin()
+        {
             if (KeepAlive)
                 CreateKeepAliveTimer();
-                       
-			if (OnLogin!=null)
-				OnLogin(this);
-				
-			if(m_AutoAgents)
-				RequestAgents();
-				
-			if (m_AutoRoster)
-				RequestRoster();
-		}
 
-		private void m_SaslHandler_OnSaslEnd(object sender)
-		{
-			if (OnSaslEnd!=null)
-				OnSaslEnd(this);
-					
-			m_Authenticated = true;
-		}
-		#endregion        
-	}
+            if (OnLogin != null)
+                OnLogin(this);
+
+            if (AutoAgents)
+                RequestAgents();
+
+            if (AutoRoster)
+                RequestRoster();
+        }
+
+        private void m_SaslHandler_OnSaslEnd(object sender)
+        {
+            if (OnSaslEnd != null)
+                OnSaslEnd(this);
+
+            Authenticated = true;
+        }
+
+        #endregion
+    }
 }

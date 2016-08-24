@@ -17,19 +17,19 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
 using System.Collections;
 using System.Globalization;
-
 using agsXMPP.Exceptions;
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.rpc
-{    
+{
     /// <summary>
-    /// The method Response element. 
+    ///     The method Response element.
     /// </summary>
     public class MethodResponse : Element
     {
@@ -53,6 +53,7 @@ namespace agsXMPP.protocol.iq.rpc
            </methodResponse>
          
          */
+
         public MethodResponse()
         {
             TagName = "methodResponse";
@@ -72,8 +73,8 @@ namespace agsXMPP.protocol.iq.rpc
         }
 
         /// <summary>
-        /// Parses the XML-RPC resonse and returns an ArrayList with all Parameters.
-        /// In there is an XML-RPC Error it returns an XmlRpcException as single parameter in the ArrayList.
+        ///     Parses the XML-RPC resonse and returns an ArrayList with all Parameters.
+        ///     In there is an XML-RPC Error it returns an XmlRpcException as single parameter in the ArrayList.
         /// </summary>
         /// <returns>Arraylist with parameters, or Arraylist with an exception</returns>
         public ArrayList GetResponse()
@@ -82,29 +83,29 @@ namespace agsXMPP.protocol.iq.rpc
         }
 
         /// <summary>
-        /// parse the response
+        ///     parse the response
         /// </summary>
         /// <returns></returns>
         private ArrayList ParseResponse()
         {
-            ArrayList al = new ArrayList();
+            var al = new ArrayList();
 
             // If an error occurred, the server will return fault
-            Element fault = SelectSingleElement("fault");
+            var fault = SelectSingleElement("fault");
             if (fault != null)
             {
-                Hashtable ht = ParseStruct(fault.SelectSingleElement("struct", true));
+                var ht = ParseStruct(fault.SelectSingleElement("struct", true));
                 al.Add(new XmlRpcException((int) ht["faultCode"], (string) ht["faultString"]));
             }
             else
             {
-                Element elParams = SelectSingleElement("params");
-                ElementList nl = elParams.SelectElements("param");
+                var elParams = SelectSingleElement("params");
+                var nl = elParams.SelectElements("param");
 
 
                 foreach (Element p in nl)
                 {
-                    Element value = p.SelectSingleElement("value");
+                    var value = p.SelectSingleElement("value");
                     if (value != null)
                         al.Add(ParseValue(value));
                 }
@@ -113,35 +114,35 @@ namespace agsXMPP.protocol.iq.rpc
         }
 
         /// <summary>
-        /// Parse a single response value
+        ///     Parse a single response value
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
         private object ParseValue(Element value)
         {
-            object result = null;            
+            object result = null;
 
             if (value != null)
             {
                 if (value.HasChildElements)
                 {
-                    Element next = value.FirstChild;
+                    var next = value.FirstChild;
                     if (next.TagName == "string")
                         result = next.Value;
                     else if (next.TagName == "boolean")
                         result = next.Value == "1";
                     else if (next.TagName == "i4")
-                        result = Int32.Parse(next.Value);
+                        result = int.Parse(next.Value);
                     else if (next.TagName == "int") // occurs in fault
                         result = int.Parse(next.Value);
                     else if (next.TagName == "double")
                     {
-                        NumberFormatInfo numberInfo = new NumberFormatInfo();
+                        var numberInfo = new NumberFormatInfo();
                         numberInfo.NumberDecimalSeparator = ".";
-                        result = Double.Parse(next.Value, numberInfo);
+                        result = double.Parse(next.Value, numberInfo);
                     }
                     else if (next.TagName == "dateTime.iso8601")
-                        result = Util.Time.ISO_8601Date(next.Value);
+                        result = Time.ISO_8601Date(next.Value);
                     else if (next.TagName == "base64")
                         result = Convert.FromBase64String(next.Value);
                     else if (next.TagName == "struct")
@@ -153,13 +154,12 @@ namespace agsXMPP.protocol.iq.rpc
                 {
                     result = value.Value;
                 }
-                   
             }
-            return result;            
+            return result;
         }
 
         /// <summary>
-        /// parse a response array
+        ///     parse a response array
         /// </summary>
         /// <param name="elArray"></param>
         /// <returns></returns>
@@ -175,28 +175,28 @@ namespace agsXMPP.protocol.iq.rpc
             //    </data>
             //</array>
 
-            Element data = elArray.SelectSingleElement("data");
+            var data = elArray.SelectSingleElement("data");
             if (data != null)
             {
-                ArrayList al = new ArrayList();
-                ElementList values = data.SelectElements("value");
+                var al = new ArrayList();
+                var values = data.SelectElements("value");
 
                 foreach (Element val in values)
                 {
                     al.Add(ParseValue(val));
-                }               
+                }
                 return al;
             }
             return null;
         }
 
         /// <summary>
-        /// parse a response struct
+        ///     parse a response struct
         /// </summary>
         /// <param name="el"></param>
         /// <returns></returns>
         private Hashtable ParseStruct(Element el)
-        {           
+        {
             //<struct>
             //   <member>
             //      <name>x</name>
@@ -211,23 +211,21 @@ namespace agsXMPP.protocol.iq.rpc
             //      <value><double>3,14</double></value>
             //   </member>
             //</struct>
-			
-            Hashtable ht = new Hashtable();
 
-            ElementList members = el.SelectElements("member");
+            var ht = new Hashtable();
+
+            var members = el.SelectElements("member");
 
             foreach (Element member in members)
             {
-                string name = member.GetTag("name");
+                var name = member.GetTag("name");
 
                 // parse this member value
-                Element value = member.SelectSingleElement("value");
+                var value = member.SelectSingleElement("value");
                 if (value != null)
-				    ht[name] = ParseValue(value);			
-			} 
-            return ht;		
+                    ht[name] = ParseValue(value);
+            }
+            return ht;
         }
-
-
     }
 }

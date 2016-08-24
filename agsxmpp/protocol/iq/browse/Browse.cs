@@ -17,8 +17,8 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 using agsXMPP.Xml.Dom;
 
 // JEP-0011: Jabber Browsing
@@ -32,63 +32,64 @@ using agsXMPP.Xml.Dom;
 
 // Most components and gateways still dont implement Service discovery. So we must use jabber:iq:browse for them until everything
 // is replaced with JEP 30 (Service Discovery).
+
 namespace agsXMPP.protocol.iq.browse
 {
-	/// <summary>
-	/// Summary description for Browse.
-	/// </summary>
-	public class Browse : Element
-	{
-		public Browse()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.IQ_BROWSE;
-		}
+    /// <summary>
+    ///     Summary description for Browse.
+    /// </summary>
+    public class Browse : Element
+    {
+        public Browse()
+        {
+            TagName = "query";
+            Namespace = Uri.IQ_BROWSE;
+        }
 
-		public string Category
-		{
-			get { return GetAttribute("category"); }
-			set { SetAttribute("category", value); }
-		}
-		
-		public string Type
-		{
-			get { return GetAttribute("type"); }
-			set { SetAttribute("type", value); }
-		}
-		
-		public string Name
-		{
-			get { return GetAttribute("name"); }
-			set { SetAttribute("name", value); }
-		}
+        public string Category
+        {
+            get { return GetAttribute("category"); }
+            set { SetAttribute("category", value); }
+        }
 
-		public string[] GetNamespaces()
-		{
-            ElementList elements = SelectElements("ns");
-			string[] nss = new string[elements.Count];
-			
-			int i=0;
-			foreach (Element ns in elements)
-			{
-				nss[i] = ns.Value;
-				i++;
-			}
+        public string Type
+        {
+            get { return GetAttribute("type"); }
+            set { SetAttribute("type", value); }
+        }
 
-			return nss;
-		}
+        public string Name
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
 
-		public BrowseItem[] GetItems()
-		{
-            ElementList nl = SelectElements(typeof(BrowseItem));
-			BrowseItem[] items = new BrowseItem[nl.Count];
-			int i = 0;
-			foreach (Element item in nl)
-			{
-				items[i] = item as BrowseItem;
-				i++;
-			}
-			return items;
-		}
-	}
+        public string[] GetNamespaces()
+        {
+            var elements = SelectElements("ns");
+            var nss = new string[elements.Count];
+
+            var i = 0;
+            foreach (Element ns in elements)
+            {
+                nss[i] = ns.Value;
+                i++;
+            }
+
+            return nss;
+        }
+
+        public BrowseItem[] GetItems()
+        {
+            var nl = SelectElements(typeof(BrowseItem));
+            var items = new BrowseItem[nl.Count];
+            var i = 0;
+            foreach (Element item in nl)
+            {
+                items[i] = item as BrowseItem;
+                i++;
+            }
+            return items;
+        }
+    }
 }

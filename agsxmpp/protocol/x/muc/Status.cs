@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -32,39 +30,34 @@ namespace agsXMPP.protocol.x.muc
     */
 
     /// <summary>
-    /// Summary description for MucUser.
+    ///     Summary description for MucUser.
     /// </summary>
     public class Status : Element
     {
+        public StatusCode Code
+        {
+            get { return (StatusCode) GetAttributeEnum("code", typeof(StatusCode)); }
+            set { SetAttribute("code", value.ToString()); }
+        }
+
         #region << Constructors >>
+
         public Status()
         {
-            this.TagName    = "status";
-            this.Namespace  = Uri.MUC_USER;
+            TagName = "status";
+            Namespace = Uri.MUC_USER;
         }
 
         public Status(StatusCode code) : this()
         {
-            this.Code = code;
+            Code = code;
         }
 
         public Status(int code) : this()
         {
             SetAttribute("code", code);
         }
+
         #endregion
-
-        public StatusCode Code
-		{
-			get 
-			{
-                return (StatusCode)GetAttributeEnum("code", typeof(StatusCode)); 
-			}
-			set 
-			{ 
-				SetAttribute("code", value.ToString()); 
-			}
-		}
     }
-
 }

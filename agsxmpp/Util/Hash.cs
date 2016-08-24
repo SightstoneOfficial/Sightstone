@@ -22,30 +22,31 @@
 using System.Text;
 #if !CF
 using System.Security.Cryptography;
+
 #endif
 
 namespace agsXMPP.Util
 {
-	/// <summary>
-	/// Helper class for hashing.
-	/// </summary>
-	public class Hash
-	{		
+    /// <summary>
+    ///     Helper class for hashing.
+    /// </summary>
+    public class Hash
+    {
+        #region << SHA1 Hash Desktop Framework and Mono >>		
 
-		#region << SHA1 Hash Desktop Framework and Mono >>		
 #if !CF
-		public static string Sha1Hash(string pass)
-		{			
-			SHA1 sha = SHA1.Create();
-			byte[] hash = sha.ComputeHash(Encoding.UTF8.GetBytes(pass));            
-			return HexToString(hash);
-		}
+        public static string Sha1Hash(string pass)
+        {
+            var sha = SHA1.Create();
+            var hash = sha.ComputeHash(Encoding.UTF8.GetBytes(pass));
+            return HexToString(hash);
+        }
 
-		public static byte[] Sha1HashBytes(string pass)
-		{			
-			SHA1 sha = SHA1.Create();
-			return sha.ComputeHash(Encoding.UTF8.GetBytes(pass));
-		}
+        public static byte[] Sha1HashBytes(string pass)
+        {
+            var sha = SHA1.Create();
+            return sha.ComputeHash(Encoding.UTF8.GetBytes(pass));
+        }
 
         public static byte[] Sha1HashBytes(byte[] pass)
         {
@@ -56,33 +57,33 @@ namespace agsXMPP.Util
         }
 #endif
 
-		/// <summary>
-		/// Converts all bytes in the Array to a string representation.
-		/// </summary>
-		/// <param name="buf"></param>
-		/// <returns>string representation</returns>
-		public static string HexToString(byte[] buf)
-		{			
-			StringBuilder sb = new StringBuilder();
-			foreach (byte b in buf)
-			{
-				sb.Append(b.ToString("x2"));
-			}
-			return sb.ToString();            
-		}
-		
-		#endregion
+        /// <summary>
+        ///     Converts all bytes in the Array to a string representation.
+        /// </summary>
+        /// <param name="buf"></param>
+        /// <returns>string representation</returns>
+        public static string HexToString(byte[] buf)
+        {
+            var sb = new StringBuilder();
+            foreach (var b in buf)
+            {
+                sb.Append(b.ToString("x2"));
+            }
+            return sb.ToString();
+        }
 
+        #endregion
 
-		#region << SHA1 Hash Compact Framework >>
+        #region << SHA1 Hash Compact Framework >>
+
 #if CF
-		
 
-		/// <summary>
-		/// return a SHA1 Hash on PPC and Smartphone
-		/// </summary>
-		/// <param name="pass"></param>
-		/// <returns></returns>
+
+    /// <summary>
+    /// return a SHA1 Hash on PPC and Smartphone
+    /// </summary>
+    /// <param name="pass"></param>
+    /// <returns></returns>
 		public static byte[] Sha1Hash(byte[] pass)
 		{
 			IntPtr hProv;
@@ -147,14 +148,15 @@ namespace agsXMPP.Util
 		}
 
 		#endif
-		#endregion
+
+        #endregion
 
 #if !(CF || CF_2)
         public static byte[] HMAC(byte[] key, byte[] data)
         {
             using (var hmacsha1 = new HMACSHA1(key, true))
             {
-                byte[] bytes = hmacsha1.ComputeHash(data);
+                var bytes = hmacsha1.ComputeHash(data);
                 return bytes;
             }
         }
@@ -175,6 +177,5 @@ namespace agsXMPP.Util
         }
 
 #endif
-
     }
 }

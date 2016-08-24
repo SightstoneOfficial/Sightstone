@@ -17,15 +17,15 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.sasl;
+using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.Sasl.Anonymous
 {
     /// <summary>
-    /// SALS ANONYMOUS Mechanism, this allows anonymous logins to a xmpp server.
+    ///     SALS ANONYMOUS Mechanism, this allows anonymous logins to a xmpp server.
     /// </summary>
     public class AnonymousMechanism : Mechanism
     {
@@ -52,16 +52,14 @@ namespace agsXMPP.Sasl.Anonymous
         */
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="con"></param>
         public override void Init(XmppClientConnection con)
-        {            
+        {
             con.Send(new Auth(MechanismType.ANONYMOUS));
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="e"></param>
         public override void Parse(Node e)

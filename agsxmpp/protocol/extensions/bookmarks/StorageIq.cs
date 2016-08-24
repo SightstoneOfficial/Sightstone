@@ -19,39 +19,33 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP.Xml.Dom;
-
 using agsXMPP.protocol.client;
 using agsXMPP.protocol.iq.@private;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// 
     /// </summary>
     public class StorageIq : PrivateIq
     {
         public StorageIq()
         {
-            this.Query.AddChild(new Storage());
+            Query.AddChild(new Storage());
         }
 
         public StorageIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        {
+            Type = type;
+        }
 
-		public StorageIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public StorageIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
         public StorageIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
+        {
+            From = from;
+        }
     }
 }

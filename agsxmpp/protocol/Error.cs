@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol
@@ -71,152 +69,172 @@ namespace agsXMPP.protocol
     public enum StreamErrorCondition
     {
         /// <summary>
-        /// unknown error condition
+        ///     unknown error condition
         /// </summary>
-        UnknownCondition        = -1,
+        UnknownCondition = -1,
 
 
         /// <summary>
-        /// the entity has sent XML that cannot be processed; this error MAY be used instead of the more specific XML-related errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;, &lt;restricted-xml/&gt;, &lt;unsupported-encoding/&gt;, and &lt;xml-not-well-formed/&gt;, although the more specific errors are preferred.
+        ///     the entity has sent XML that cannot be processed; this error MAY be used instead of the more specific XML-related
+        ///     errors, such as &lt;bad-namespace-prefix/&gt;, &lt;invalid-xml/&gt;, &lt;restricted-xml/&gt;, &lt;
+        ///     unsupported-encoding/&gt;, and &lt;xml-not-well-formed/&gt;, although the more specific errors are preferred.
         /// </summary>
         BadFormat,
-        
+
         /// <summary>
-        /// the entity has sent a namespace prefix that is unsupported, or has sent no namespace prefix on an element that requires such a prefix (see XML Namespace Names and Prefixes (XML Namespace Names and Prefixes)).
+        ///     the entity has sent a namespace prefix that is unsupported, or has sent no namespace prefix on an element that
+        ///     requires such a prefix (see XML Namespace Names and Prefixes (XML Namespace Names and Prefixes)).
         /// </summary>
         BadNamespacePrefix,
 
         /// <summary>
-        /// the server is closing the active stream for this entity because a new stream has been initiated that conflicts with the existing stream.
+        ///     the server is closing the active stream for this entity because a new stream has been initiated that conflicts with
+        ///     the existing stream.
         /// </summary>
         Conflict,
-        
+
         /// <summary>
-        /// the entity has not generated any traffic over the stream for some period of time (configurable according to a local service policy).
+        ///     the entity has not generated any traffic over the stream for some period of time (configurable according to a local
+        ///     service policy).
         /// </summary>
         ConnectionTimeout,
-        
+
         /// <summary>
-        /// the value of the 'to' attribute provided by the initiating entity in the stream header corresponds to a hostname that is no longer hosted by the server.
+        ///     the value of the 'to' attribute provided by the initiating entity in the stream header corresponds to a hostname
+        ///     that is no longer hosted by the server.
         /// </summary>
         HostGone,
-        
+
         /// <summary>
-        /// the value of the 'to' attribute provided by the initiating entity in the stream header does not correspond to a hostname that is hosted by the server.
+        ///     the value of the 'to' attribute provided by the initiating entity in the stream header does not correspond to a
+        ///     hostname that is hosted by the server.
         /// </summary>
         HostUnknown,
-        
+
         /// <summary>
-        /// a stanza sent between two servers lacks a 'to' or 'from' attribute (or the attribute has no value).
+        ///     a stanza sent between two servers lacks a 'to' or 'from' attribute (or the attribute has no value).
         /// </summary>
         ImproperAddressing,
 
         /// <summary>
-        /// the server has experienced a misconfiguration or an otherwise-undefined internal error that prevents it from servicing the stream.
+        ///     the server has experienced a misconfiguration or an otherwise-undefined internal error that prevents it from
+        ///     servicing the stream.
         /// </summary>
         InternalServerError,
 
         /// <summary>
-        /// the JID or hostname provided in a 'from' address does not match an authorized JID or validated domain negotiated between servers via SASL or dialback, or between a client and a server via authentication and resource binding.
+        ///     the JID or hostname provided in a 'from' address does not match an authorized JID or validated domain negotiated
+        ///     between servers via SASL or dialback, or between a client and a server via authentication and resource binding.
         /// </summary>
         InvalidFrom,
-        
+
         /// <summary>
-        /// the stream ID or dialback ID is invalid or does not match an ID previously provided.
+        ///     the stream ID or dialback ID is invalid or does not match an ID previously provided.
         /// </summary>
         InvalidId,
 
         /// <summary>
-        /// the streams namespace name is something other than "http://etherx.jabber.org/streams" or the dialback namespace name is something other than "jabber:server:dialback" (see XML Namespace Names and Prefixes (XML Namespace Names and Prefixes)).
+        ///     the streams namespace name is something other than "http://etherx.jabber.org/streams" or the dialback namespace
+        ///     name is something other than "jabber:server:dialback" (see XML Namespace Names and Prefixes (XML Namespace Names
+        ///     and Prefixes)).
         /// </summary>
         InvalidNamespace,
-        
+
         /// <summary>
-        /// the entity has sent invalid XML over the stream to a server that performs validation.
+        ///     the entity has sent invalid XML over the stream to a server that performs validation.
         /// </summary>
         InvalidXml,
-        
+
         /// <summary>
-        /// the entity has attempted to send data before the stream has been authenticated, or otherwise is not authorized to perform an action related to stream negotiation; the receiving entity MUST NOT process the offending stanza before sending the stream error.
+        ///     the entity has attempted to send data before the stream has been authenticated, or otherwise is not authorized to
+        ///     perform an action related to stream negotiation; the receiving entity MUST NOT process the offending stanza before
+        ///     sending the stream error.
         /// </summary>
         NotAuthorized,
 
         /// <summary>
-        /// the entity has violated some local service policy; the server MAY choose to specify the policy in the &lt;text/&gt; element or an application-specific condition element.
+        ///     the entity has violated some local service policy; the server MAY choose to specify the policy in the &lt;text/&gt;
+        ///     element or an application-specific condition element.
         /// </summary>
         PolicyViolation,
 
         /// <summary>
-        /// the server is unable to properly connect to a remote entity that is required for authentication or authorization.
+        ///     the server is unable to properly connect to a remote entity that is required for authentication or authorization.
         /// </summary>
         RemoteConnectionFailed,
-        
+
         /// <summary>
-        /// the server lacks the system resources necessary to service the stream.
+        ///     the server lacks the system resources necessary to service the stream.
         /// </summary>
         ResourceConstraint,
 
         /// <summary>
-        /// the entity has attempted to send restricted XML features such as a comment, processing instruction, DTD, entity reference, or unescaped character (see Restrictions (Restrictions)).
+        ///     the entity has attempted to send restricted XML features such as a comment, processing instruction, DTD, entity
+        ///     reference, or unescaped character (see Restrictions (Restrictions)).
         /// </summary>
         RestrictedXml,
-        
+
         /// <summary>
-        /// the server will not provide service to the initiating entity but is redirecting traffic to another host; the server SHOULD specify the alternate hostname or IP address (which MUST be a valid domain identifier) as the XML character data of the &lt;see-other-host/&gt; element.
+        ///     the server will not provide service to the initiating entity but is redirecting traffic to another host; the server
+        ///     SHOULD specify the alternate hostname or IP address (which MUST be a valid domain identifier) as the XML character
+        ///     data of the &lt;see-other-host/&gt; element.
         /// </summary>
         SeeOtherHost,
-        
+
         /// <summary>
-        /// the server is being shut down and all active streams are being closed.
+        ///     the server is being shut down and all active streams are being closed.
         /// </summary>
         SystemShutdown,
-        
+
         /// <summary>
-        /// the error condition is not one of those defined by the other conditions in this list; this error condition SHOULD be used only in conjunction with an application-specific condition.
+        ///     the error condition is not one of those defined by the other conditions in this list; this error condition SHOULD
+        ///     be used only in conjunction with an application-specific condition.
         /// </summary>
         UndefinedCondition,
-        
+
         /// <summary>
-        /// the initiating entity has encoded the stream in an encoding that is not supported by the server.
+        ///     the initiating entity has encoded the stream in an encoding that is not supported by the server.
         /// </summary>
         UnsupportedEncoding,
-        
+
         /// <summary>
-        /// the initiating entity has sent a first-level child of the stream that is not supported by the server.
+        ///     the initiating entity has sent a first-level child of the stream that is not supported by the server.
         /// </summary>
         UnsupportedStanzaType,
-        
+
         /// <summary>
-        /// the value of the 'version' attribute provided by the initiating entity in the stream header specifies a version of XMPP that is not supported by the server; the server MAY specify the version(s) it supports in the &lt;text/&gt; element.
+        ///     the value of the 'version' attribute provided by the initiating entity in the stream header specifies a version of
+        ///     XMPP that is not supported by the server; the server MAY specify the version(s) it supports in the &lt;text/&gt;
+        ///     element.
         /// </summary>
         UnsupportedVersion,
-        
+
         /// <summary>
-        /// the initiating entity has sent XML that is not well-formed as defined by the XML specs.
+        ///     the initiating entity has sent XML that is not well-formed as defined by the XML specs.
         /// </summary>
-        XmlNotWellFormed      
+        XmlNotWellFormed
     }
 
- 
-	// <stream:error>Invalid handshake</stream:error>
-	// <stream:error>Socket override by another connection.</stream:error>
 
-	/// <summary>
-	/// Stream Errors &lt;stream:error&gt;
-	/// </summary>
-	public class Error : Element
-	{
-		public Error()
-		{
-			this.TagName	= "error";
-			this.Namespace	= Uri.STREAM;			
-		}
+    // <stream:error>Invalid handshake</stream:error>
+    // <stream:error>Socket override by another connection.</stream:error>
+
+    /// <summary>
+    ///     Stream Errors &lt;stream:error&gt;
+    /// </summary>
+    public class Error : Element
+    {
+        public Error()
+        {
+            TagName = "error";
+            Namespace = Uri.STREAM;
+        }
 
         public Error(StreamErrorCondition condition) : this()
         {
-            this.Condition = condition;
-        }        
-        
+            Condition = condition;
+        }
+
         /*
 		public Error(string msg) : this()
 		{
@@ -239,54 +257,53 @@ namespace agsXMPP.protocol
             {
                 if (HasTag("bad-format"))
                     return StreamErrorCondition.BadFormat;
-                else if (HasTag("bad-namespace-prefix"))
+                if (HasTag("bad-namespace-prefix"))
                     return StreamErrorCondition.BadNamespacePrefix;
-                else if (HasTag("conflict"))
+                if (HasTag("conflict"))
                     return StreamErrorCondition.Conflict;
-                else if (HasTag("connection-timeout"))
+                if (HasTag("connection-timeout"))
                     return StreamErrorCondition.ConnectionTimeout;
-                else if (HasTag("host-gone"))
+                if (HasTag("host-gone"))
                     return StreamErrorCondition.HostGone;
-                else if (HasTag("host-unknown"))
+                if (HasTag("host-unknown"))
                     return StreamErrorCondition.HostUnknown;
-                else if (HasTag("improper-addressing"))
+                if (HasTag("improper-addressing"))
                     return StreamErrorCondition.ImproperAddressing;
-                else if (HasTag("internal-server-error"))
+                if (HasTag("internal-server-error"))
                     return StreamErrorCondition.InternalServerError;
-                else if (HasTag("invalid-from"))
+                if (HasTag("invalid-from"))
                     return StreamErrorCondition.InvalidFrom;
-                else if (HasTag("invalid-id"))
+                if (HasTag("invalid-id"))
                     return StreamErrorCondition.InvalidId;
-                else if (HasTag("invalid-namespace"))
+                if (HasTag("invalid-namespace"))
                     return StreamErrorCondition.InvalidNamespace;
-                else if (HasTag("invalid-xml"))
+                if (HasTag("invalid-xml"))
                     return StreamErrorCondition.InvalidXml;
-                else if (HasTag("not-authorized"))
+                if (HasTag("not-authorized"))
                     return StreamErrorCondition.NotAuthorized;
-                else if (HasTag("policy-violation"))
+                if (HasTag("policy-violation"))
                     return StreamErrorCondition.PolicyViolation;
-                else if (HasTag("remote-connection-failed"))
+                if (HasTag("remote-connection-failed"))
                     return StreamErrorCondition.RemoteConnectionFailed;
-                else if (HasTag("resource-constraint"))
+                if (HasTag("resource-constraint"))
                     return StreamErrorCondition.ResourceConstraint;
-                else if (HasTag("restricted-xml"))
+                if (HasTag("restricted-xml"))
                     return StreamErrorCondition.RestrictedXml;
-                else if (HasTag("see-other-host"))
+                if (HasTag("see-other-host"))
                     return StreamErrorCondition.SeeOtherHost;
-                else if (HasTag("system-shutdown"))
+                if (HasTag("system-shutdown"))
                     return StreamErrorCondition.SystemShutdown;
-                else if (HasTag("undefined-condition"))
+                if (HasTag("undefined-condition"))
                     return StreamErrorCondition.UndefinedCondition;
-                else if (HasTag("unsupported-encoding"))
+                if (HasTag("unsupported-encoding"))
                     return StreamErrorCondition.UnsupportedEncoding;
-                else if (HasTag("unsupported-stanza-type"))
+                if (HasTag("unsupported-stanza-type"))
                     return StreamErrorCondition.UnsupportedStanzaType;
-                else if (HasTag("unsupported-version"))
+                if (HasTag("unsupported-version"))
                     return StreamErrorCondition.UnsupportedVersion;
-                else if (HasTag("xml-not-well-formed"))
+                if (HasTag("xml-not-well-formed"))
                     return StreamErrorCondition.XmlNotWellFormed;
-                else
-                    return StreamErrorCondition.UnknownCondition;
+                return StreamErrorCondition.UnknownCondition;
             }
 
             set
@@ -367,30 +384,27 @@ namespace agsXMPP.protocol
                         break;
                     default:
                         return;
-
                 }
             }
         }
 
         /// <summary>
-        /// <para>
-        /// The &lt;text/&gt; element is OPTIONAL. If included, it SHOULD be used only to provide descriptive or diagnostic information
-        /// that supplements the meaning of a defined condition or application-specific condition. 
-        /// </para>
-        /// <para>
-        /// It SHOULD NOT be interpreted programmatically by an application.
-        /// It SHOULD NOT be used as the error message presented to a user, but MAY be shown in addition to the error message 
-        /// associated with the included condition element (or elements).
-        /// </para>
+        ///     <para>
+        ///         The &lt;text/&gt; element is OPTIONAL. If included, it SHOULD be used only to provide descriptive or diagnostic
+        ///         information
+        ///         that supplements the meaning of a defined condition or application-specific condition.
+        ///     </para>
+        ///     <para>
+        ///         It SHOULD NOT be interpreted programmatically by an application.
+        ///         It SHOULD NOT be used as the error message presented to a user, but MAY be shown in addition to the error
+        ///         message
+        ///         associated with the included condition element (or elements).
+        ///     </para>
         /// </summary>
         public string Text
         {
             get { return GetTag("text"); }
-            set
-            {
-                SetTag("text", value, Uri.STREAMS);
-            }
+            set { SetTag("text", value, Uri.STREAMS); }
         }
-    
     }
 }

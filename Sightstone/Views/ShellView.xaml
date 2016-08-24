@@ -1,0 +1,49 @@
+﻿<controls:MetroWindow x:Class="Sightstone.Views.ShellView"
+                      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                      xmlns:controls="clr-namespace:MahApps.Metro.Controls;assembly=MahApps.Metro"
+                      xmlns:cal="http://www.caliburnproject.org"
+                      xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+                      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+                      Title="Sightstone"
+                      Width="1200" Height="750" MinWidth="900" MinHeight="650"
+                      BorderThickness="1"
+                      TitleCaps="False"
+                      FontFamily="pack://application:,,,/MaterialDesignThemes.Wpf;component/Resources/Roboto/#Roboto"
+                      SaveWindowPosition="True"
+                      WindowStartupLocation="CenterScreen"
+                      mc:Ignorable="d">
+    <controls:MetroWindow.RightWindowCommands>
+        <controls:WindowCommands>
+            <Label x:Name="inQueueTimer" Content="00:00" FontWeight="Light" FontSize="15" Foreground="WhiteSmoke" Visibility="Hidden"/>
+            <Button x:Name="ReturnToPage" Content="Return To Lobby"/>
+            <Label x:Name="InfoLabel" Content="Not Logged In" FontWeight="Light" FontSize="15" Foreground="WhiteSmoke" />
+            <Button x:Name="HomeButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/home.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="PlayButton" Content="play"  Foreground="Orange" />
+            <Button x:Name="ProfileButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/profile.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="ShopButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/shop.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="ReplayButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/replays.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="SettingsButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/settings.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="PluginsButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/plugins.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+            <Button x:Name="LogoutButton">
+                <Image Source="pack://application:,,,/Sightstone;component/ui/img/menubar/logout.png" Stretch="Uniform" SnapsToDevicePixels="True" Height="14" Width="14"/>
+            </Button>
+        </controls:WindowCommands>
+    </controls:MetroWindow.RightWindowCommands>
+
+    <Grid>
+        <ContentControl x:Name="ActiveItem" />
+    </Grid>
+</controls:MetroWindow>

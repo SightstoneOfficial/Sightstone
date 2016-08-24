@@ -17,28 +17,26 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.tls
 {
-	// Step 5 (alt): Server informs client that TLS negotiation has failed and closes both stream and TCP connection:
+    // Step 5 (alt): Server informs client that TLS negotiation has failed and closes both stream and TCP connection:
 
-	// <failure xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
-	// </stream:stream>
+    // <failure xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
+    // </stream:stream>
 
-	/// <summary>
-	/// Summary description for Failure.
-	/// </summary>
-	public class Failure : Element
-	{
-		public Failure()
-		{
-			this.TagName	= "failure";
-			this.Namespace	= Uri.TLS;
-		}
-	}
+    /// <summary>
+    ///     Summary description for Failure.
+    /// </summary>
+    public class Failure : Element
+    {
+        public Failure()
+        {
+            TagName = "failure";
+            Namespace = Uri.TLS;
+        }
+    }
 }

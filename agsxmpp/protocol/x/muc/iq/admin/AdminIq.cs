@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
@@ -39,41 +37,32 @@ namespace agsXMPP.protocol.x.muc.iq.admin
           </query>
         </iq>
     */
-    
+
     /// <summary>
-    /// 
     /// </summary>
     public class AdminIq : IQ
     {
-        private Admin m_Admin = new Admin();
-
         public AdminIq()
         {
-            base.Query = m_Admin;
-            this.GenerateId();
+            base.Query = Query;
+            GenerateId();
         }
 
         public AdminIq(IqType type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public AdminIq(IqType type, Jid to) : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public AdminIq(IqType type, Jid to, Jid from) : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public new Admin Query
-        {
-            get
-            {
-                return m_Admin;
-            }
-        }
+        public new Admin Query { get; } = new Admin();
     }
 }

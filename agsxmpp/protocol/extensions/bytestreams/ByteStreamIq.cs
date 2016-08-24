@@ -19,39 +19,36 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.extensions.bytestreams
 {
     /// <summary>
-    /// a Bytestream IQ
+    ///     a Bytestream IQ
     /// </summary>
     public class ByteStreamIq : IQ
     {
-        private ByteStream m_ByteStream = new ByteStream();
-
         public ByteStreamIq()
         {
-            base.Query = m_ByteStream;
-            this.GenerateId(); 
+            base.Query = Query;
+            GenerateId();
         }
 
         public ByteStreamIq(IqType type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public ByteStreamIq(IqType type, Jid to)
             : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public ByteStreamIq(IqType type, Jid to, Jid from)
             : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
         public ByteStreamIq(IqType type, Jid to, Jid from, string Id)
@@ -60,12 +57,6 @@ namespace agsXMPP.protocol.extensions.bytestreams
             this.Id = Id;
         }
 
-        public new ByteStream Query
-        {
-            get
-            {
-                return m_ByteStream;
-            }
-        }
+        public new ByteStream Query { get; } = new ByteStream();
     }
 }

@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -28,6 +25,24 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
 {
     public class PhoneAction : Element
     {
+        public ActionType Type
+        {
+            set { SetAttribute("type", value.ToString()); }
+            get { return (ActionType) GetAttributeEnum("type", typeof(ActionType)); }
+        }
+
+        public string Extension
+        {
+            get { return GetTag("extension"); }
+            set { SetTag("extension", value); }
+        }
+
+        public Jid Jid
+        {
+            get { return new Jid(GetTag("jid")); }
+            set { SetTag("jid", value.ToString()); }
+        }
+
         /*
          * Actions are sent by the client to perform tasks such as dialing, checking for messages, etc. Actions are sent as IQ's (type set), as with the following child stanza:
          * 
@@ -54,15 +69,14 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
          *
          */
 
-
         #region << Constructors >>
+
         /// <summary>
-        /// 
         /// </summary>
         public PhoneAction()
         {
-            this.TagName    = "phone-action";
-            this.Namespace  = Uri.JIVESOFTWARE_PHONE;
+            TagName = "phone-action";
+            Namespace = Uri.JIVESOFTWARE_PHONE;
         }
 
         public PhoneAction(ActionType type) : this()
@@ -71,7 +85,7 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
         }
 
         public PhoneAction(ActionType type, string extension) : this(type)
-        {            
+        {
             Extension = extension;
         }
 
@@ -79,31 +93,7 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
         {
             Jid = jid;
         }
+
         #endregion
-
-        public ActionType Type
-        {
-            set
-            {
-                SetAttribute("type", value.ToString());
-            }
-            get
-            {
-                return (ActionType)GetAttributeEnum("type", typeof(ActionType));
-            }
-        }
-
-        public string Extension
-        {
-            get { return GetTag("extension"); }
-            set { SetTag("extension", value); }
-        }
-
-        public Jid Jid
-        {
-            get { return new Jid(GetTag("jid")); }
-            set { SetTag("jid", value.ToString()); }
-        }
-
     }
 }

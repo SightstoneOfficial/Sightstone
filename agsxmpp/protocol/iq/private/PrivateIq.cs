@@ -17,45 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.@private
 {
-	/// <summary>
-	/// Summary description for PrivateIq.
-	/// </summary>
-	public class PrivateIq : IQ
-	{
-		Private m_Private	= new Private();
+    /// <summary>
+    ///     Summary description for PrivateIq.
+    /// </summary>
+    public class PrivateIq : IQ
+    {
+        public PrivateIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public PrivateIq()
-		{
-			base.Query = m_Private;
-			this.GenerateId();
-		}
+        public PrivateIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public PrivateIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public PrivateIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public PrivateIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public PrivateIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public PrivateIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Private Query
-		{
-			get { return m_Private; }
-		}
-	}
+        public new Private Query { get; } = new Private();
+    }
 }

@@ -17,14 +17,13 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.disco
 {
-	/*
+    /*
 	<iq type='result'
 	from='plays.shakespeare.lit'
 	to='romeo@montague.net/orchard'
@@ -49,22 +48,22 @@ namespace agsXMPP.protocol.iq.disco
 	</iq>
 	*/
 
-	/// <summary>
-	/// Summary description for DiscoIdentity.
-	/// </summary>
-	public class DiscoIdentity : Element
-	{
-		public DiscoIdentity()
-		{
-			this.TagName	= "identity";
-			this.Namespace	= Uri.DISCO_INFO;
-		}
+    /// <summary>
+    ///     Summary description for DiscoIdentity.
+    /// </summary>
+    public class DiscoIdentity : Element
+    {
+        public DiscoIdentity()
+        {
+            TagName = "identity";
+            Namespace = Uri.DISCO_INFO;
+        }
 
         public DiscoIdentity(string type, string name, string category) : this()
         {
-            Type        = type;
-            Name        = name;
-            Category    = category;
+            Type = type;
+            Name = name;
+            Category = category;
         }
 
         public DiscoIdentity(string type, string category) : this()
@@ -74,32 +73,30 @@ namespace agsXMPP.protocol.iq.disco
         }
 
         /// <summary>
-        /// type name for the entity
+        ///     type name for the entity
         /// </summary>
-		public string Type
-		{
-			get { return GetAttribute("type"); }
-			set { SetAttribute("type", value); }
-		}
+        public string Type
+        {
+            get { return GetAttribute("type"); }
+            set { SetAttribute("type", value); }
+        }
 
         /// <summary>
-        /// natural-language name for the entity
+        ///     natural-language name for the entity
         /// </summary>
-		public string Name
-		{
-			get { return GetAttribute("name"); }
-			set { SetAttribute("name", value); }
-		}
-		
-        /// <summary>
-        /// category name for the entity
-        /// </summary>
-		public string Category
-		{
-			get { return GetAttribute("category"); }
-			set { SetAttribute("category", value); }
-		}
+        public string Name
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
 
-		
-	}
+        /// <summary>
+        ///     category name for the entity
+        /// </summary>
+        public string Category
+        {
+            get { return GetAttribute("category"); }
+            set { SetAttribute("category", value); }
+        }
+    }
 }

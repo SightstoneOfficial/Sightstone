@@ -18,11 +18,12 @@
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 namespace agsXMPP.Sasl.Facebook
 {
     public class FacebookExtendedData : ExtendedData
     {
-        public string ApiKey        {get; set;}
-        public string AccessToken   {get; set;}
+        public string ApiKey { get; set; }
+        public string AccessToken { get; set; }
     }
 }

@@ -17,24 +17,20 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.jivesoftware.phone
-{  
+{
     /// <summary>
-    /// Action type, Currently supported types are DIAL and FORWARD
+    ///     Action type, Currently supported types are DIAL and FORWARD
     /// </summary>
     public enum ActionType
     {
         /// <summary>
-        /// 
         /// </summary>
         DIAL,
+
         /// <summary>
-        /// 
         /// </summary>
         FORWARD
     }

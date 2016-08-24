@@ -19,25 +19,22 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.ibb
 {
     /// <summary>
-    /// IBB base class
+    ///     IBB base class
     /// </summary>
     public abstract class Base : Element
     {
         public Base()
         {
-            this.Namespace = Uri.IBB;
+            Namespace = Uri.IBB;
         }
 
         /// <summary>
-        /// Sid
+        ///     Sid
         /// </summary>
         public string Sid
         {

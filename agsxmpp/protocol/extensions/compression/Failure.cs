@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.compression
@@ -51,8 +49,8 @@ namespace agsXMPP.protocol.extensions.compression
     {
         public Failure()
         {
-            this.TagName    = "failure";
-            this.Namespace  = Uri.COMPRESS;
+            TagName = "failure";
+            Namespace = Uri.COMPRESS;
         }
     }
 }

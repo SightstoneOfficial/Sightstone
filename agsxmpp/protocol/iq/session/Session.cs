@@ -17,23 +17,21 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.session
 {
-	/// <summary>
-	/// Summary description for Session.
-	/// </summary>
-	public class Session : Element
-	{
-		public Session()
-		{
-			this.TagName	= "session";
-			this.Namespace	= Uri.SESSION;
-		}
-	}
+    /// <summary>
+    ///     Summary description for Session.
+    /// </summary>
+    public class Session : Element
+    {
+        public Session()
+        {
+            TagName = "session";
+            Namespace = Uri.SESSION;
+        }
+    }
 }

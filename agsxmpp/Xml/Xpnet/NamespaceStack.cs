@@ -22,19 +22,20 @@
  * xpnet is a deriviative of James Clark's XP parser.
  * See copying.txt for more info.
  */
+
 using System.Collections.Generic;
 
 namespace agsXMPP.Xml.Xpnet
 {
     /// <summary>
-    /// Namespace stack.
+    ///     Namespace stack.
     /// </summary>
     public class NamespaceStack
     {
         private readonly Stack<Dictionary<string, string>> stack = new Stack<Dictionary<string, string>>();
-        
+
         /// <summary>
-        /// Create a new stack, primed with xmlns and xml as prefixes.
+        ///     Create a new stack, primed with xmlns and xml as prefixes.
         /// </summary>
         public NamespaceStack()
         {
@@ -42,9 +43,17 @@ namespace agsXMPP.Xml.Xpnet
             AddNamespace("xmlns", "http://www.w3.org/2000/xmlns/");
             AddNamespace("xml", "http://www.w3.org/XML/1998/namespace");
         }
-        
+
         /// <summary>
-        /// Declare a new scope, typically at the start of each element
+        ///     The current default namespace.
+        /// </summary>
+        public string DefaultNamespace
+        {
+            get { return LookupNamespace(string.Empty); }
+        }
+
+        /// <summary>
+        ///     Declare a new scope, typically at the start of each element
         /// </summary>
         public void Push()
         {
@@ -52,7 +61,7 @@ namespace agsXMPP.Xml.Xpnet
         }
 
         /// <summary>
-        /// Pop the current scope off the stack.  Typically at the end of each element.
+        ///     Pop the current scope off the stack.  Typically at the end of each element.
         /// </summary>
         public void Pop()
         {
@@ -60,7 +69,7 @@ namespace agsXMPP.Xml.Xpnet
         }
 
         /// <summary>
-        /// Add a namespace to the current scope.
+        ///     Add a namespace to the current scope.
         /// </summary>
         /// <param name="prefix"></param>
         /// <param name="uri"></param>
@@ -70,39 +79,31 @@ namespace agsXMPP.Xml.Xpnet
         }
 
         /// <summary>
-        /// Lookup a prefix to find a namespace.  Searches down the stack, starting at the current scope.
+        ///     Lookup a prefix to find a namespace.  Searches down the stack, starting at the current scope.
         /// </summary>
         /// <param name="prefix"></param>
         /// <returns></returns>
         public string LookupNamespace(string prefix)
         {
-            foreach (Dictionary<string, string> ht in stack)
+            foreach (var ht in stack)
             {
-                if ((ht.Count > 0) && (ht.ContainsKey(prefix)))
+                if ((ht.Count > 0) && ht.ContainsKey(prefix))
                     return ht[prefix];
             }
             return "";
         }
 
         /// <summary>
-        /// The current default namespace.
+        ///     Clears this instance.
         /// </summary>
-        public string DefaultNamespace
+        public void Clear()
         {
-            get { return LookupNamespace(string.Empty); }
-        }
-
-        /// <summary>
-        /// Clears this instance.
-        /// </summary>
-		public void Clear()
-		{			
 #if !CF
-		    stack.Clear();
+            stack.Clear();
 #else
 			while (m_stack.Count > 0)
 			    m_stack.Pop();
 #endif
-		}
+        }
     }
 }

@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -30,29 +28,31 @@ using agsXMPP.Xml.Dom;
 //LHJlc3BvbnNlPWQzODhkYWQ5MGQ0YmJkNzYwYTE1MjMyMWYyMTQzYWY3LGNo
 //YXJzZXQ9dXRmLTgK
 //</response>
+
 namespace agsXMPP.protocol.sasl
 {
-	/// <summary>
-	/// Summary description for Response.
-	/// </summary>
-	public class Response : Element
-	{
-		public Response()
-		{
-			TagName	= "response";
-			Namespace	= Uri.SASL;
-		}
+    /// <summary>
+    ///     Summary description for Response.
+    /// </summary>
+    public class Response : Element
+    {
+        public Response()
+        {
+            TagName = "response";
+            Namespace = Uri.SASL;
+        }
 
-		public Response(string text) 
+        public Response(string text)
             : this()
-		{
-			TextBase64	= text;
-		}
+        {
+            TextBase64 = text;
+        }
+
+        //    : this()
 
         //public Response(byte[] bytes)
-        //    : this()
         //{
         //    this.Value = Convert.ToBase64String(bytes);
         //}
-	}
+    }
 }

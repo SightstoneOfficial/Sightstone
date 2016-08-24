@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -51,19 +49,6 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
 
     public class Affiliates : Element
     {
-        #region << Constructors >>
-        public Affiliates()
-        {
-            this.TagName    = "affiliates";
-            this.Namespace  = Uri.PUBSUB_OWNER;
-        }
-                
-        public Affiliates(string node) : this()
-        {
-            this.Node = node;
-        }
-        #endregion
-
         public string Node
         {
             get { return GetAttribute("node"); }
@@ -71,18 +56,16 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Affiliate AddAffiliate()
         {
-            Affiliate affiliate = new Affiliate();
+            var affiliate = new Affiliate();
             AddChild(affiliate);
             return affiliate;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="affiliate"></param>
         /// <returns></returns>
@@ -93,32 +76,45 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="affiliates"></param>
         public void AddAffiliates(Affiliate[] affiliates)
         {
-            foreach (Affiliate affiliate in affiliates)
+            foreach (var affiliate in affiliates)
             {
                 AddAffiliate(affiliate);
             }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Affiliate[] GetAffiliates()
         {
-            ElementList nl = SelectElements(typeof(Affiliate));
-            Affiliate[] affiliates = new Affiliate[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Affiliate));
+            var affiliates = new Affiliate[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                affiliates[i] = (Affiliate)e;
+                affiliates[i] = (Affiliate) e;
                 i++;
             }
             return affiliates;
         }
+
+        #region << Constructors >>
+
+        public Affiliates()
+        {
+            TagName = "affiliates";
+            Namespace = Uri.PUBSUB_OWNER;
+        }
+
+        public Affiliates(string node) : this()
+        {
+            Node = node;
+        }
+
+        #endregion
     }
 }

@@ -17,23 +17,20 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public enum AffiliationType
-	{
-		/// <summary>
-		/// the absence of an affiliation
-		/// </summary>
-		none,
-		owner,
-		publisher,
-		outcast
-	}
+    /// <summary>
+    /// </summary>
+    public enum AffiliationType
+    {
+        /// <summary>
+        ///     the absence of an affiliation
+        /// </summary>
+        none,
+        owner,
+        publisher,
+        outcast
+    }
 }

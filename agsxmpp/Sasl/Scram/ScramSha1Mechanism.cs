@@ -17,7 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
 using System.Collections.Generic;
@@ -30,14 +30,13 @@ using agsXMPP.Xml.Dom;
 namespace agsXMPP.Sasl.Scram
 {
     /// <summary>
-    /// 
     /// </summary>
     public class ScramSha1Mechanism : Mechanism
     {
         private const int LENGHT_CLIENT_NONE = 24;
-        private string firstClientMessage;
         private byte[] clientNonce;
         private string clientNonceB64;
+        private string firstClientMessage;
         private string password;
         private string username;
 
@@ -55,7 +54,7 @@ namespace agsXMPP.Sasl.Scram
             password = Password;
 
             firstClientMessage = GenerateFirstClientMessage();
-            string msg = ToB64String(firstClientMessage);
+            var msg = ToB64String(firstClientMessage);
             con.Send(new Auth(MechanismType.SCRAM_SHA_1, msg));
         }
 
@@ -63,19 +62,19 @@ namespace agsXMPP.Sasl.Scram
         {
             if (e is Challenge)
             {
-                Challenge ch = e as Challenge;
-                string msg = ch.TextBase64;
-                string content = GenerateFinalClientMessage(msg);
+                var ch = e as Challenge;
+                var msg = ch.TextBase64;
+                var content = GenerateFinalClientMessage(msg);
                 XmppClientConnection.Send(new Response(content));
             }
         }
 
         /// <summary>
-        /// Generate a random client nonce
+        ///     Generate a random client nonce
         /// </summary>
         private void GenerateClientNonce()
         {
-            var random = new Byte[LENGHT_CLIENT_NONE];
+            var random = new byte[LENGHT_CLIENT_NONE];
 
             var rng = new RNGCryptoServiceProvider();
             rng.GetBytes(random);
@@ -89,9 +88,9 @@ namespace agsXMPP.Sasl.Scram
             var str = msg.Split(',');
 
             var dict = new Dictionary<string, string>();
-            foreach (string s in str)
+            foreach (var s in str)
             {
-                int equalPos = s.IndexOf('=');
+                var equalPos = s.IndexOf('=');
 
                 var key = s.Substring(0, equalPos - 0);
                 var val = s.Substring(equalPos + 1);
@@ -107,11 +106,11 @@ namespace agsXMPP.Sasl.Scram
             var pairs = ParseMessage(sMessage);
 
             //string clientServerNonce = pairs["r"];
-            string serverNonce = pairs["r"].Substring(clientNonceB64.Length);
+            var serverNonce = pairs["r"].Substring(clientNonceB64.Length);
 
 
-            var salt = pairs["s"];   // the user's salt - (base64 encoded)
-            var iteration = pairs["i"];  // iteation count
+            var salt = pairs["s"]; // the user's salt - (base64 encoded)
+            var iteration = pairs["i"]; // iteation count
 
             // the bare of our first message
             var clientFirstMessageBare = firstClientMessage.Substring(3);
@@ -123,9 +122,9 @@ namespace agsXMPP.Sasl.Scram
             sb.Append(clientNonceB64);
             sb.Append(serverNonce);
 
-            string clientFinalMessageWithoutProof = sb.ToString();
+            var clientFinalMessageWithoutProof = sb.ToString();
 
-            string authMessage = clientFirstMessageBare + "," + sMessage + "," + clientFinalMessageWithoutProof;
+            var authMessage = clientFirstMessageBare + "," + sMessage + "," + clientFinalMessageWithoutProof;
 
             var saltedPassword = Hi(password, Convert.FromBase64String(salt), Convert.ToInt32(iteration));
 
@@ -137,13 +136,13 @@ namespace agsXMPP.Sasl.Scram
 
             var clientProof = new byte[clientKey.Length];
             for (var i = 0; i < clientKey.Length; ++i)
-                clientProof[i] = (byte)(clientKey[i] ^ clientSignature[i]);
+                clientProof[i] = (byte) (clientKey[i] ^ clientSignature[i]);
 
 
             //var serverKey = Hash.HMAC(saltedPassword, "Server Key");
             //var serverSignature = Hash.HMAC(serverKey, authMessage);
 
-            string clientFinalMessage = clientFinalMessageWithoutProof;
+            var clientFinalMessage = clientFinalMessageWithoutProof;
             clientFinalMessage += ",p=";
             clientFinalMessage += Convert.ToBase64String(clientProof);
 
@@ -186,7 +185,7 @@ namespace agsXMPP.Sasl.Scram
 
         private static string ToB64String(string sin)
         {
-            byte[] msg = Encoding.UTF8.GetBytes(sin);
+            var msg = Encoding.UTF8.GetBytes(sin);
             return Convert.ToBase64String(msg, 0, msg.Length);
         }
 

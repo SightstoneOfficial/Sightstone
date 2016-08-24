@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -38,39 +35,11 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
      */
 
     /// <summary>
-    /// Events are sent to the user when their phone is ringing, when a call ends, etc. 
-    /// This packet is send within a message packet (subelement of message)
+    ///     Events are sent to the user when their phone is ringing, when a call ends, etc.
+    ///     This packet is send within a message packet (subelement of message)
     /// </summary>
     public class PhoneEvent : Element
     {
-        #region << Constructors >>
-        public PhoneEvent()
-        {
-            this.TagName    = "phone-event";
-            this.Namespace  = Uri.JIVESOFTWARE_PHONE;
-        }
-
-        public PhoneEvent(PhoneStatusType status) : this()
-        {
-            Type = status;
-        }
-
-        public PhoneEvent(PhoneStatusType status, string device) : this(status)            
-        {
-            Device = device;
-        }
-
-        public PhoneEvent(PhoneStatusType status, string device, string id) : this(status, device)
-        {
-            CallId = id;
-        }
-
-        public PhoneEvent(PhoneStatusType status, string device, string id, string callerId): this(status, device, id)
-        {
-            CallerId = callerId;
-        }        
-        #endregion
-
         public string CallId
         {
             get { return GetAttribute("callID"); }
@@ -85,14 +54,8 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
 
         public PhoneStatusType Type
         {
-            set
-            {
-                SetAttribute("type", value.ToString());
-            }
-            get
-            {
-                return (PhoneStatusType)GetAttributeEnum("type", typeof(PhoneStatusType));
-            }
+            set { SetAttribute("type", value.ToString()); }
+            get { return (PhoneStatusType) GetAttributeEnum("type", typeof(PhoneStatusType)); }
         }
 
         public string CallerId
@@ -106,5 +69,35 @@ namespace agsXMPP.protocol.extensions.jivesoftware.phone
             get { return GetTag("callerIDName"); }
             set { SetTag("callerIDName", value); }
         }
+
+        #region << Constructors >>
+
+        public PhoneEvent()
+        {
+            TagName = "phone-event";
+            Namespace = Uri.JIVESOFTWARE_PHONE;
+        }
+
+        public PhoneEvent(PhoneStatusType status) : this()
+        {
+            Type = status;
+        }
+
+        public PhoneEvent(PhoneStatusType status, string device) : this(status)
+        {
+            Device = device;
+        }
+
+        public PhoneEvent(PhoneStatusType status, string device, string id) : this(status, device)
+        {
+            CallId = id;
+        }
+
+        public PhoneEvent(PhoneStatusType status, string device, string id, string callerId) : this(status, device, id)
+        {
+            CallerId = callerId;
+        }
+
+        #endregion
     }
 }

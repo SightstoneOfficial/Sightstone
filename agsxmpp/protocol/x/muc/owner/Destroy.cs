@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -41,15 +39,45 @@ namespace agsXMPP.protocol.x.muc.owner
      */
 
     /// <summary>
-    /// 
     /// </summary>
     public class Destroy : Element
     {
+        /// <summary>
+        ///     Pptional attribute for a alternate venue
+        /// </summary>
+        public Jid AlternateVenue
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
+            }
+        }
+
+        public string Reason
+        {
+            set { SetTag("reason", value); }
+            get { return GetTag("reason"); }
+        }
+
+        public string Password
+        {
+            set { SetTag("password", value); }
+            get { return GetTag("password"); }
+        }
+
         #region << Constructor >>
+
         public Destroy()
         {
-            this.TagName = "destroy";
-            this.Namespace = Uri.MUC_OWNER;
+            TagName = "destroy";
+            Namespace = Uri.MUC_OWNER;
         }
 
         public Destroy(string reason) : this()
@@ -67,39 +95,7 @@ namespace agsXMPP.protocol.x.muc.owner
             Reason = reason;
             AlternateVenue = altVenue;
         }
-        #endregion                     
 
-        
-        /// <summary>
-        /// Pptional attribute for a alternate venue
-        /// </summary>
-        public Jid AlternateVenue
-        {
-            get
-            {
-                if (HasAttribute("jid"))
-                    return new Jid(this.GetAttribute("jid"));
-                else
-                    return null;
-            }
-            set
-            {
-                if (value != null)
-                    this.SetAttribute("jid", value.ToString());
-            }
-        }
-        
-        public string Reason
-        {
-            set { SetTag("reason", value); }
-            get { return GetTag("reason"); }
-        }
-
-        public string Password
-        {
-            set { SetTag("password", value); }
-            get { return GetTag("password"); }
-        }
-
+        #endregion
     }
 }

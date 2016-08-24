@@ -17,33 +17,33 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.pubsub.@event
 {
-	public class Delete : Element
+    public class Delete : Element
     {
-        #region << Constructors >>
-        public Delete()
-        {
-            this.TagName    = "delete";
-            this.Namespace  = Uri.PUBSUB_EVENT;
-        }
-
-        public Delete(string node) : this()
-        {
-            this.Node = node;
-        }
-        #endregion
-
         public string Node
         {
             get { return GetAttribute("node"); }
             set { SetAttribute("node", value); }
         }
-	}
+
+        #region << Constructors >>
+
+        public Delete()
+        {
+            TagName = "delete";
+            Namespace = Uri.PUBSUB_EVENT;
+        }
+
+        public Delete(string node) : this()
+        {
+            Node = node;
+        }
+
+        #endregion
+    }
 }

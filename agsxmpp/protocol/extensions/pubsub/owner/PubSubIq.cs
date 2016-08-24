@@ -17,7 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
@@ -38,13 +38,15 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
             </iq>
                 
         */
-        private PubSub m_PubSub = new PubSub();
+
+        public PubSub PubSub { get; } = new PubSub();
 
         #region << Constructors >>
+
         public PubSubIq()
         {
             GenerateId();
-            AddChild(m_PubSub);
+            AddChild(PubSub);
         }
 
         public PubSubIq(IqType type) : this()
@@ -61,14 +63,7 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         {
             From = from;
         }
-        #endregion
 
-        public PubSub PubSub
-        {
-            get
-            {
-                return m_PubSub;
-            }
-        }
+        #endregion
     }
 }

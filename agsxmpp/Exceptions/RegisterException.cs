@@ -31,7 +31,6 @@ namespace agsXMPP.Exceptions
 
         public RegisterException(string msg) : base(msg)
         {
-
         }
     }
 }

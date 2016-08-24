@@ -19,22 +19,17 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP.Xml;
 using agsXMPP.Xml.Dom;
-using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.Base
 {
     /// <summary>
-    /// Base XMPP Element
-    /// This must ne used to build all other new packets
+    ///     Base XMPP Element
+    ///     This must ne used to build all other new packets
     /// </summary>
     public abstract class DirectionalElement : Element
     {
         public DirectionalElement()
-            : base()
         {
         }
 
@@ -46,13 +41,13 @@ namespace agsXMPP.protocol.Base
         public DirectionalElement(string tag, string ns)
             : base(tag)
         {
-            this.Namespace = ns;
+            Namespace = ns;
         }
 
         public DirectionalElement(string tag, string text, string ns)
             : base(tag, text)
         {
-            this.Namespace = ns;
+            Namespace = ns;
         }
 
         public Jid From
@@ -60,14 +55,13 @@ namespace agsXMPP.protocol.Base
             get
             {
                 if (HasAttribute("from"))
-                    return new Jid(this.GetAttribute("from"));
-                else
-                    return null;
+                    return new Jid(GetAttribute("from"));
+                return null;
             }
             set
             {
                 if (value != null)
-                    this.SetAttribute("from", value.ToString());
+                    SetAttribute("from", value.ToString());
                 else
                     RemoveAttribute("from");
             }
@@ -78,26 +72,25 @@ namespace agsXMPP.protocol.Base
             get
             {
                 if (HasAttribute("to"))
-                    return new Jid(this.GetAttribute("to"));
-                else
-                    return null;
+                    return new Jid(GetAttribute("to"));
+                return null;
             }
             set
             {
                 if (value != null)
-                    this.SetAttribute("to", value.ToString());
+                    SetAttribute("to", value.ToString());
                 else
                     RemoveAttribute("to");
             }
         }
 
         /// <summary>
-        /// Switches the from and to attributes when existing
+        ///     Switches the from and to attributes when existing
         /// </summary>
         public void SwitchDirection()
         {
-            Jid from = From;
-            Jid to = To;
+            var from = From;
+            var to = To;
 
             // Remove from and to now
             RemoveAttribute("from");
@@ -111,6 +104,6 @@ namespace agsXMPP.protocol.Base
 
             From = from;
             To = to;
-        } 
+        }
     }
 }

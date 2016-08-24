@@ -21,57 +21,55 @@
 
 #region Using directives
 
-using System;
+using agsXMPP.protocol.client;
 
 #endregion
 
 namespace agsXMPP.protocol.component
 {
     /// <summary>
-    /// Summary description for Iq.
+    ///     Summary description for Iq.
     /// </summary>
-    public class IQ : agsXMPP.protocol.client.IQ
+    public class IQ : client.IQ
     {
-        #region << Constructors >>
-        public IQ() : base()
+        /// <summary>
+        ///     Error Child Element
+        /// </summary>
+        public new Error Error
         {
-            this.Namespace = Uri.ACCEPT;
+            get { return SelectSingleElement(typeof(Error)) as Error; }
+            set
+            {
+                if (HasTag(typeof(Error)))
+                    RemoveTag(typeof(Error));
+
+                if (value != null)
+                    AddChild(value);
+            }
         }
 
-        public IQ(agsXMPP.protocol.client.IqType type) : base(type)
+        #region << Constructors >>
+
+        public IQ()
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
+        }
+
+        public IQ(IqType type) : base(type)
+        {
+            Namespace = Uri.ACCEPT;
         }
 
         public IQ(Jid from, Jid to) : base(from, to)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
 
-        public IQ(agsXMPP.protocol.client.IqType type, Jid from, Jid to) : base(type, from, to)
+        public IQ(IqType type, Jid from, Jid to) : base(type, from, to)
         {
-            this.Namespace = Uri.ACCEPT;
+            Namespace = Uri.ACCEPT;
         }
+
         #endregion
-
-        /// <summary>
-        /// Error Child Element
-        /// </summary>
-        public new agsXMPP.protocol.component.Error Error
-        {
-            get
-            {
-                return SelectSingleElement(typeof(agsXMPP.protocol.component.Error)) as agsXMPP.protocol.component.Error;
-
-            }
-            set
-            {
-                if (HasTag(typeof(agsXMPP.protocol.component.Error)))
-                    RemoveTag(typeof(agsXMPP.protocol.component.Error));
-
-                if (value != null)
-                    this.AddChild(value);
-            }
-        }
     }
 }

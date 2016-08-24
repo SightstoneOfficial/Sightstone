@@ -17,11 +17,8 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using agsXMPP;
-using agsXMPP.protocol;
 using agsXMPP.Xml.Dom;
 
 /*
@@ -73,97 +70,98 @@ Example 3. Target entity does not exist
   </error>
 </iq>
     
- */  
+ */
+
 namespace agsXMPP.protocol.iq.disco
 {
-	/// <summary>
-	/// Discovering Information About a Jabber Entity
-	/// </summary>
-	public class DiscoInfo : Element
-	{
-		public DiscoInfo()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.DISCO_INFO;
-		}
-		
-		/// <summary>
-		/// Optional node Attrib
-		/// </summary>
-		public string Node
-		{
-			get { return GetAttribute("node"); }
-			set { SetAttribute("node", value); }
-		}
-
-		public DiscoIdentity AddIdentity()
-		{
-			DiscoIdentity id = new DiscoIdentity();
-			AddChild(id);
-			return id;
-		}
-
-		public void AddIdentity(DiscoIdentity id)
-		{
-			AddChild(id);
-		}
-
-		public DiscoFeature AddFeature()
-		{
-			DiscoFeature f = new DiscoFeature();
-			AddChild(f);
-			return f;
-		}
-
-		public void AddFeature(DiscoFeature f)
-		{
-			AddChild(f);
-		}
-
-		public DiscoIdentity[] GetIdentities()
-		{
-            ElementList nl = SelectElements(typeof(DiscoIdentity));
-			DiscoIdentity[] items = new DiscoIdentity[nl.Count];
-			int i = 0;
-			foreach (Element e in nl)
-			{
-				items[i] = (DiscoIdentity) e;
-				i++;
-			}
-			return items;
-		}
+    /// <summary>
+    ///     Discovering Information About a Jabber Entity
+    /// </summary>
+    public class DiscoInfo : Element
+    {
+        public DiscoInfo()
+        {
+            TagName = "query";
+            Namespace = Uri.DISCO_INFO;
+        }
 
         /// <summary>
-        /// Gets all Features
+        ///     Optional node Attrib
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+
+        public DiscoIdentity AddIdentity()
+        {
+            var id = new DiscoIdentity();
+            AddChild(id);
+            return id;
+        }
+
+        public void AddIdentity(DiscoIdentity id)
+        {
+            AddChild(id);
+        }
+
+        public DiscoFeature AddFeature()
+        {
+            var f = new DiscoFeature();
+            AddChild(f);
+            return f;
+        }
+
+        public void AddFeature(DiscoFeature f)
+        {
+            AddChild(f);
+        }
+
+        public DiscoIdentity[] GetIdentities()
+        {
+            var nl = SelectElements(typeof(DiscoIdentity));
+            var items = new DiscoIdentity[nl.Count];
+            var i = 0;
+            foreach (Element e in nl)
+            {
+                items[i] = (DiscoIdentity) e;
+                i++;
+            }
+            return items;
+        }
+
+        /// <summary>
+        ///     Gets all Features
         /// </summary>
         /// <returns></returns>
-		public DiscoFeature[] GetFeatures()
-		{
-            ElementList nl = SelectElements(typeof(DiscoFeature));
-			DiscoFeature[] items = new DiscoFeature[nl.Count];			
-			int i = 0;
-			foreach (Element e in nl)
-			{
-				items[i] = (DiscoFeature) e;
-				i++;
-			}
-			return items;
-		}
+        public DiscoFeature[] GetFeatures()
+        {
+            var nl = SelectElements(typeof(DiscoFeature));
+            var items = new DiscoFeature[nl.Count];
+            var i = 0;
+            foreach (Element e in nl)
+            {
+                items[i] = (DiscoFeature) e;
+                i++;
+            }
+            return items;
+        }
 
         /// <summary>
-        /// Check if a feature is supported
+        ///     Check if a feature is supported
         /// </summary>
         /// <param name="var"></param>
         /// <returns></returns>
         public bool HasFeature(string var)
         {
-            DiscoFeature[] features = GetFeatures();
-            foreach (DiscoFeature feat in features)
+            var features = GetFeatures();
+            foreach (var feat in features)
             {
                 if (feat.Var == var)
                     return true;
             }
             return false;
         }
-	}
+    }
 }

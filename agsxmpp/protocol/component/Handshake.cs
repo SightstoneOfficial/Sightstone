@@ -19,47 +19,41 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.protocol.Base;
-
-using agsXMPP.Xml;
-using agsXMPP.Xml.Dom;
+using agsXMPP.Util;
 
 namespace agsXMPP.protocol.component
 {
-	
-	//<handshake>aaee83c26aeeafcbabeabfcbcd50df997e0a2a1e</handshake>
+    //<handshake>aaee83c26aeeafcbabeabfcbcd50df997e0a2a1e</handshake>
 
-	/// <summary>
-	/// Handshake Element
-	/// </summary>
-	public class Handshake : Stanza
-	{
-		public Handshake()
-		{
-			this.TagName	= "handshake";
-			this.Namespace	= Uri.ACCEPT;			
-		}
+    /// <summary>
+    ///     Handshake Element
+    /// </summary>
+    public class Handshake : Stanza
+    {
+        public Handshake()
+        {
+            TagName = "handshake";
+            Namespace = Uri.ACCEPT;
+        }
 
-		public Handshake(string password, string streamid) : this()
-		{
-			SetAuth(password, streamid);
-		}
+        public Handshake(string password, string streamid) : this()
+        {
+            SetAuth(password, streamid);
+        }
 
-		public void SetAuth(string password, string streamId)
-		{
-			this.Value = Util.Hash.Sha1Hash(streamId + password);
-		}
+        /// <summary>
+        ///     Digest (Hash) for authentication
+        /// </summary>
+        public string Digest
+        {
+            get { return Value; }
+            set { Value = value; }
+        }
 
-		/// <summary>
-		/// Digest (Hash) for authentication
-		/// </summary>
-		public string Digest
-		{
-			get { return this.Value; }
-			set { this.Value = value; }
-
-		}
-	}
+        public void SetAuth(string password, string streamId)
+        {
+            Value = Hash.Sha1Hash(streamId + password);
+        }
+    }
 }

@@ -17,46 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.browse
 {
-	/// <summary>
-	/// Summary description for BrowseIq.
-	/// </summary>
-	public class BrowseIq : IQ
-	{
-		private Browse m_Browse	= new Browse();
-		
-		public BrowseIq()
-		{		
-			base.Query = m_Browse;
-			this.GenerateId();			
-		}
+    /// <summary>
+    ///     Summary description for BrowseIq.
+    /// </summary>
+    public class BrowseIq : IQ
+    {
+        public BrowseIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public BrowseIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public BrowseIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public BrowseIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public BrowseIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public BrowseIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
+        public BrowseIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public new Browse Query
-		{
-			get
-			{
-				return m_Browse;
-			}
-		}
-	}
+        public new Browse Query { get; } = new Browse();
+    }
 }

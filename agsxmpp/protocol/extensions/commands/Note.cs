@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.commands
@@ -50,39 +48,35 @@ namespace agsXMPP.protocol.extensions.commands
     public class Note : Element
     {
         /// <summary>
-        /// Default constructor
+        ///     Default constructor
         /// </summary>
         public Note()
         {
-            this.TagName    = "note";
-            this.Namespace  = Uri.COMMANDS;
+            TagName = "note";
+            Namespace = Uri.COMMANDS;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="type"></param>
         public Note(NoteType type) : this()
         {
-            this.Type = type;   
+            Type = type;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="text"></param>
         /// <param name="type"></param>
         public Note(string text, NoteType type) : this(type)
         {
-            this.Value = text;            
+            Value = text;
         }
 
         public NoteType Type
         {
-            get { return (NoteType)GetAttributeEnum("type", typeof(NoteType)); }
+            get { return (NoteType) GetAttributeEnum("type", typeof(NoteType)); }
             set { SetAttribute("type", value.ToString()); }
         }
-
-        
     }
 }

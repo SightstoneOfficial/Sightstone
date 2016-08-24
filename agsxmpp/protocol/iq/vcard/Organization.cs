@@ -17,49 +17,47 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.vcard
 {
+    /// <summary>
+    /// </summary>
+    public class Organization : Element
+    {
+        public string Name
+        {
+            get { return GetTag("ORGNAME"); }
+            set { SetTag("ORGNAME", value); }
+        }
 
-	/// <summary>
-	/// 
-	/// </summary>
-	public class Organization : Element
-	{
-		// <ORG>
-		//	<ORGNAME>Jabber Software Foundation</ORGNAME>
-		//	<ORGUNIT/>
-		// </ORG>
+        public string Unit
+        {
+            get { return GetTag("ORGUNIT"); }
+            set { SetTag("ORGUNIT", value); }
+        }
 
-		#region << Constructors >>
-		public Organization()
-		{
-			this.TagName	= "ORG";
-			this.Namespace	= Uri.VCARD;
-		}
-		
-		public Organization(string name, string unit) : this()
-		{			
-			this.Name	= name;		
-			this.Unit	= unit;
-		}
-		#endregion
+        // <ORG>
+        //	<ORGNAME>Jabber Software Foundation</ORGNAME>
+        //	<ORGUNIT/>
+        // </ORG>
 
-		public string Name
-		{
-			get { return GetTag("ORGNAME"); }
-			set { SetTag("ORGNAME", value); }
-		}
+        #region << Constructors >>
 
-		public string Unit
-		{
-			get { return GetTag("ORGUNIT"); }
-			set { SetTag("ORGUNIT", value); }
-		}
-	}
+        public Organization()
+        {
+            TagName = "ORG";
+            Namespace = Uri.VCARD;
+        }
+
+        public Organization(string name, string unit) : this()
+        {
+            Name = name;
+            Unit = unit;
+        }
+
+        #endregion
+    }
 }

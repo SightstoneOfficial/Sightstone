@@ -18,6 +18,7 @@
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 namespace agsXMPP.Sasl
 {
     public abstract class ExtendedData

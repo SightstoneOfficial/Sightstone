@@ -17,27 +17,26 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 // <failure xmlns='urn:ietf:params:xml:ns:xmpp-sasl'>
 //		<incorrect-encoding/>
 // </failure>
+
 namespace agsXMPP.protocol.sasl
 {
-	/// <summary>
-	/// Summary description for Failure.
-	/// </summary>
-	public class Failure : Element
-	{
-		public Failure()
-		{
-			this.TagName	= "failure";
-			this.Namespace	= Uri.SASL;
-		}
+    /// <summary>
+    ///     Summary description for Failure.
+    /// </summary>
+    public class Failure : Element
+    {
+        public Failure()
+        {
+            TagName = "failure";
+            Namespace = Uri.SASL;
+        }
 
         public Failure(FailureCondition cond) : this()
         {
@@ -50,20 +49,19 @@ namespace agsXMPP.protocol.sasl
             {
                 if (HasTag("aborted"))
                     return FailureCondition.aborted;
-                else if (HasTag("incorrect-encoding"))
+                if (HasTag("incorrect-encoding"))
                     return FailureCondition.incorrect_encoding;
-                else if (HasTag("invalid-authzid"))
+                if (HasTag("invalid-authzid"))
                     return FailureCondition.invalid_authzid;
-                else if (HasTag("invalid-mechanism"))
+                if (HasTag("invalid-mechanism"))
                     return FailureCondition.invalid_mechanism;
-                else if (HasTag("mechanism-too-weak"))
+                if (HasTag("mechanism-too-weak"))
                     return FailureCondition.mechanism_too_weak;
-                else if (HasTag("not-authorized"))
+                if (HasTag("not-authorized"))
                     return FailureCondition.not_authorized;
-                else if (HasTag("temporary-auth-failure"))
+                if (HasTag("temporary-auth-failure"))
                     return FailureCondition.temporary_auth_failure;
-                else
-                    return FailureCondition.UnknownCondition;
+                return FailureCondition.UnknownCondition;
             }
             set
             {
@@ -80,8 +78,8 @@ namespace agsXMPP.protocol.sasl
                 else if (value == FailureCondition.not_authorized)
                     SetTag("not-authorized");
                 else if (value == FailureCondition.temporary_auth_failure)
-                    SetTag("temporary-auth-failure");                
+                    SetTag("temporary-auth-failure");
             }
         }
-	}
+    }
 }

@@ -19,15 +19,11 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.protocol.x.data;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
-    
     /*
         <xs:element name='options'>
             <xs:complexType>
@@ -52,75 +48,72 @@ namespace agsXMPP.protocol.extensions.pubsub
 
     public class Options : Element
     {
-        #region << Constructors >>
-        public Options()
-        {
-            this.TagName    = "options";
-            this.Namespace  = Uri.PUBSUB;
-        }
-
-        public Options(Jid jid) : this()
-        {
-            this.Jid = jid;
-        }
-
-        public Options(Jid jid, string node) : this(jid)
-        {
-            this.Node = node;
-        }
-
-        public Options(Jid jid, string node, string subId) : this(jid, node)
-        {
-            this.SubId = subId;
-        }        
-        #endregion
-
         public Jid Jid
-		{
-			get 
-			{ 
-				if (HasAttribute("jid"))
-					return new Jid(this.GetAttribute("jid"));
-				else
-					return null;
-			}
-			set 
-			{ 
-				if (value!=null)
-					this.SetAttribute("jid", value.ToString());
-			}
-		}
-        
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
+            }
+        }
+
         public string Node
-		{
+        {
             get { return GetAttribute("node"); }
-			set	{ SetAttribute("node", value); }			
-		}
+            set { SetAttribute("node", value); }
+        }
 
         public string SubId
         {
             get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }           
+            set { SetAttribute("subid", value); }
         }
-        
+
         /// <summary>
-        /// The X-Data Element/Form
+        ///     The X-Data Element/Form
         /// </summary>
         public Data Data
         {
-            get
-            {
-                return SelectSingleElement(typeof(Data)) as Data;
-
-            }
+            get { return SelectSingleElement(typeof(Data)) as Data; }
             set
             {
                 if (HasTag(typeof(Data)))
                     RemoveTag(typeof(Data));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
+
+        #region << Constructors >>
+
+        public Options()
+        {
+            TagName = "options";
+            Namespace = Uri.PUBSUB;
+        }
+
+        public Options(Jid jid) : this()
+        {
+            Jid = jid;
+        }
+
+        public Options(Jid jid, string node) : this(jid)
+        {
+            Node = node;
+        }
+
+        public Options(Jid jid, string node, string subId) : this(jid, node)
+        {
+            SubId = subId;
+        }
+
+        #endregion
     }
 }

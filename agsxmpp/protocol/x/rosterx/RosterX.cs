@@ -17,20 +17,18 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.rosterx
 {
     /// <summary>
-    /// Roster Item Exchange (JEP-0144)
+    ///     Roster Item Exchange (JEP-0144)
     /// </summary>
-	public class RosterX : Element
-	{
-		/*
+    public class RosterX : Element
+    {
+        /*
 		<message from='horatio@denmark.lit' to='hamlet@denmark.lit'>
 		<body>Some visitors, m'lord!</body>
 		<x xmlns='http://jabber.org/protocol/rosterx'> 
@@ -49,39 +47,39 @@ namespace agsXMPP.protocol.x.rosterx
 		*/
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="RosterX"/> class.
+        ///     Initializes a new instance of the <see cref="RosterX" /> class.
         /// </summary>
-		public RosterX()
-		{
-			this.TagName	= "x";
-			this.Namespace	= Uri.X_ROSTERX;
-		}
+        public RosterX()
+        {
+            TagName = "x";
+            Namespace = Uri.X_ROSTERX;
+        }
 
 
         /// <summary>
-        /// Gets the roster.
+        ///     Gets the roster.
         /// </summary>
         /// <returns></returns>
-		public RosterItem[] GetRoster()
-		{
-            ElementList nl = SelectElements(typeof(RosterItem));
-			int i = 0;
-			RosterItem[] result = new RosterItem[nl.Count];
-			foreach (RosterItem ri in nl)
-			{
-				result[i] = (RosterItem) ri;				
-				i++;
-			}
-			return result;
-		}
+        public RosterItem[] GetRoster()
+        {
+            var nl = SelectElements(typeof(RosterItem));
+            var i = 0;
+            var result = new RosterItem[nl.Count];
+            foreach (RosterItem ri in nl)
+            {
+                result[i] = ri;
+                i++;
+            }
+            return result;
+        }
 
         /// <summary>
-        /// Adds a roster item.
+        ///     Adds a roster item.
         /// </summary>
         /// <param name="r">The r.</param>
-		public void AddRosterItem(RosterItem r)
-		{
-			this.ChildNodes.Add(r);
-		}
-	}
+        public void AddRosterItem(RosterItem r)
+        {
+            ChildNodes.Add(r);
+        }
+    }
 }

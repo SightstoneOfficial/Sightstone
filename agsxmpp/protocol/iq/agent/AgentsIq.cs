@@ -17,9 +17,8 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 // Request Agents:
@@ -29,37 +28,32 @@ using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.agent
 {
-	/// <summary>
-	/// Summary description for AgentsIq.
-	/// </summary>
-	public class AgentsIq : IQ
-	{
-		private Agents m_Agents = new Agents();
+    /// <summary>
+    ///     Summary description for AgentsIq.
+    /// </summary>
+    public class AgentsIq : IQ
+    {
+        public AgentsIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public AgentsIq()
-		{
-			base.Query = m_Agents;
-			this.GenerateId();
-		}
+        public AgentsIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public AgentsIq(IqType type) : this()
-		{			
-            this.Type = type;		
-		}
+        public AgentsIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public AgentsIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public AgentsIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public AgentsIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Agents Query
-		{
-			get	{ return m_Agents; }            
-		}
-	}
+        public new Agents Query { get; } = new Agents();
+    }
 }

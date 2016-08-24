@@ -19,15 +19,13 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// URLs are fairly simple, as they only need to store a URL and a title, 
-    /// and the client then can simply launch the appropriate browser.
+    ///     URLs are fairly simple, as they only need to store a URL and a title,
+    ///     and the client then can simply launch the appropriate browser.
     /// </summary>
     public class Url : Element
     {
@@ -35,20 +33,21 @@ namespace agsXMPP.protocol.extensions.bookmarks
             <url name='Complete Works of Shakespeare'
          url='http://the-tech.mit.edu/Shakespeare/'/>
         */
+
         public Url()
         {
-            this.TagName    = "url";
-            this.Namespace  = Uri.STORAGE_BOOKMARKS;   
+            TagName = "url";
+            Namespace = Uri.STORAGE_BOOKMARKS;
         }
 
         public Url(string address, string name) : this()
         {
             Address = address;
-            Name    = name;
+            Name = name;
         }
 
         /// <summary>
-        /// A description/name for this bookmark
+        ///     A description/name for this bookmark
         /// </summary>
         public string Name
         {
@@ -57,7 +56,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// The url address to store e.g. http://www.ag-software,de/
+        ///     The url address to store e.g. http://www.ag-software,de/
         /// </summary>
         public string Address
         {

@@ -18,7 +18,6 @@
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
-using System;
 
 using agsXMPP.protocol.client;
 
@@ -26,17 +25,18 @@ namespace agsXMPP.protocol.extensions.bookmarks
 {
     public class BookmarkManager
     {
-        private XmppClientConnection	m_connection	= null;
+        private readonly XmppClientConnection m_connection;
 
-        
+
         public BookmarkManager(XmppClientConnection con)
         {
             m_connection = con;
         }
-        
+
         #region << Request Bookmarks >>
+
         /// <summary>
-        /// Request the bookmarks from the storage on the server
+        ///     Request the bookmarks from the storage on the server
         /// </summary>
         public void RequestBookmarks()
         {
@@ -44,7 +44,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Request the bookmarks from the storage on the server
+        ///     Request the bookmarks from the storage on the server
         /// </summary>
         /// <param name="cb"></param>
         public void RequestBookmarks(IqCB cb)
@@ -53,25 +53,26 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Request the bookmarks from the storage on the server
+        ///     Request the bookmarks from the storage on the server
         /// </summary>
         /// <param name="cb"></param>
         /// <param name="cbArgs"></param>
         public void RequestBookmarks(IqCB cb, object cbArgs)
         {
-            StorageIq siq = new StorageIq(IqType.get);
-                      
+            var siq = new StorageIq(IqType.get);
+
             if (cb == null)
                 m_connection.Send(siq);
             else
                 m_connection.IqGrabber.SendIq(siq, cb, cbArgs);
         }
+
         #endregion
 
-
         #region << Store Bookmarks >>
+
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         public void StoreBookmarks(Url[] urls)
@@ -80,7 +81,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         /// <param name="cb"></param>
@@ -90,7 +91,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         /// <param name="cb"></param>
@@ -101,7 +102,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="conferences"></param>
         public void StoreBookmarks(Conference[] conferences)
@@ -110,7 +111,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="conferences"></param>
         /// <param name="cb"></param>
@@ -120,7 +121,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="conferences"></param>
         /// <param name="cb"></param>
@@ -131,7 +132,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         /// <param name="conferences"></param>
@@ -141,7 +142,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         /// <param name="conferences"></param>
@@ -152,7 +153,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Send booksmarks to the server storage
+        ///     Send booksmarks to the server storage
         /// </summary>
         /// <param name="urls"></param>
         /// <param name="conferences"></param>
@@ -160,8 +161,8 @@ namespace agsXMPP.protocol.extensions.bookmarks
         /// <param name="cbArgs"></param>
         public void StoreBookmarks(Url[] urls, Conference[] conferences, IqCB cb, object cbArgs)
         {
-            StorageIq siq = new StorageIq(IqType.set);
-            
+            var siq = new StorageIq(IqType.set);
+
             if (urls != null)
                 siq.Query.Storage.AddUrls(urls);
 
@@ -173,6 +174,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
             else
                 m_connection.IqGrabber.SendIq(siq, cb, cbArgs);
         }
+
         #endregion
     }
 }

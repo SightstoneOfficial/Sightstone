@@ -17,21 +17,29 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.disco
 {
-	/// <summary>
-	/// Disco feature
-	/// </summary>
-	/// <remarks>
-	/// see: http://www.jabber.org/registrar/disco-features.html
-	/// </remarks>
-	public class DiscoFeature : Element
-	{
+    /// <summary>
+    ///     Disco feature
+    /// </summary>
+    /// <remarks>
+    ///     see: http://www.jabber.org/registrar/disco-features.html
+    /// </remarks>
+    public class DiscoFeature : Element
+    {
+        /// <summary>
+        ///     feature name or namespace
+        /// </summary>
+        public string Var
+        {
+            get { return GetAttribute("var"); }
+            set { SetAttribute("var", value); }
+        }
+
         /*
         <iq type='result'
             from='plays.shakespeare.lit'
@@ -56,26 +64,20 @@ namespace agsXMPP.protocol.iq.disco
         </query>
         </iq>
         */
+
         #region << Constructors >>
+
         public DiscoFeature()
-		{
-			this.TagName	= "feature";
-			this.Namespace	= Uri.DISCO_INFO;
-		}
-
-		public DiscoFeature(string var) : this()
-		{
-			Var = var;
+        {
+            TagName = "feature";
+            Namespace = Uri.DISCO_INFO;
         }
-        #endregion
 
-        /// <summary>
-		/// feature name or namespace
-		/// </summary>
-		public string Var
-		{
-			get { return GetAttribute("var"); }
-			set { SetAttribute("var", value); }
-		}
-	}
+        public DiscoFeature(string var) : this()
+        {
+            Var = var;
+        }
+
+        #endregion
+    }
 }

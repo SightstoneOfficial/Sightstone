@@ -17,14 +17,10 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-using System.IO;
-
-
 using agsXMPP.Xml.Dom;
-using agsXMPP.protocol.iq.vcard;
 
 // JEP-0054
 // http://www.jabber.org/jeps/jep-0054.html
@@ -84,232 +80,218 @@ using agsXMPP.protocol.iq.vcard;
 //		</vCard>
 //</iq>
 //    
+
 namespace agsXMPP.protocol.iq.vcard
 {
-	//	<!-- Telephone number property. -->
-	//	<!ELEMENT TEL (
-	//	HOME?, 
-	//	WORK?, 
-	//	VOICE?, 
-	//	FAX?, 
-	//	PAGER?, 
-	//	MSG?, 
-	//	CELL?, 
-	//	VIDEO?, 
-	//	BBS?, 
-	//	MODEM?, 
-	//	ISDN?, 
-	//	PCS?, 
-	//	PREF?, 
-	//	NUMBER
-	//	)>
+    //	<!-- Telephone number property. -->
+    //	<!ELEMENT TEL (
+    //	HOME?, 
+    //	WORK?, 
+    //	VOICE?, 
+    //	FAX?, 
+    //	PAGER?, 
+    //	MSG?, 
+    //	CELL?, 
+    //	VIDEO?, 
+    //	BBS?, 
+    //	MODEM?, 
+    //	ISDN?, 
+    //	PCS?, 
+    //	PREF?, 
+    //	NUMBER
+    //	)>
 
 
+    /// <summary>
+    ///     Summary description for Vcard.
+    /// </summary>
+    public class Vcard : Element
+    {
+        #region << Constructors >>
 
-	/// <summary>
-	/// Summary description for Vcard.
-	/// </summary>
-	public class Vcard : Element
-	{
-		#region << Constructors >>
-		public Vcard()
-		{
-			this.TagName	= "vCard";
-			this.Namespace	= Uri.VCARD;
-		}
-		#endregion
+        public Vcard()
+        {
+            TagName = "vCard";
+            Namespace = Uri.VCARD;
+        }
 
-		/// <summary>
-		///
-		/// </summary>
-		public string Url
-		{
-			get { return GetTag("URL"); }
-			set { SetTag("URL", value); }
-		}
+        #endregion
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public DateTime Birthday
-		{
-			get 
-			{ 
-				try
-				{
-                    string sDate = GetTag("BDAY");
-                    if (sDate != null)
-					    return DateTime.Parse(sDate);
-                    else
-                        return DateTime.MinValue;
-				}
-				catch
-				{
-					return DateTime.MinValue;
-				}
-			}
-			set { SetTag("BDAY", value.ToString("yyyy-MM-dd")); }            
-		}
-		
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Title
-		{
-			get { return GetTag("TITLE"); }
-			set { SetTag("TITLE", value); }
-		}
+        /// <summary>
+        /// </summary>
+        public string Url
+        {
+            get { return GetTag("URL"); }
+            set { SetTag("URL", value); }
+        }
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Role
-		{
-			get { return GetTag("ROLE"); }
-			set { SetTag("ROLE", value); }
-		}
-
-		public string Fullname
-		{
-			get { return GetTag("FN"); }
-			set { SetTag("FN", value); }
-		}
-
-		public string Nickname
-		{
-			get { return GetTag("NICKNAME"); }
-			set { SetTag("NICKNAME", value); }
-		}
-
-		public Jid JabberId
-		{
-			get
-			{
-				return new Jid(GetTag("JABBERID"));
-			}
-			set
-			{
-				SetTag("JABBERID", value.ToString());
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public string Description
-		{
-			get { return GetTag("DESC"); }
-			set { SetTag("DESC", value); }
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public Name Name
-		{
-			get { return SelectSingleElement(typeof(Name)) as Name; }
-			set 
+        /// <summary>
+        /// </summary>
+        public DateTime Birthday
+        {
+            get
             {
-                Element n = SelectSingleElement(typeof(Name));
+                try
+                {
+                    var sDate = GetTag("BDAY");
+                    if (sDate != null)
+                        return DateTime.Parse(sDate);
+                    return DateTime.MinValue;
+                }
+                catch
+                {
+                    return DateTime.MinValue;
+                }
+            }
+            set { SetTag("BDAY", value.ToString("yyyy-MM-dd")); }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Title
+        {
+            get { return GetTag("TITLE"); }
+            set { SetTag("TITLE", value); }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Role
+        {
+            get { return GetTag("ROLE"); }
+            set { SetTag("ROLE", value); }
+        }
+
+        public string Fullname
+        {
+            get { return GetTag("FN"); }
+            set { SetTag("FN", value); }
+        }
+
+        public string Nickname
+        {
+            get { return GetTag("NICKNAME"); }
+            set { SetTag("NICKNAME", value); }
+        }
+
+        public Jid JabberId
+        {
+            get { return new Jid(GetTag("JABBERID")); }
+            set { SetTag("JABBERID", value.ToString()); }
+        }
+
+        /// <summary>
+        /// </summary>
+        public string Description
+        {
+            get { return GetTag("DESC"); }
+            set { SetTag("DESC", value); }
+        }
+
+        /// <summary>
+        /// </summary>
+        public Name Name
+        {
+            get { return SelectSingleElement(typeof(Name)) as Name; }
+            set
+            {
+                var n = SelectSingleElement(typeof(Name));
                 if (n != null)
                     n.Remove();
 
-                AddChild(value);                
+                AddChild(value);
             }
-		}
+        }
 
 #if !CF
         /// <summary>
-        /// a Photograph
+        ///     a Photograph
         /// </summary>
-		public Photo Photo
-		{
-			get { return SelectSingleElement(typeof(Photo)) as Photo; }
-			set 
+        public Photo Photo
+        {
+            get { return SelectSingleElement(typeof(Photo)) as Photo; }
+            set
             {
-                Element p = SelectSingleElement(typeof(Photo));
+                var p = SelectSingleElement(typeof(Photo));
                 if (p != null)
                     p.Remove();
 
-                AddChild(value);              
+                AddChild(value);
             }
-		}
+        }
 #endif
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public Organization Organization
-		{
-			get { return SelectSingleElement(typeof(Organization)) as Organization; }
-			set 
+        /// <summary>
+        /// </summary>
+        public Organization Organization
+        {
+            get { return SelectSingleElement(typeof(Organization)) as Organization; }
+            set
             {
-                Element org = SelectSingleElement(typeof(Organization));
+                var org = SelectSingleElement(typeof(Organization));
                 if (org != null)
                     org.Remove();
 
-                AddChild(value);           
+                AddChild(value);
             }
-		}
+        }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Address[] GetAddresses()
-		{
-            ElementList el = SelectElements(typeof(Address));
-            int i = 0;
-            Address[] result = new Address[el.Count];
+        {
+            var el = SelectElements(typeof(Address));
+            var i = 0;
+            var result = new Address[el.Count];
             foreach (Address add in el)
             {
                 result[i] = add;
                 i++;
             }
-            return result;			
-		}
+            return result;
+        }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="loc"></param>
         /// <returns></returns>
-		public Address GetAddress(AddressLocation loc)
-		{
-			foreach (Address adr in GetAddresses())
-			{
-				if (adr.Location == loc)
-					return adr;
-			}
-			return null;
-		}
+        public Address GetAddress(AddressLocation loc)
+        {
+            foreach (var adr in GetAddresses())
+            {
+                if (adr.Location == loc)
+                    return adr;
+            }
+            return null;
+        }
 
 
         public void AddAddress(Address addr)
         {
-            Address a = GetAddress(addr.Location);
+            var a = GetAddress(addr.Location);
             if (a != null)
                 a.Remove();
 
-            this.AddChild(addr);
+            AddChild(addr);
         }
 
-		public Address GetPreferedAddress()
-		{
-			foreach (Address adr in GetAddresses())
-			{
-				if (adr.IsPrefered)
-					return adr;
-			}
-			return null;
-		}
-              
-   
+        public Address GetPreferedAddress()
+        {
+            foreach (var adr in GetAddresses())
+            {
+                if (adr.IsPrefered)
+                    return adr;
+            }
+            return null;
+        }
+
+
         public Telephone[] GetTelephoneNumbers()
         {
-            ElementList el = SelectElements(typeof(Telephone));
-            int i = 0;
-            Telephone[] result = new Telephone[el.Count];
+            var el = SelectElements(typeof(Telephone));
+            var i = 0;
+            var result = new Telephone[el.Count];
             foreach (Telephone tel in el)
             {
                 result[i] = tel;
@@ -318,47 +300,47 @@ namespace agsXMPP.protocol.iq.vcard
             return result;
         }
 
-		public Telephone GetTelephoneNumber(TelephoneType type, TelephoneLocation loc)
-		{
-			foreach (Telephone phone in GetTelephoneNumbers())
-			{
-				if (phone.Type == type && phone.Location == loc)
-					return phone;
-			}
-			return null;
-		}
+        public Telephone GetTelephoneNumber(TelephoneType type, TelephoneLocation loc)
+        {
+            foreach (var phone in GetTelephoneNumbers())
+            {
+                if (phone.Type == type && phone.Location == loc)
+                    return phone;
+            }
+            return null;
+        }
 
-		public void AddTelephoneNumber(Telephone tel)
-		{
-            Telephone t = GetTelephoneNumber(tel.Type, tel.Location);
+        public void AddTelephoneNumber(Telephone tel)
+        {
+            var t = GetTelephoneNumber(tel.Type, tel.Location);
             if (t != null)
                 t.Remove();
 
-            this.AddChild(tel);	
-		}
+            AddChild(tel);
+        }
 
-		/// <summary>
-		/// Adds a new Email Adress object
-		/// </summary>
-		/// <param name="mail"></param>
-		public void AddEmailAddress(Email mail)
-		{
-            Email e = GetEmailAddress(mail.Type);
+        /// <summary>
+        ///     Adds a new Email Adress object
+        /// </summary>
+        /// <param name="mail"></param>
+        public void AddEmailAddress(Email mail)
+        {
+            var e = GetEmailAddress(mail.Type);
             if (e != null)
                 e.Remove();
 
-			this.AddChild(mail);
-		}
-               
+            AddChild(mail);
+        }
+
         /// <summary>
-        /// Get all Email addresses
+        ///     Get all Email addresses
         /// </summary>
         /// <returns></returns>
         public Email[] GetEmailAddresses()
         {
-            ElementList el = SelectElements(typeof(Email));
-            int i = 0;
-            Email[] result = new Email[el.Count];
+            var el = SelectElements(typeof(Email));
+            var i = 0;
+            var result = new Email[el.Count];
             foreach (Email mail in el)
             {
                 result[i] = mail;
@@ -367,25 +349,24 @@ namespace agsXMPP.protocol.iq.vcard
             return result;
         }
 
-		public Email GetEmailAddress(EmailType type)
-		{
-			foreach (Email email in GetEmailAddresses())
-			{
-				if (email.Type == type)
-					return email;
-			}
-			return null;
-		}
+        public Email GetEmailAddress(EmailType type)
+        {
+            foreach (var email in GetEmailAddresses())
+            {
+                if (email.Type == type)
+                    return email;
+            }
+            return null;
+        }
 
-		public Email GetPreferedEmailAddress()
-		{
-			foreach (Email email in GetEmailAddresses())
-			{
-				if (email.IsPrefered)
-					return email;
-			}
-			return null;
-		}
-	}
-	
+        public Email GetPreferedEmailAddress()
+        {
+            foreach (var email in GetEmailAddresses())
+            {
+                if (email.IsPrefered)
+                    return email;
+            }
+            return null;
+        }
+    }
 }

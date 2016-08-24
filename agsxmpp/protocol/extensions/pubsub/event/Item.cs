@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub.@event
 {
@@ -62,26 +60,14 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
     // This class is the same as the Item class in the main pubsub namespace,
     // so inherit it and overwrite some properties and functions
 
-    public class Item : agsXMPP.protocol.extensions.pubsub.Item
+    public class Item : pubsub.Item
     {
-        #region << Constructors >>
-        public Item() : base()
-        {
-            this.Namespace = Uri.PUBSUB_EVENT;
-        }
-        
-        public Item(string id) : this()
-        {
-            this.Id = id;
-        }
-        #endregion
-
         private const string RETRACT = "retract";
 
         public bool Retract
         {
             get { return HasTag(RETRACT); }
-            set 
+            set
             {
                 if (value)
                     SetTag(RETRACT);
@@ -89,5 +75,19 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
                     RemoveTag(RETRACT);
             }
         }
+
+        #region << Constructors >>
+
+        public Item()
+        {
+            Namespace = Uri.PUBSUB_EVENT;
+        }
+
+        public Item(string id) : this()
+        {
+            Id = id;
+        }
+
+        #endregion
     }
 }

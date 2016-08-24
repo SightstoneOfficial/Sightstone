@@ -23,6 +23,8 @@ namespace SightStone
         {
             Initialize();
         }
+
+        /*
         protected override IEnumerable<Assembly> SelectAssemblies()
         {
             var assemblies = base.SelectAssemblies().ToList();
@@ -30,6 +32,8 @@ namespace SightStone
             assemblies.Add(typeof(Sightstone.Views.ShellView).GetTypeInfo().Assembly);
             return assemblies;
         }
+        //*/
+
         protected override void BuildUp(object instance)
         {
             _container.SatisfyImportsOnce(instance);
@@ -40,14 +44,6 @@ namespace SightStone
         /// </summary>
         protected override void Configure()
         {
-            //Allow us to load views and view models from different location
-            var config = new TypeMappingConfiguration
-            {
-                DefaultSubNamespaceForViews = "Sightstone.Views",
-                DefaultSubNamespaceForViewModels = "Sightstone.ViewModels"
-            };
-            Caliburn.Micro.ViewLocator.ConfigureTypeMappings(config);
-            ViewModelLocator.ConfigureTypeMappings(config);
 
             ConventionManager.ApplyValueConverter = ValueTypeConverter.ApplyValueConverter;
 

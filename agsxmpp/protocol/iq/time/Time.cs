@@ -17,16 +17,13 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.time
 {
-
-	/*
+    /*
      <iq type='get'
         from='romeo@montague.net/orchard'
         to='juliet@capulet.com/balcony'
@@ -45,60 +42,42 @@ namespace agsXMPP.protocol.iq.time
       </query>
      </iq>
      */
-    
-     
-	/// <summary>
-    /// XEP-0090: Entity Time
-	/// </summary>
-	public class Time : Element
-	{
-		public Time()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.IQ_TIME;
-		}
 
 
-		public string Utc 
-		{
-			get 
-			{ 
-				return GetTag("utc"); 
-			}
-			set 
-			{ 
-				SetTag("utc", value);
-			}
-		}
+    /// <summary>
+    ///     XEP-0090: Entity Time
+    /// </summary>
+    public class Time : Element
+    {
+        public Time()
+        {
+            TagName = "query";
+            Namespace = Uri.IQ_TIME;
+        }
 
-		/// <summary>
-		/// Timezone
-		/// </summary>		
-		public string Tz
-		{			
-			get 
-			{ 
-				return GetTag("tz"); 
-			}
-			set 
-			{ 
-				SetTag("tz", value);			
-			}
-		}
 
-		/// <summary>
-		/// Human-readable date/time.
-		/// </summary>
-		public string Display
-		{
-			get 
-			{ 
-				return GetTag("display"); 
-			}
-			set 
-			{ 
-				SetTag("display", value);
-			}
-		}
-	}
+        public string Utc
+        {
+            get { return GetTag("utc"); }
+            set { SetTag("utc", value); }
+        }
+
+        /// <summary>
+        ///     Timezone
+        /// </summary>
+        public string Tz
+        {
+            get { return GetTag("tz"); }
+            set { SetTag("tz", value); }
+        }
+
+        /// <summary>
+        ///     Human-readable date/time.
+        /// </summary>
+        public string Display
+        {
+            get { return GetTag("display"); }
+            set { SetTag("display", value); }
+        }
+    }
 }

@@ -20,13 +20,11 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// 
     /// </summary>
     public class RosterNotes : Element
     {
@@ -44,14 +42,15 @@ namespace agsXMPP.protocol.extensions.bookmarks
                 </query>
             </iq> 
         */
+
         public RosterNotes()
         {
-            TagName    = "storage";
+            TagName = "storage";
             Namespace = Uri.STORAGE_ROSTERNOTES;
         }
 
         /// <summary>
-        /// Add a note to the storage object
+        ///     Add a note to the storage object
         /// </summary>
         /// <param name="note">The note.</param>
         /// <returns></returns>
@@ -62,7 +61,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Add a note to the storage object
+        ///     Add a note to the storage object
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="cdate"></param>
@@ -75,17 +74,17 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// get all roster notes
+        ///     get all roster notes
         /// </summary>
         /// <returns></returns>
         public RosterNote[] GetRosterNotes()
         {
-            ElementList nl = SelectElements(typeof(RosterNote));
-            RosterNote[] items = new RosterNote[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(RosterNote));
+            var items = new RosterNote[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                items[i] = (RosterNote)e;
+                items[i] = (RosterNote) e;
                 i++;
             }
             return items;

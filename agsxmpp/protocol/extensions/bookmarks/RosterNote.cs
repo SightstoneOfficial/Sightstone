@@ -20,15 +20,15 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// Annotations are stored using server-side private XML storage. 
-    /// A storage element contains a collection of one or more notes elements, 
-    /// each representing a note about a given entity.
+    ///     Annotations are stored using server-side private XML storage.
+    ///     A storage element contains a collection of one or more notes elements,
+    ///     each representing a note about a given entity.
     /// </summary>
     public class RosterNote : Element
     {
@@ -46,9 +46,10 @@ namespace agsXMPP.protocol.extensions.bookmarks
                 </query>
             </iq> 
          */
+
         public RosterNote()
         {
-            TagName    = "note";
+            TagName = "note";
             Namespace = Uri.STORAGE_ROSTERNOTES;
         }
 
@@ -62,25 +63,25 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Creation date time
+        ///     Creation date time
         /// </summary>
         public DateTime CreationDate
         {
-            get { return Util.Time.ISO_8601Date(GetAttribute("cdate")); }
-            set { SetAttribute("cdate", Util.Time.ISO_8601Date(value)); }
+            get { return Time.ISO_8601Date(GetAttribute("cdate")); }
+            set { SetAttribute("cdate", Time.ISO_8601Date(value)); }
         }
 
         /// <summary>
-        /// Modification date tiime
+        ///     Modification date tiime
         /// </summary>
         public DateTime ModificationDate
         {
-            get { return Util.Time.ISO_8601Date(GetAttribute("mdate")); }
-            set { SetAttribute("mdate", Util.Time.ISO_8601Date(value)); }
+            get { return Time.ISO_8601Date(GetAttribute("mdate")); }
+            set { SetAttribute("mdate", Time.ISO_8601Date(value)); }
         }
 
         /// <summary>
-        /// The Jid of the bookmarked room
+        ///     The Jid of the bookmarked room
         /// </summary>
         public Jid Jid
         {

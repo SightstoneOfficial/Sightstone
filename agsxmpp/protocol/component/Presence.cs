@@ -21,53 +21,51 @@
 
 #region Using directives
 
-using System;
+using agsXMPP.protocol.client;
 
 #endregion
 
 namespace agsXMPP.protocol.component
 {
     /// <summary>
-    /// Summary description for Presence.
+    ///     Summary description for Presence.
     /// </summary>
-    public class Presence : agsXMPP.protocol.client.Presence
+    public class Presence : client.Presence
     {
-        #region << Constructors >>
-        public Presence() : base()
-        {
-            this.Namespace = Uri.ACCEPT;
-        }
-
-        public Presence(agsXMPP.protocol.client.ShowType show, string status) : this()
-        {
-            this.Show = show;
-            this.Status = status;
-        }
-
-        public Presence(agsXMPP.protocol.client.ShowType show, string status, int priority) : this(show, status)
-        {
-            this.Priority = priority;
-        }
-        #endregion
-
         /// <summary>
-        /// Error Child Element
+        ///     Error Child Element
         /// </summary>
-        public new agsXMPP.protocol.component.Error Error
+        public new Error Error
         {
-            get
-            {
-                return SelectSingleElement(typeof(agsXMPP.protocol.component.Error)) as agsXMPP.protocol.component.Error;
-
-            }
+            get { return SelectSingleElement(typeof(Error)) as Error; }
             set
             {
-                if (HasTag(typeof(agsXMPP.protocol.component.Error)))
-                    RemoveTag(typeof(agsXMPP.protocol.component.Error));
+                if (HasTag(typeof(Error)))
+                    RemoveTag(typeof(Error));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
+
+        #region << Constructors >>
+
+        public Presence()
+        {
+            Namespace = Uri.ACCEPT;
+        }
+
+        public Presence(ShowType show, string status) : this()
+        {
+            Show = show;
+            Status = status;
+        }
+
+        public Presence(ShowType show, string status, int priority) : this(show, status)
+        {
+            Priority = priority;
+        }
+
+        #endregion
     }
 }

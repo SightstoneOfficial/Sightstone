@@ -17,24 +17,20 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// privacy lis action
+    ///     privacy lis action
     /// </summary>
     public enum Action
     {
         /// <summary>
-        /// 
         /// </summary>
         allow,
-        
+
         /// <summary>
-        /// 
         /// </summary>
         deny
     }

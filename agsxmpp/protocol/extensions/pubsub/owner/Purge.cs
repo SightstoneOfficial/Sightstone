@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub.owner
 {
@@ -27,15 +25,17 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
     public class Purge : @event.Purge
     {
         #region << Constructors >>
-        public Purge() : base()
+
+        public Purge()
         {
-            this.Namespace = Uri.PUBSUB_OWNER;
+            Namespace = Uri.PUBSUB_OWNER;
         }
 
         public Purge(string node) : this()
         {
-            this.Node = node;
+            Node = node;
         }
+
         #endregion
     }
 }

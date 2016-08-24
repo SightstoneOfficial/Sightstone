@@ -24,18 +24,19 @@ using agsXMPP.Xml.Dom;
 namespace agsXMPP.protocol.extensions.chatstates
 {
     /// <summary>
-    /// User had been composing but now has stopped.
-    /// User was composing but has not interacted with the message input interface for a short period of time (e.g., 5 seconds).
+    ///     User had been composing but now has stopped.
+    ///     User was composing but has not interacted with the message input interface for a short period of time (e.g., 5
+    ///     seconds).
     /// </summary>
     public class Paused : Element
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Paused"/> class.
+        ///     Initializes a new instance of the <see cref="Paused" /> class.
         /// </summary>
         public Paused()
         {
-            TagName    = Chatstate.paused.ToString();
-            Namespace  = Uri.CHATSTATES;
+            TagName = Chatstate.paused.ToString();
+            Namespace = Uri.CHATSTATES;
         }
     }
 }

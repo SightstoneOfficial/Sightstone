@@ -17,48 +17,42 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.tls
 {
+    // Step 4: Client sends the STARTTLS command to server:
+    // <starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
 
-	// Step 4: Client sends the STARTTLS command to server:
-	// <starttls xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
+    /// <summary>
+    ///     Summary description for starttls.
+    /// </summary>
+    public class StartTls : Element
+    {
+        public StartTls()
+        {
+            TagName = "starttls";
+            Namespace = Uri.TLS;
+        }
 
-	/// <summary>
-	/// Summary description for starttls.
-	/// </summary>
-	public class StartTls : Element
-	{
-		public StartTls()
-		{
-			this.TagName	= "starttls";
-			this.Namespace	= Uri.TLS;
-		}
-
-		public bool Required
-		{
-			get
-			{
-				return HasTag("required");
-			}
-			set
-			{
-				if (value == false)
-				{
-					if (HasTag("required"))
-						RemoveTag("required");
-				}
-				else
-				{
-					if (!HasTag("required"))
-						SetTag("required");
-				}
-			}
-		}
-	}
+        public bool Required
+        {
+            get { return HasTag("required"); }
+            set
+            {
+                if (value == false)
+                {
+                    if (HasTag("required"))
+                        RemoveTag("required");
+                }
+                else
+                {
+                    if (!HasTag("required"))
+                        SetTag("required");
+                }
+            }
+        }
+    }
 }

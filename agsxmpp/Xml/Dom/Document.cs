@@ -23,89 +23,80 @@ using System.IO;
 
 namespace agsXMPP.Xml.Dom
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class Document : Node
-	{
-		public Document()
-		{
-			NodeType = NodeType.Document;
-		}
+    /// <summary>
+    /// </summary>
+    public class Document : Node
+    {
+        public Document()
+        {
+            NodeType = NodeType.Document;
+        }
 
-		public Element RootElement
-		{
-			get
-			{
-				foreach (Node n in this.ChildNodes)
-				{
-					if(n.NodeType == NodeType.Element)
-						return n as Element;
-				}
-				return null;
-			}
-		}
+        public Element RootElement
+        {
+            get
+            {
+                foreach (Node n in ChildNodes)
+                {
+                    if (n.NodeType == NodeType.Element)
+                        return n as Element;
+                }
+                return null;
+            }
+        }
 
-		#region << Properties and Member Variables >>
-		private string	m_Encoding	= null;
-		private string	m_Version	= null;
+        /// <summary>
+        ///     Clears the Document
+        /// </summary>
+        public void Clear()
+        {
+            ChildNodes.Clear();
+        }
 
-		public string Encoding
-		{
-			get { return m_Encoding; }
-			set { m_Encoding = value; }
-		}
+        #region << Properties and Member Variables >>
 
-		public string Version
-		{
-			get { return m_Version; }
-			set { m_Version = value; }
-		}
-		#endregion
+        public string Encoding { get; set; } = null;
 
-		/// <summary>
-		/// Clears the Document
-		/// </summary>
-		public void Clear()
-		{
-			this.ChildNodes.Clear();
-		}
+        public string Version { get; set; } = null;
 
-		#region << Load functions >>		
-		public void LoadXml(string xml)
-		{
+        #endregion
+
+        #region << Load functions >>		
+
+        public void LoadXml(string xml)
+        {
             if (!string.IsNullOrEmpty(xml))
             {
                 DomLoader.Load(xml, this);
             }
-		}
+        }
 
-		public bool LoadFile(string filename)
-		{
-		    if (File.Exists(filename))
-			{
-				try
-				{
-					using(var sr = new StreamReader(filename))
+        public bool LoadFile(string filename)
+        {
+            if (File.Exists(filename))
+            {
+                try
+                {
+                    using (var sr = new StreamReader(filename))
                     {
-					    DomLoader.Load(sr, this);
-					    sr.Close();					
-					    return true;
+                        DomLoader.Load(sr, this);
+                        sr.Close();
+                        return true;
                     }
-				}
-				catch
-				{
-					return false;
-				}
-			}
-		    return false;
-		}
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+            return false;
+        }
 
-	    public bool LoadStream(Stream stream)
+        public bool LoadStream(Stream stream)
         {
             try
             {
-                using(var sr = new StreamReader(stream))
+                using (var sr = new StreamReader(stream))
                 {
                     DomLoader.Load(sr, this);
                     sr.Close();
@@ -117,16 +108,17 @@ namespace agsXMPP.Xml.Dom
                 return false;
             }
         }
-		
-		public void Save(string filename)
-		{
-			using (var w = new StreamWriter(filename))
+
+        public void Save(string filename)
+        {
+            using (var w = new StreamWriter(filename))
             {
-			    w.Write(ToString(System.Text.Encoding.UTF8));
-			    w.Flush();
-			    w.Close();
+                w.Write(ToString(System.Text.Encoding.UTF8));
+                w.Flush();
+                w.Close();
             }
-		}
-		#endregion
-	}
+        }
+
+        #endregion
+    }
 }

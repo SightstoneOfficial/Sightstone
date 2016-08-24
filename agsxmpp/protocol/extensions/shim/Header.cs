@@ -17,42 +17,42 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.shim
 {
+    /// <summary>
+    ///     JEP-0131: Stanza Headers and Internet Metadata (SHIM)
+    /// </summary>
+    public class Header : Element
+    {
+        public string Name
+        {
+            get { return GetAttribute("name"); }
+            set { SetAttribute("name", value); }
+        }
 
-	/// <summary>
-	/// JEP-0131: Stanza Headers and Internet Metadata (SHIM)
-	/// </summary>
-	public class Header : Element
-	{
-		// <headers xmlns='http://jabber.org/protocol/shim'>
-		//	 <header name='In-Reply-To'>123456789@capulet.com</header>
-		// <header name='Keywords'>shakespeare,&lt;xmpp/&gt;</header>
-		// </headers>
-		#region << Constructors >>
-		public Header()
-		{
-			this.TagName	= "header";
-			this.Namespace	= Uri.SHIM;			
-		}
+        // <headers xmlns='http://jabber.org/protocol/shim'>
+        //	 <header name='In-Reply-To'>123456789@capulet.com</header>
+        // <header name='Keywords'>shakespeare,&lt;xmpp/&gt;</header>
+        // </headers>
 
-		public Header(string name, string val) : this()
-		{
-			this.Name	= name;
-			this.Value	= val;
-		}
-		#endregion
+        #region << Constructors >>
 
-		public string Name
-		{
-			get { return GetAttribute("name"); }
-			set { SetAttribute("name", value); }
-		}
-	}
+        public Header()
+        {
+            TagName = "header";
+            Namespace = Uri.SHIM;
+        }
+
+        public Header(string name, string val) : this()
+        {
+            Name = name;
+            Value = val;
+        }
+
+        #endregion
+    }
 }

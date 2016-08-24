@@ -17,49 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.avatar
 {
-	/// <summary>
-	/// Summary description for AvatarIq.
-	/// </summary>
-	public class AvatarIq : IQ
-	{
-		private Avatar m_Avatar = new Avatar();
+    /// <summary>
+    ///     Summary description for AvatarIq.
+    /// </summary>
+    public class AvatarIq : IQ
+    {
+        public AvatarIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public AvatarIq()
-		{			
-			base.Query = m_Avatar;
-			this.GenerateId();	
-		}
+        public AvatarIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public AvatarIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public AvatarIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public AvatarIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public AvatarIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public AvatarIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Avatar Query
-		{
-			get
-			{
-				return m_Avatar;
-			}
-		}
-
-		
-	}
+        public new Avatar Query { get; } = new Avatar();
+    }
 }

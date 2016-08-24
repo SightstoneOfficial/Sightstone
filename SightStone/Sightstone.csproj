@@ -110,6 +110,32 @@
     <Compile Include="Helpers\ValueTypeConverter.cs" />
     <Compile Include="Services\IServiceLocator.cs" />
     <Compile Include="Services\MefServiceLocator.cs" />
+    <Compile Include="ViewHelper\ViewHelpers.cs" />
+    <Compile Include="ViewModels\AboutViewModel.cs" />
+    <Compile Include="ViewModels\Controls\TopSlideUserViewModel.cs" />
+    <Compile Include="ViewModels\IShell.cs" />
+    <Compile Include="ViewModels\LoginViewModel.cs" />
+    <Compile Include="ViewModels\MultiViewModel.cs" />
+    <Compile Include="ViewModels\SettingsViewModel.cs" />
+    <Compile Include="ViewModels\ShellViewModel.cs" />
+    <Compile Include="Views\AboutView.xaml.cs">
+      <DependentUpon>AboutView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\Controls\TopSlideUserView.xaml.cs">
+      <DependentUpon>TopSlideUserView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LoginView.xaml.cs">
+      <DependentUpon>LoginView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MultiView.xaml.cs">
+      <DependentUpon>MultiView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsView.xaml.cs">
+      <DependentUpon>SettingsView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\ShellView.xaml.cs">
+      <DependentUpon>ShellView.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AppBootstrapper.cs" />
@@ -159,6 +185,30 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\AboutView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\Controls\TopSlideUserView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\LoginView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\MultiView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\SettingsView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\ShellView.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Entypo-license.txt" />
@@ -175,14 +225,6 @@
     <ProjectReference Include="..\Sightstone.RiotConnect\Sightstone.RiotConnect.csproj">
       <Project>{5d134f9d-2b1b-4ac9-8a5d-27ab70acb764}</Project>
       <Name>Sightstone.RiotConnect</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sightstone.ViewModels\Sightstone.ViewModels.csproj">
-      <Project>{95d47198-a97d-4270-92de-3df535fa89d1}</Project>
-      <Name>Sightstone.ViewModels</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Sightstone.Views\Sightstone.Views.csproj">
-      <Project>{ee5f1704-7f68-4265-94b3-fa27c0103ef6}</Project>
-      <Name>Sightstone.Views</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -210,6 +252,7 @@
     <Resource Include="ui\img\menubar\settings.png" />
     <Resource Include="ui\img\menubar\shop.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

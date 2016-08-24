@@ -17,11 +17,9 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
-
 
 // Send:	<iq type='get' id='MX_5' to='jfrankel@coversant.net/SoapBox'>
 //				<query xmlns='jabber:iq:last'></query>
@@ -32,24 +30,24 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.last
 {
-	/// <summary>
-	/// Zusammenfassung für Last.
-	/// </summary>
-	public class Last : Element
-	{
-		public Last()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.IQ_LAST;
-		}
+    /// <summary>
+    ///     Zusammenfassung für Last.
+    /// </summary>
+    public class Last : Element
+    {
+        public Last()
+        {
+            TagName = "query";
+            Namespace = Uri.IQ_LAST;
+        }
 
-		/// <summary>
-		/// Seconds since the last activity.
-		/// </summary>
-		public int Seconds
-		{
-			get { return Int32.Parse(GetAttribute("seconds"));  }
-			set { SetAttribute("seconds", value.ToString()); }
-		}
-	}
+        /// <summary>
+        ///     Seconds since the last activity.
+        /// </summary>
+        public int Seconds
+        {
+            get { return int.Parse(GetAttribute("seconds")); }
+            set { SetAttribute("seconds", value.ToString()); }
+        }
+    }
 }

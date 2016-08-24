@@ -17,40 +17,36 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.html
 {
     /// <summary>
-    /// The Body Element of a XHTML message
+    ///     The Body Element of a XHTML message
     /// </summary>
     public class Body : Element
     {
         public Body()
         {
-            this.TagName    = "body";
-            this.Namespace  = Uri.XHTML;
+            TagName = "body";
+            Namespace = Uri.XHTML;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         public string InnerHtml
         {
             get
             {
                 // Thats a HACK
-                string xml = this.ToString();
-                
-                int start   = xml.IndexOf(">");
-                int end     = xml.LastIndexOf("</" + this.TagName + ">");
+                var xml = ToString();
 
-                return xml.Substring(start + 1, end - start -1);
+                var start = xml.IndexOf(">");
+                var end = xml.LastIndexOf("</" + TagName + ">");
+
+                return xml.Substring(start + 1, end - start - 1);
             }
         }
     }

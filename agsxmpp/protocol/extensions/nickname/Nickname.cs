@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -30,8 +28,8 @@ namespace agsXMPP.protocol.extensions.nickname
     {
         public Nickname()
         {
-            this.TagName    = "nick";
-            this.Namespace  = Uri.NICK;
+            TagName = "nick";
+            Namespace = Uri.NICK;
         }
 
         public Nickname(string nick) : this()

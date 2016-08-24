@@ -17,30 +17,26 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-
-using agsXMPP.Xml.Dom;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.iq.avatar
 {
-	//	<iq id='2' type='result' to='user@server/resource'>
-	//		<query xmlns='jabber:iq:avatar'>
-	//			<data mimetype='image/jpeg'>
-	//			Base64-Encoded Data
-	//			</data>
-	//		</query>
-	//	</iq>
+    //	<iq id='2' type='result' to='user@server/resource'>
+    //		<query xmlns='jabber:iq:avatar'>
+    //			<data mimetype='image/jpeg'>
+    //			Base64-Encoded Data
+    //			</data>
+    //		</query>
+    //	</iq>
 
-	/// <summary>
-	/// Summary description for Avatar.
-	/// </summary>
-	public class Avatar : agsXMPP.protocol.Base.Avatar
-	{
-		public Avatar() : base()
-		{
-			this.Namespace	= Uri.IQ_AVATAR;			
-		}	
-	}
+    /// <summary>
+    ///     Summary description for Avatar.
+    /// </summary>
+    public class Avatar : Base.Avatar
+    {
+        public Avatar()
+        {
+            Namespace = Uri.IQ_AVATAR;
+        }
+    }
 }

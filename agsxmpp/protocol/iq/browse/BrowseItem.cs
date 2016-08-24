@@ -17,64 +17,64 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
+using agsXMPP.protocol.Base;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.browse
 {
-	/// <summary>
-	/// Summary description for BrowseItem.
-	/// </summary>
-	public class BrowseItem : agsXMPP.protocol.Base.Item
-	{
-		/*
+    /// <summary>
+    ///     Summary description for BrowseItem.
+    /// </summary>
+    public class BrowseItem : Item
+    {
+        /*
 		<item version="0.6.0" name="Public Conferencing" jid="conference.myjabber.net" type="public" category="conference"> 
 			<ns>http://jabber.org/protocol/muc</ns> 
 		</item>
 		*/
-		public BrowseItem() : base()
-		{
-			this.Namespace	= Uri.IQ_BROWSE;
-		}
 
-		public string Category
-		{
-			get { return GetAttribute("category"); }
-			set { SetAttribute("category", value); }
-		}
+        public BrowseItem()
+        {
+            Namespace = Uri.IQ_BROWSE;
+        }
 
-		public string Version
-		{
-			get { return GetAttribute("version"); }
-			set { SetAttribute("version", value); }
-		}
+        public string Category
+        {
+            get { return GetAttribute("category"); }
+            set { SetAttribute("category", value); }
+        }
 
-		public string Type
-		{
-			get { return GetAttribute("type"); }
-			set { SetAttribute("type", value); }
-		}
+        public string Version
+        {
+            get { return GetAttribute("version"); }
+            set { SetAttribute("version", value); }
+        }
 
-		/// <summary>
-		/// Gets all advertised namespaces of this item
-		/// </summary>
-		/// <returns>string array that contains the advertised namespaces</returns>
-		public string[] GetNamespaces()
-		{
-            ElementList elements = SelectElements("ns");
-			string[] nss = new string[elements.Count];
-			
-			int i=0;
-			foreach (Element ns in elements)
-			{
-				nss[i] = ns.Value;
-				i++;
-			}
+        public string Type
+        {
+            get { return GetAttribute("type"); }
+            set { SetAttribute("type", value); }
+        }
 
-			return nss;
-		}		
+        /// <summary>
+        ///     Gets all advertised namespaces of this item
+        /// </summary>
+        /// <returns>string array that contains the advertised namespaces</returns>
+        public string[] GetNamespaces()
+        {
+            var elements = SelectElements("ns");
+            var nss = new string[elements.Count];
 
-	}
+            var i = 0;
+            foreach (Element ns in elements)
+            {
+                nss[i] = ns.Value;
+                i++;
+            }
+
+            return nss;
+        }
+    }
 }

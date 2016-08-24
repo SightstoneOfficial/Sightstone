@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -47,21 +45,9 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
             </xs:complexType>
         </xs:element>
     */
+
     public class Subscribers : Element
     {
-        #region << Constructors >>
-        public Subscribers()
-        {
-            this.TagName    = "subscribers";
-            this.Namespace  = Uri.PUBSUB_OWNER;
-        }
-
-        public Subscribers(string node) : this()
-        {
-            this.Node = node;
-        }
-        #endregion
-
         public string Node
         {
             get { return GetAttribute("node"); }
@@ -69,18 +55,18 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         }
 
         /// <summary>
-        /// Add a Subscriber
+        ///     Add a Subscriber
         /// </summary>
         /// <returns></returns>
         public Subscriber AddSubscriber()
         {
-            Subscriber subscriber = new Subscriber();
+            var subscriber = new Subscriber();
             AddChild(subscriber);
             return subscriber;
         }
 
         /// <summary>
-        /// Add a Subscriber
+        ///     Add a Subscriber
         /// </summary>
         /// <param name="subscriber">the Subscriber to add</param>
         /// <returns></returns>
@@ -92,21 +78,20 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
 
         public void AddSubscribers(Subscriber[] subscribers)
         {
-            foreach (Subscriber subscriber in subscribers)
+            foreach (var subscriber in subscribers)
             {
                 AddSubscriber(subscriber);
-            }           
+            }
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <returns></returns>
         public Subscriber[] GetSubscribers()
         {
-            ElementList nl = SelectElements(typeof(Subscriber));
-            Subscriber[] subscribers = new Subscriber[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Subscriber));
+            var subscribers = new Subscriber[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
                 subscribers[i] = (Subscriber) e;
@@ -114,5 +99,20 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
             }
             return subscribers;
         }
+
+        #region << Constructors >>
+
+        public Subscribers()
+        {
+            TagName = "subscribers";
+            Namespace = Uri.PUBSUB_OWNER;
+        }
+
+        public Subscribers(string node) : this()
+        {
+            Node = node;
+        }
+
+        #endregion
     }
 }

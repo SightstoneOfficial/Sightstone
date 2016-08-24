@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -59,48 +57,44 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         </xs:element>
      
     */
+
     public class Affiliate : Element
     {
-        #region << Constructors >>
-        public Affiliate()
-        {
-            this.TagName    = "affiliate";
-            this.Namespace  = Uri.PUBSUB_OWNER;
-        }
-
-        public Affiliate(Jid jid, AffiliationType affiliation) : this()
-        {
-            this.Jid            = jid;
-            this.Affiliation    = affiliation;
-        }
-        #endregion
-
         public Jid Jid
         {
             get
             {
                 if (HasAttribute("jid"))
-                    return new Jid(this.GetAttribute("jid"));
-                else
-                    return null;
+                    return new Jid(GetAttribute("jid"));
+                return null;
             }
             set
             {
                 if (value != null)
-                    this.SetAttribute("jid", value.ToString());
+                    SetAttribute("jid", value.ToString());
             }
         }
 
         public AffiliationType Affiliation
-		{
-			get 
-			{
-                return (AffiliationType) GetAttributeEnum("affiliation", typeof(AffiliationType)); 
-			}
-			set 
-			{
-                SetAttribute("affiliation", value.ToString());
-			}
-		}
+        {
+            get { return (AffiliationType) GetAttributeEnum("affiliation", typeof(AffiliationType)); }
+            set { SetAttribute("affiliation", value.ToString()); }
+        }
+
+        #region << Constructors >>
+
+        public Affiliate()
+        {
+            TagName = "affiliate";
+            Namespace = Uri.PUBSUB_OWNER;
+        }
+
+        public Affiliate(Jid jid, AffiliationType affiliation) : this()
+        {
+            Jid = jid;
+            Affiliation = affiliation;
+        }
+
+        #endregion
     }
 }

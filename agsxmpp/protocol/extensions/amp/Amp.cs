@@ -19,8 +19,7 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
+using agsXMPP.protocol.Base;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.amp
@@ -38,28 +37,25 @@ namespace agsXMPP.protocol.extensions.amp
             </xs:complexType>
         </xs:element>
     */
-    
-    public class Amp : Base.DirectionalElement
+
+    public class Amp : DirectionalElement
     {
         public Amp()
         {
-            this.TagName = "amp";
-            this.Namespace = Uri.AMP;
+            TagName = "amp";
+            Namespace = Uri.AMP;
         }
 
         /// <summary>
-        /// The 'status' attribute specifies the reason for the amp element.
-        /// When specifying semantics to be applied (client to server), this attribute MUST NOT be present. 
-        /// When replying to a sending entity regarding a met condition, this attribute MUST be present and 
-        /// SHOULD be the value of the 'action' attribute for the triggered rule. 
-        /// (Note: Individual action definitions MAY provide their own requirements.)
+        ///     The 'status' attribute specifies the reason for the amp element.
+        ///     When specifying semantics to be applied (client to server), this attribute MUST NOT be present.
+        ///     When replying to a sending entity regarding a met condition, this attribute MUST be present and
+        ///     SHOULD be the value of the 'action' attribute for the triggered rule.
+        ///     (Note: Individual action definitions MAY provide their own requirements.)
         /// </summary>
         public Action Status
         {
-            get
-            {
-                return (Action) GetAttributeEnum("status", typeof(Action));
-            }
+            get { return (Action) GetAttributeEnum("status", typeof(Action)); }
             set
             {
                 if (value == Action.Unknown)
@@ -70,10 +66,10 @@ namespace agsXMPP.protocol.extensions.amp
         }
 
         /// <summary>
-        /// The 'per-hop' attribute flags the contained ruleset for processing at each server in the route 
-        /// between the original sender and original intended recipient. 
-        /// This attribute MAY be present, and MUST be either "true" or "false". 
-        /// If not present, the default is "false".
+        ///     The 'per-hop' attribute flags the contained ruleset for processing at each server in the route
+        ///     between the original sender and original intended recipient.
+        ///     This attribute MAY be present, and MUST be either "true" or "false".
+        ///     If not present, the default is "false".
         /// </summary>
         public bool PerHop
         {
@@ -88,24 +84,24 @@ namespace agsXMPP.protocol.extensions.amp
 
         public Rule AddRule()
         {
-            Rule rule = new Rule();
+            var rule = new Rule();
             AddChild(rule);
 
             return rule;
         }
 
         /// <summary>
-        /// Gets a list of all form fields
+        ///     Gets a list of all form fields
         /// </summary>
         /// <returns></returns>
         public Rule[] GetRules()
         {
-            ElementList nl = SelectElements(typeof(Rule));
-            Rule[] items = new Rule[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Rule));
+            var items = new Rule[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                items[i] = (Rule)e;
+                items[i] = (Rule) e;
                 i++;
             }
             return items;

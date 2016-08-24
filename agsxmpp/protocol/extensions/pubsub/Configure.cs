@@ -17,73 +17,64 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.x.data;
-
-using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
     public class Configure : PubSubAction
     {
-        #region << Constructors >>
-        public Configure() : base()
-        {
-            this.TagName = "configure";
-        }
-
-        public Configure(string node) : this()
-        {
-            this.Node = node;
-        }
-
-        public Configure(Type type) : this()
-        {
-            this.Type = type;            
-        }
-
-        public Configure(string node, Type type) : this(node)
-        {            
-            this.Type = type;
-        }
-        #endregion
-
         public Access Access
-		{
-			get 
-			{
-                return (Access)GetAttributeEnum("access", typeof(Access)); 
-			}
-			set 
-			{
+        {
+            get { return (Access) GetAttributeEnum("access", typeof(Access)); }
+            set
+            {
                 if (value == Access.NONE)
                     RemoveAttribute("access");
                 else
-                    SetAttribute("access", value.ToString()); 
-			}
-		}
+                    SetAttribute("access", value.ToString());
+            }
+        }
 
         /// <summary>
-        /// The x-Data Element
+        ///     The x-Data Element
         /// </summary>
         public Data Data
         {
-            get
-            {
-                return SelectSingleElement(typeof(Data)) as Data;
-
-            }
+            get { return SelectSingleElement(typeof(Data)) as Data; }
             set
             {
                 if (HasTag(typeof(Data)))
                     RemoveTag(typeof(Data));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
+
+        #region << Constructors >>
+
+        public Configure()
+        {
+            TagName = "configure";
+        }
+
+        public Configure(string node) : this()
+        {
+            Node = node;
+        }
+
+        public Configure(Type type) : this()
+        {
+            Type = type;
+        }
+
+        public Configure(string node, Type type) : this(node)
+        {
+            Type = type;
+        }
+
+        #endregion
     }
 }

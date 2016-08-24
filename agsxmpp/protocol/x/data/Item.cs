@@ -17,26 +17,24 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.x.data
 {
     /// <summary>
-    /// Used in XData seach.
-    /// includes the headers of the search results
+    ///     Used in XData seach.
+    ///     includes the headers of the search results
     /// </summary>
     public class Item : FieldContainer
     {
-       
         #region << Constructors >>
+
         public Item()
         {
-            this.TagName    = "item";
-            this.Namespace  = Uri.X_DATA;
+            TagName = "item";
+            Namespace = Uri.X_DATA;
         }
+
         #endregion
     }
 }

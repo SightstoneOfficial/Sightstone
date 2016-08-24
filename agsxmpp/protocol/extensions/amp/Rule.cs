@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.amp
@@ -29,22 +27,22 @@ namespace agsXMPP.protocol.extensions.amp
     {
         public Rule()
         {
-            this.TagName = "rule";
-            this.Namespace = Uri.AMP;
+            TagName = "rule";
+            Namespace = Uri.AMP;
         }
 
         public Rule(Condition condition, string val, Action action)
             : this()
         {
-            Condition   = condition;
-            Val         = val;
-            Action      = action;
+            Condition = condition;
+            Val = val;
+            Action = action;
         }
 
         /// <summary>
-        /// The 'value' attribute defines how the condition is matched. 
-        /// This attribute MUST be present, and MUST NOT be an empty string (""). 
-        /// The interpretation of this attribute's value is determined by the 'condition' attribute.
+        ///     The 'value' attribute defines how the condition is matched.
+        ///     This attribute MUST be present, and MUST NOT be an empty string ("").
+        ///     The interpretation of this attribute's value is determined by the 'condition' attribute.
         /// </summary>
         public string Val
         {
@@ -53,19 +51,16 @@ namespace agsXMPP.protocol.extensions.amp
         }
 
         /// <summary>
-        /// The 'action' attribute defines the result for this rule. 
-        /// This attribute MUST be present, and MUST be either a value defined in the Defined Actions section, 
-        /// or one registered with the XMPP Registrar.
+        ///     The 'action' attribute defines the result for this rule.
+        ///     This attribute MUST be present, and MUST be either a value defined in the Defined Actions section,
+        ///     or one registered with the XMPP Registrar.
         /// </summary>
         public Action Action
         {
-            get
-            {
-                return (Action) GetAttributeEnum("action", typeof(Action));
-            }
+            get { return (Action) GetAttributeEnum("action", typeof(Action)); }
             set
             {
-                if (value ==Action.Unknown)
+                if (value == Action.Unknown)
                     RemoveAttribute("action");
                 else
                     SetAttribute("action", value.ToString());
@@ -73,9 +68,9 @@ namespace agsXMPP.protocol.extensions.amp
         }
 
         /// <summary>
-        /// The 'condition' attribute defines the overall condition this rule applies to. 
-        /// This attribute MUST be present, and MUST be either a value defined in the Defined Conditions section, 
-        /// or one registered with the XMPP Registrar.
+        ///     The 'condition' attribute defines the overall condition this rule applies to.
+        ///     This attribute MUST be present, and MUST be either a value defined in the Defined Conditions section,
+        ///     or one registered with the XMPP Registrar.
         /// </summary>
         public Condition Condition
         {
@@ -84,11 +79,11 @@ namespace agsXMPP.protocol.extensions.amp
                 switch (GetAttribute("condition"))
                 {
                     case "deliver":
-                        return Condition.Deliver;                       
+                        return Condition.Deliver;
                     case "expire-at":
-                        return Condition.ExprireAt;                        
+                        return Condition.ExprireAt;
                     case "match-resource":
-                        return Condition.MatchResource;                      
+                        return Condition.MatchResource;
                     default:
                         return Condition.Unknown;
                 }

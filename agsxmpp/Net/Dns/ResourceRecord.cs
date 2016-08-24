@@ -25,93 +25,77 @@
 // distributed and edited without restriction.
 // 
 
-using System;
-
 namespace agsXMPP.Net.Dns
 {
-	/// <summary>
-	/// Represents a Resource Record as detailed in RFC1035 4.1.3
-	/// </summary>	
-	public class ResourceRecord
-	{
-		// private, constructor initialised fields
-		private readonly string		_domain;
-		private readonly DnsType	_dnsType;
-		private readonly DnsClass	_dnsClass;
-		private readonly int		_Ttl;
-		private readonly RecordBase	_record;
+    /// <summary>
+    ///     Represents a Resource Record as detailed in RFC1035 4.1.3
+    /// </summary>
+    public class ResourceRecord
+    {
+        // private, constructor initialised fields
 
-		// read only properties applicable for all records
-		public string Domain
-        { 
-            get { return _domain; }
-        }
-		
-        public DnsType Type
+        /// <summary>
+        ///     Construct a resource record from a pointer to a byte array
+        /// </summary>
+        /// <param name="pointer">the position in the byte array of the record</param>
+        internal ResourceRecord(Pointer pointer)
         {
-            get { return _dnsType; }
-        }
+            // extract the domain, question type, question class and Ttl
+            Domain = pointer.ReadDomain();
+            Type = (DnsType) pointer.ReadShort();
+            Class = (DnsClass) pointer.ReadShort();
+            Ttl = pointer.ReadInt();
 
-		public DnsClass	Class		   
-        { 
-            get { return _dnsClass;	}
-        }
-		
-        public int Ttl
-        { 
-            get { return _Ttl; }
-        }
+            // the next short is the record length, we only use it for unrecognised record types
+            int recordLength = pointer.ReadShort();
 
-		public RecordBase Record
-        { 
-            get { return _record; }
-        }
-
-		/// <summary>
-		/// Construct a resource record from a pointer to a byte array
-		/// </summary>
-		/// <param name="pointer">the position in the byte array of the record</param>
-		internal ResourceRecord(Pointer pointer)
-		{
-			// extract the domain, question type, question class and Ttl
-			_domain     = pointer.ReadDomain();
-			_dnsType    = (DnsType) pointer.ReadShort();
-			_dnsClass   = (DnsClass) pointer.ReadShort();
-			_Ttl        = pointer.ReadInt();
-
-			// the next short is the record length, we only use it for unrecognised record types
-			int recordLength = pointer.ReadShort();
-
-			// and create the appropriate RDATA record based on the dnsType
-			switch (_dnsType)
-			{
+            // and create the appropriate RDATA record based on the dnsType
+            switch (Type)
+            {
                 case DnsType.SRV:
-                    _record = new SRVRecord(pointer);
+                    Record = new SRVRecord(pointer);
                     break;
-				
-                default:
-				{
-					// move the pointer over this unrecognised record
-					pointer.Position += recordLength;
-					break;
-				}
-			}
-		}
-	}
 
-	// Answers, Name Servers and Additional Records all share the same RR format	
-	public class Answer : ResourceRecord
-	{
-		internal Answer(Pointer pointer) : base(pointer) {}
-	}
-    	
-	public class NameServer : ResourceRecord
-	{
-		internal NameServer(Pointer pointer) : base(pointer) {}
-	}
-    	
-	public class AdditionalRecord : ResourceRecord
-	{
-		internal AdditionalRecord(Pointer pointer) : base(pointer) {}
-	}
+                default:
+                {
+                    // move the pointer over this unrecognised record
+                    pointer.Position += recordLength;
+                    break;
+                }
+            }
+        }
+
+        // read only properties applicable for all records
+        public string Domain { get; }
+
+        public DnsType Type { get; }
+
+        public DnsClass Class { get; }
+
+        public int Ttl { get; }
+
+        public RecordBase Record { get; }
+    }
+
+    // Answers, Name Servers and Additional Records all share the same RR format	
+    public class Answer : ResourceRecord
+    {
+        internal Answer(Pointer pointer) : base(pointer)
+        {
+        }
+    }
+
+    public class NameServer : ResourceRecord
+    {
+        internal NameServer(Pointer pointer) : base(pointer)
+        {
+        }
+    }
+
+    public class AdditionalRecord : ResourceRecord
+    {
+        internal AdditionalRecord(Pointer pointer) : base(pointer)
+        {
+        }
+    }
 }

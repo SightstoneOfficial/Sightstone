@@ -17,38 +17,28 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using agsXMPP.protocol;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.disco
 {
-	/// <summary>
-	/// Discovering Information About a Jabber Entity
-	/// </summary>
-	public class DiscoInfoIq : IQ
-	{
-		private DiscoInfo m_DiscoInfo = new DiscoInfo();
-		
-		public DiscoInfoIq()
-		{
-			base.Query = m_DiscoInfo;
-			this.GenerateId();
-		}
+    /// <summary>
+    ///     Discovering Information About a Jabber Entity
+    /// </summary>
+    public class DiscoInfoIq : IQ
+    {
+        public DiscoInfoIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public DiscoInfoIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}	
+        public DiscoInfoIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public new DiscoInfo Query
-		{
-			get
-			{
-				return m_DiscoInfo;
-			}
-		}
-	}
+        public new DiscoInfo Query { get; } = new DiscoInfo();
+    }
 }

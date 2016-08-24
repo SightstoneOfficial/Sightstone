@@ -17,48 +17,41 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// Summary description for PrivateIq.
+    ///     Summary description for PrivateIq.
     /// </summary>
     public class PrivacyIq : IQ
     {
-        Privacy m_Privacy = new Privacy();
-
         public PrivacyIq()
         {
-            base.Query = m_Privacy;
-            this.GenerateId();
+            base.Query = Query;
+            GenerateId();
         }
 
         public PrivacyIq(IqType type)
             : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public PrivacyIq(IqType type, Jid to)
             : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public PrivacyIq(IqType type, Jid to, Jid from)
             : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public new Privacy Query
-        {
-            get { return m_Privacy; }
-        }
+        public new Privacy Query { get; } = new Privacy();
     }
 }

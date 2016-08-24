@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -61,46 +59,41 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
 
     public class Subscriber : Element
     {
+        public SubscriptionState SubscriptionState
+        {
+            get { return (SubscriptionState) GetAttributeEnum("subscription", typeof(SubscriptionState)); }
+            set { SetAttribute("subscription", value.ToString()); }
+        }
+
+        public Jid Jid
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
+            }
+        }
+
         #region << Constructors >>
+
         public Subscriber()
         {
-            this.TagName    = "subscriber";
-            this.Namespace  = Uri.PUBSUB_OWNER;
+            TagName = "subscriber";
+            Namespace = Uri.PUBSUB_OWNER;
         }
 
         public Subscriber(Jid jid, SubscriptionState sub) : this()
         {
-            this.Jid                = jid;
-            this.SubscriptionState   = sub;
+            Jid = jid;
+            SubscriptionState = sub;
         }
-        #endregion
 
-        public SubscriptionState SubscriptionState
-		{
-			get 
-			{
-                return (SubscriptionState)GetAttributeEnum("subscription", typeof(SubscriptionState)); 
-			}
-			set 
-			{
-                SetAttribute("subscription", value.ToString()); 
-			}
-		}
-        
-        public Jid Jid
-		{
-			get 
-			{ 
-				if (HasAttribute("jid"))
-					return new Jid(this.GetAttribute("jid"));
-				else
-					return null;
-			}
-			set 
-			{ 
-				if (value!=null)
-					this.SetAttribute("jid", value.ToString());
-			}
-		}
+        #endregion
     }
 }

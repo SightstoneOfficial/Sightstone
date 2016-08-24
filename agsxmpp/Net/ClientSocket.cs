@@ -20,28 +20,21 @@
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
+using System.Collections;
+using System.IO;
 using System.Net;
 using System.Net.Sockets;
-using System.Threading;
-using System.IO;
 using System.Text;
-using System.Configuration;
-using System.Collections;
-using System.Diagnostics;
-
+using System.Threading;
+using agsXMPP.IO.Compression;
 #if SSL
 using System.Net.Security;
 using System.Security.Authentication;
 using System.Security.Cryptography.X509Certificates;
 #endif
-
 #if BCCRYPTO
 using Org.BouncyCastle.Crypto.Tls;
 #endif
-
-using agsXMPP.IO.Compression;
-
-using agsXMPP;
 
 namespace agsXMPP.Net
 {
@@ -54,67 +47,63 @@ namespace agsXMPP.Net
     }
 
     /// <summary>
-    /// Use async sockets to connect, send and receive data over TCP sockets.
+    ///     Use async sockets to connect, send and receive data over TCP sockets.
     /// </summary>
     public class ClientSocket : BaseSocket
     {
-        Socket _socket;
-#if SSL	
-        SslStream           m_SSLStream;
+        private Socket _socket;
+#if SSL
+        private SslStream m_SSLStream;
 #endif
-        NetworkStream m_Stream;
-        Stream m_NetworkStream = null;
+        private NetworkStream m_Stream;
+        private Stream m_NetworkStream;
 
 
-        const int BUFFERSIZE = 1024;
-        private byte[] m_ReadBuffer = null;
+        private const int BUFFERSIZE = 1024;
+        private byte[] m_ReadBuffer;
 
-        private bool m_SSL = false;
+        private bool m_SSL;
 
-        private bool m_PendingSend = false;
-        private Queue m_SendQueue = new Queue();
+        private bool m_PendingSend;
+        private readonly Queue m_SendQueue = new Queue();
 
         /// <summary>
-        /// is compression used for this connection
+        ///     is compression used for this connection
         /// </summary>
-        private bool m_Compressed = false;
+        private bool m_Compressed;
 
-        private bool m_ConnectTimedOut = false;
+        private bool m_ConnectTimedOut;
+
         /// <summary>
-        /// is used to compress data
+        ///     is used to compress data
         /// </summary>
-        private Deflater deflater = null;
+        private Deflater deflater;
+
         /// <summary>
-        /// is used to decompress data
+        ///     is used to decompress data
         /// </summary>
-        private Inflater inflater = null;
+        private Inflater inflater;
 
         private Timer connectTimeoutTimer;
 
-
         #region << Constructor >>
-        public ClientSocket()
-        {
 
-        }
         #endregion
 
         #region << Properties >>
+
         public bool SSL
         {
             get { return m_SSL; }
 #if SSL
-			set	{ m_SSL = value; }
+            set { m_SSL = value; }
 #endif
         }
 
         public override bool SupportsStartTls
         {
 #if SSL
-			get
-			{
-				return true;
-			}
+            get { return true; }
 #else
             get
             {
@@ -124,9 +113,9 @@ namespace agsXMPP.Net
         }
 
         /// <summary>
-        /// Returns true if the socket is connected to the server. The property 
-        /// Socket.Connected does not always indicate if the socket is currently 
-        /// connected, this polls the socket to determine the latest connection state.
+        ///     Returns true if the socket is connected to the server. The property
+        ///     Socket.Connected does not always indicate if the socket is currently
+        ///     connected, this polls the socket to determine the latest connection state.
         /// </summary>
         public override bool Connected
         {
@@ -164,10 +153,11 @@ namespace agsXMPP.Net
             get { return m_Compressed; }
             set { m_Compressed = value; }
         }
+
         #endregion
 
         /// <summary>
-        /// Connect to the specified address and port number.
+        ///     Connect to the specified address and port number.
         /// </summary>
         public void Connect(string address, int port)
         {
@@ -197,18 +187,18 @@ namespace agsXMPP.Net
                 // first check if a IP adress was passed as Hostname            
                 if (!IPAddress.TryParse(Address, out ipAddress))
                 {
-                    IPHostEntry ipHostInfo = System.Net.Dns.GetHostEntry(Address);
+                    var ipHostInfo = System.Net.Dns.GetHostEntry(Address);
                     ipAddress = ipHostInfo.AddressList[0];
                 }
-#endif           
-                IPEndPoint endPoint = new IPEndPoint(ipAddress, Port);
+#endif
+                var endPoint = new IPEndPoint(ipAddress, Port);
 
                 // Timeout
                 // .NET supports no timeout for connect, and the default timeout is very high, so it could
                 // take very long to establish the connection with the default timeout. So we handle custom
                 // connect timeouts with a timer
                 m_ConnectTimedOut = false;
-                TimerCallback timerDelegate = new TimerCallback(connectTimeoutTimerDelegate);
+                TimerCallback timerDelegate = connectTimeoutTimerDelegate;
                 connectTimeoutTimer = new Timer(timerDelegate, null, ConnectTimeout, ConnectTimeout);
 
 #if !(CF || CF_2)
@@ -218,14 +208,14 @@ namespace agsXMPP.Net
                 else
                     _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #else
-                // CF, there is no IPV6 support yet
+    // CF, there is no IPV6 support yet
                 _socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 #endif
-                _socket.BeginConnect(endPoint, new AsyncCallback(EndConnect), null);
+                _socket.BeginConnect(endPoint, EndConnect, null);
             }
             catch (Exception ex)
             {
-                base.FireOnError(ex);
+                FireOnError(ex);
             }
         }
 
@@ -233,7 +223,7 @@ namespace agsXMPP.Net
         {
             if (m_ConnectTimedOut)
             {
-                base.FireOnError(new ConnectTimeoutException("Attempt to connect timed out"));
+                FireOnError(new ConnectTimeoutException("Attempt to connect timed out"));
             }
             else
             {
@@ -257,20 +247,20 @@ namespace agsXMPP.Net
                     FireOnConnect();
 
                     // Setup Receive Callback
-                    this.Receive();
+                    Receive();
                 }
                 catch (Exception ex)
                 {
-                    base.FireOnError(ex);
+                    FireOnError(ex);
                 }
             }
         }
 
         /// <summary>
-        /// Connect Timeout Timer Callback
+        ///     Connect Timeout Timer Callback
         /// </summary>
         /// <param name="stateInfo"></param>
-        private void connectTimeoutTimerDelegate(Object stateInfo)
+        private void connectTimeoutTimerDelegate(object stateInfo)
         {
             connectTimeoutTimer.Dispose();
             m_ConnectTimedOut = true;
@@ -278,48 +268,45 @@ namespace agsXMPP.Net
         }
 
 #if SSL
-		/// <summary>
-		/// Starts TLS on a "normal" connection
-		/// </summary>
-		public override bool StartTls()
-		{
-			base.StartTls();
-			
-            SslProtocols protocol = SslProtocols.Tls;
-			return InitSSL(protocol);
-		}           
-
-		
-		private bool InitSSL()
-		{
-            return InitSSL(SslProtocols.Default);
-		}        
-        
         /// <summary>
-		/// 
-		/// </summary>
-		/// <param name="protocol"></param>		
+        ///     Starts TLS on a "normal" connection
+        /// </summary>
+        public override bool StartTls()
+        {
+            base.StartTls();
+
+            var protocol = SslProtocols.Tls;
+            return InitSSL(protocol);
+        }
+
+
+        private bool InitSSL()
+        {
+            return InitSSL(SslProtocols.Default);
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="protocol"></param>
         private bool InitSSL(SslProtocols protocol)
-		{            
-			m_SSLStream = new SslStream(
+        {
+            m_SSLStream = new SslStream(
                 m_Stream,
                 false,
-                new RemoteCertificateValidationCallback(ValidateCertificate),
+                ValidateCertificate,
                 null
-                );			
+                );
             try
             {
-                m_SSLStream.AuthenticateAsClient(base.Address, null, protocol, true);
+                m_SSLStream.AuthenticateAsClient(Address, null, protocol, true);
                 // Display the properties and settings for the authenticated stream.
                 //DisplaySecurityLevel(m_SSLStream);
                 //DisplaySecurityServices(m_SSLStream);
                 //DisplayCertificateInformation(m_SSLStream);
                 //DisplayStreamProperties(m_SSLStream);
-
-            } 
+            }
             catch (AuthenticationException e)
             {
-                
                 if (e.InnerException != null)
                 {
                     //Console.WriteLine("Inner exception: {0}", e.InnerException.Message);
@@ -331,11 +318,10 @@ namespace agsXMPP.Net
             }
 
             m_NetworkStream = m_SSLStream;
-			m_SSL = true;
-            
-            return true;
-		}
+            m_SSL = true;
 
+            return true;
+        }
 
         #region << SSL Properties Display stuff >>
 
@@ -353,7 +339,7 @@ namespace agsXMPP.Net
             Console.WriteLine("IsSigned: {0}", stream.IsSigned);
             Console.WriteLine("Is Encrypted: {0}", stream.IsEncrypted);
         }
-        
+
         private void DisplayStreamProperties(SslStream stream)
         {
             Console.WriteLine("Can read: {0}, write {1}", stream.CanRead, stream.CanWrite);
@@ -364,7 +350,7 @@ namespace agsXMPP.Net
         {
             //Console.WriteLine("Certificate revocation list checked: {0}", stream.CheckCertRevocationStatus);
             // Display the properties of the client's certificate.
-            X509Certificate remoteCertificate = stream.RemoteCertificate;
+            var remoteCertificate = stream.RemoteCertificate;
             if (stream.RemoteCertificate != null)
             {
                 Console.WriteLine("Remote cert was issued to {0} and is valid from {1} until {2}.",
@@ -377,26 +363,27 @@ namespace agsXMPP.Net
                 Console.WriteLine("Remote certificate is null.");
             }
         }
-               
+
         #endregion
 
         /// <summary>
-		/// Validate the SSL certificate here
-		/// for now we dont stop the SSL connection an return always true
-		/// </summary>
-		/// <param name="certificate"></param>
-		/// <param name="certificateErrors"></param>
-		/// <returns></returns>
-		//private bool ValidateCertificate (X509Certificate certificate, int[] certificateErrors) 
-        private bool ValidateCertificate (object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
-		{
-			return base.FireOnValidateCertificate(sender, certificate, chain, sslPolicyErrors);
-		}
+        ///     Validate the SSL certificate here
+        ///     for now we dont stop the SSL connection an return always true
+        /// </summary>
+        /// <param name="certificate"></param>
+        /// <param name="certificateErrors"></param>
+        /// <returns></returns>
+        //private bool ValidateCertificate (X509Certificate certificate, int[] certificateErrors) 
+        private bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain,
+            SslPolicyErrors sslPolicyErrors)
+        {
+            return FireOnValidateCertificate(sender, certificate, chain, sslPolicyErrors);
+        }
 #endif
 #if BCCRYPTO
-        /// <summary>
-        /// Starts TLS on a "normal" connection
-        /// </summary>
+    /// <summary>
+    /// Starts TLS on a "normal" connection
+    /// </summary>
         public override void StartTls()
         {
             base.StartTls();
@@ -422,7 +409,7 @@ namespace agsXMPP.Net
 #endif
 
         /// <summary>
-        /// Start Compression on the socket
+        ///     Start Compression on the socket
         /// </summary>
         public override void StartCompression()
         {
@@ -430,7 +417,7 @@ namespace agsXMPP.Net
         }
 
         /// <summary>
-        /// Initialize compression stuff (Inflater, Deflater)
+        ///     Initialize compression stuff (Inflater, Deflater)
         /// </summary>
         private void InitCompression()
         {
@@ -444,7 +431,7 @@ namespace agsXMPP.Net
         }
 
         /// <summary>
-        /// Disconnect from the server.
+        ///     Disconnect from the server.
         /// </summary>
         public override void Disconnect()
         {
@@ -466,7 +453,9 @@ namespace agsXMPP.Net
                 // first, shutdown the socket
                 _socket.Shutdown(SocketShutdown.Both);
             }
-            catch { }
+            catch
+            {
+            }
 
             try
             {
@@ -474,13 +463,14 @@ namespace agsXMPP.Net
                 // async operations
                 _socket.Close();
             }
-            catch { }
+            catch
+            {
+            }
 
             FireOnDisconnect();
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="data"></param>
         public override void Send(string data)
@@ -489,7 +479,7 @@ namespace agsXMPP.Net
         }
 
         /// <summary>
-        /// Send data to the server.
+        ///     Send data to the server.
         /// </summary>
         public override void Send(byte[] bData)
         {
@@ -497,14 +487,14 @@ namespace agsXMPP.Net
             {
                 try
                 {
-                    base.FireOnSend(bData, bData.Length);
+                    FireOnSend(bData, bData.Length);
 
                     //Console.WriteLine("Socket OnSend: " + System.Text.Encoding.UTF8.GetString(bData, 0, bData.Length));
 
                     // compress bytes if we are on a compressed socket
                     if (m_Compressed)
                     {
-                        byte[] tmpData = new byte[bData.Length];
+                        var tmpData = new byte[bData.Length];
                         bData.CopyTo(tmpData, 0);
 
                         bData = Compress(bData);
@@ -524,7 +514,7 @@ namespace agsXMPP.Net
                         m_PendingSend = true;
                         try
                         {
-                            m_NetworkStream.BeginWrite(bData, 0, bData.Length, new AsyncCallback(EndSend), null);
+                            m_NetworkStream.BeginWrite(bData, 0, bData.Length, EndSend, null);
                         }
                         catch (Exception)
                         {
@@ -534,17 +524,16 @@ namespace agsXMPP.Net
                 }
                 catch (Exception)
                 {
-
                 }
             }
         }
 
         /// <summary>
-        /// Read data from server.
+        ///     Read data from server.
         /// </summary>
         private void Receive()
         {
-            m_NetworkStream.BeginRead(m_ReadBuffer, 0, BUFFERSIZE, new AsyncCallback(EndReceive), null);
+            m_NetworkStream.BeginRead(m_ReadBuffer, 0, BUFFERSIZE, EndReceive, null);
         }
 
         private void EndReceive(IAsyncResult ar)
@@ -558,8 +547,8 @@ namespace agsXMPP.Net
                     // uncompress Data if we are on a compressed socket
                     if (m_Compressed)
                     {
-                        byte[] buf = Decompress(m_ReadBuffer, nBytes);
-                        base.FireOnReceive(buf, buf.Length);
+                        var buf = Decompress(m_ReadBuffer, nBytes);
+                        FireOnReceive(buf, buf.Length);
                         // for compression debug statistics
                         //base.FireOnInComingCompressionDebug(this, m_ReadBuffer, nBytes, buf, buf.Length);
                     }
@@ -567,11 +556,11 @@ namespace agsXMPP.Net
                     {
                         //Console.WriteLine("Socket OnReceive: " + System.Text.Encoding.UTF8.GetString(m_ReadBuffer, 0, nBytes));                        
                         // Raise the receive event
-                        base.FireOnReceive(m_ReadBuffer, nBytes);
+                        FireOnReceive(m_ReadBuffer, nBytes);
                     }
                     // Setup next Receive Callback
-                    if (this.Connected)
-                        this.Receive();
+                    if (Connected)
+                        Receive();
                 }
                 else
                 {
@@ -581,9 +570,8 @@ namespace agsXMPP.Net
             catch (ObjectDisposedException)
             {
                 //object already disposed, just exit
-                return;
             }
-            catch (System.IO.IOException)
+            catch (IOException)
             {
                 //Console.WriteLine("\nSocket Exception: " + ex.Message);
                 Disconnect();
@@ -599,8 +587,8 @@ namespace agsXMPP.Net
                     m_NetworkStream.EndWrite(ar);
                     if (m_SendQueue.Count > 0)
                     {
-                        byte[] bData = (byte[])m_SendQueue.Dequeue();
-                        m_NetworkStream.BeginWrite(bData, 0, bData.Length, new AsyncCallback(EndSend), null);
+                        var bData = (byte[]) m_SendQueue.Dequeue();
+                        m_NetworkStream.BeginWrite(bData, 0, bData.Length, EndSend, null);
                     }
                     else
                     {
@@ -615,8 +603,9 @@ namespace agsXMPP.Net
         }
 
         #region << compression functions >>
+
         /// <summary>
-        /// Compress bytes
+        ///     Compress bytes
         /// </summary>
         /// <param name="bIn"></param>
         /// <returns></returns>
@@ -631,22 +620,20 @@ namespace agsXMPP.Net
             deflater.SetInput(bIn);
             deflater.Flush();
 
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
             do
             {
-                byte[] buf = new byte[BUFFERSIZE];
+                var buf = new byte[BUFFERSIZE];
                 ret = deflater.Deflate(buf);
                 if (ret > 0)
                     ms.Write(buf, 0, ret);
-
             } while (ret > 0);
 
             return ms.ToArray();
-
         }
 
         /// <summary>
-        /// Decompress bytes
+        ///     Decompress bytes
         /// </summary>
         /// <param name="bIn"></param>
         /// <param name="length"></param>
@@ -657,14 +644,13 @@ namespace agsXMPP.Net
 
             inflater.SetInput(bIn, 0, length);
 
-            MemoryStream ms = new MemoryStream();
+            var ms = new MemoryStream();
             do
             {
-                byte[] buf = new byte[BUFFERSIZE];
+                var buf = new byte[BUFFERSIZE];
                 ret = inflater.Inflate(buf);
                 if (ret > 0)
                     ms.Write(buf, 0, ret);
-
             } while (ret > 0);
 
             return ms.ToArray();

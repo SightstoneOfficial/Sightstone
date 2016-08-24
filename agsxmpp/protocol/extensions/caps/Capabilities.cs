@@ -22,9 +22,7 @@
 using System;
 using System.Collections;
 using System.Text;
-
 using agsXMPP.protocol.iq.disco;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.caps
@@ -50,55 +48,58 @@ namespace agsXMPP.protocol.extensions.caps
     */
 
     /// <summary>
-    /// <para>
-    /// It is often desirable for a Jabber/XMPP application (commonly but not necessarily a client) to take different actions 
-    /// depending on the capabilities of another application from which it receives presence information. Examples include: 
-    /// </para> 
-    /// <list type="bullet">
-    /// <item>
-    ///     <term>Showing a different set of icons depending on the capabilities of other clients.</term>
-    /// </item>
-    /// <item>
-    ///     <term>Not sending XHTML-IM content to plaintext clients such as cell phones.</term>
-    /// </item>
-    /// <item>
-    ///     <term>Allowing the initiation of Voice over IP (VoIP) sessions only to clients that support VoIP.</term>
-    /// </item>
-    /// <item>
-    ///     <term>Not showing a "Send a File" button if another user's client does not support File Transfer.</term>
-    /// </item>
-    /// </list>
-    /// <para>
-    /// Recently, some existing Jabber clients have begun sending Software Version requests to each entity from which they 
-    /// receive presence. That solution is impractical on a larger scale, particularly for users or applications with large rosters. 
-    /// This document proposes a more robust and scalable solution: namely, a presence-based mechanism for exchanging information 
-    /// about entity capabilities.
-    /// </para>
+    ///     <para>
+    ///         It is often desirable for a Jabber/XMPP application (commonly but not necessarily a client) to take different
+    ///         actions
+    ///         depending on the capabilities of another application from which it receives presence information. Examples
+    ///         include:
+    ///     </para>
+    ///     <list type="bullet">
+    ///         <item>
+    ///             <term>Showing a different set of icons depending on the capabilities of other clients.</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Not sending XHTML-IM content to plaintext clients such as cell phones.</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Allowing the initiation of Voice over IP (VoIP) sessions only to clients that support VoIP.</term>
+    ///         </item>
+    ///         <item>
+    ///             <term>Not showing a "Send a File" button if another user's client does not support File Transfer.</term>
+    ///         </item>
+    ///     </list>
+    ///     <para>
+    ///         Recently, some existing Jabber clients have begun sending Software Version requests to each entity from which
+    ///         they
+    ///         receive presence. That solution is impractical on a larger scale, particularly for users or applications with
+    ///         large rosters.
+    ///         This document proposes a more robust and scalable solution: namely, a presence-based mechanism for exchanging
+    ///         information
+    ///         about entity capabilities.
+    ///     </para>
     /// </summary>
     public class Capabilities : Element
     {
         /// <summary>
-        /// 
         /// </summary>
         public Capabilities()
         {
-            this.TagName    = "c";
-            this.Namespace  = Uri.CAPS;
+            TagName = "c";
+            Namespace = Uri.CAPS;
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="version"></param>
         /// <param name="node"></param>
         public Capabilities(string version, string node) : this()
         {
             Version = version;
-            Node    = node;
+            Node = node;
         }
 
         /// <summary>
-        /// Required node attribute
+        ///     Required node attribute
         /// </summary>
         public string Node
         {
@@ -107,7 +108,7 @@ namespace agsXMPP.protocol.extensions.caps
         }
 
         /// <summary>
-        /// Required version attribute
+        ///     Required version attribute
         /// </summary>
         public string Version
         {
@@ -116,7 +117,7 @@ namespace agsXMPP.protocol.extensions.caps
         }
 
         /// <summary>
-        /// Required Hash-Type.
+        ///     Required Hash-Type.
         /// </summary>
         public string Hash
         {
@@ -127,37 +128,34 @@ namespace agsXMPP.protocol.extensions.caps
         [Obsolete("This property is deprecated with version 1.4 of XEP-0115. You shouldn't use this propety anymore.")]
         public string[] Extensions
         {
-            get 
+            get
             {
-                string ext = GetAttribute("ext");
+                var ext = GetAttribute("ext");
                 if (ext != null)
                 {
-                    string[] ret = ext.Split(' ');
+                    var ret = ext.Split(' ');
                     return ret;
                 }
-                else
-                {
-                    return null;
-                }
+                return null;
             }
-            set 
+            set
             {
                 if (value != null)
                 {
                     string temp = null;
-                    for (int i = 0; i < value.Length; i++)
+                    for (var i = 0; i < value.Length; i++)
                     {
                         temp += value[i];
                         if (i < value.Length - 1)
-                            temp += " ";                            
-                    }                    
+                            temp += " ";
+                    }
                     SetAttribute("ext", temp);
                 }
             }
         }
 
         /// <summary>
-        /// Builds and sets the caps ver attribute from a DiscoInfo object
+        ///     Builds and sets the caps ver attribute from a DiscoInfo object
         /// </summary>
         /// <param name="di"></param>
         public void SetVersion(DiscoInfo di)
@@ -178,19 +176,19 @@ namespace agsXMPP.protocol.extensions.caps
                    encoding the hash using Base64 as specified in Section 4 of RFC 4648 [18] 
                    (note: the Base64 output MUST NOT include whitespace and MUST set padding bits to zero). [19]
              */
-            ArrayList features      = new ArrayList();
-            ArrayList identities    = new ArrayList();
+            var features = new ArrayList();
+            var identities = new ArrayList();
 
-            foreach (DiscoIdentity did in di.GetIdentities())
+            foreach (var did in di.GetIdentities())
                 identities.Add(did.Type == null ? did.Category : did.Category + "/" + did.Type);
 
-            foreach (DiscoFeature df in di.GetFeatures())
+            foreach (var df in di.GetFeatures())
                 features.Add(df.Var);
-            
-            identities.Sort();
-            features.Sort();            
 
-            StringBuilder S = new StringBuilder();
+            identities.Sort();
+            features.Sort();
+
+            var S = new StringBuilder();
 
             foreach (string s in identities)
                 S.Append(s + "<");
@@ -198,7 +196,7 @@ namespace agsXMPP.protocol.extensions.caps
             foreach (string s in features)
                 S.Append(s + "<");
 
-            byte[] sha1 = Util.Hash.Sha1HashBytes(S.ToString());
+            var sha1 = Util.Hash.Sha1HashBytes(S.ToString());
 
 #if CF
             return Convert.ToBase64String(sha1, 0, sha1.Length);
@@ -208,52 +206,54 @@ namespace agsXMPP.protocol.extensions.caps
         }
 
         #region << Extension Helpers >>
+
         public void AddExtension(string ext)
         {
-            string[] extensions = this.Extensions;
+            var extensions = Extensions;
             // check if the extension already exists
-            if (extensions != null && Array.IndexOf(extensions, ext, extensions.GetLowerBound(0), extensions.Length) >= 0)
+            if (extensions != null &&
+                Array.IndexOf(extensions, ext, extensions.GetLowerBound(0), extensions.Length) >= 0)
                 return;
 
-            int size = extensions == null ? 1 : extensions.Length + 1;
-            string[] tmpExtensions = new string[size];
+            var size = extensions == null ? 1 : extensions.Length + 1;
+            var tmpExtensions = new string[size];
             if (size > 1)
-                extensions.CopyTo(tmpExtensions, 0);           
-            
-            tmpExtensions[size - 1] = ext;            
-            this.Extensions = tmpExtensions;
+                extensions.CopyTo(tmpExtensions, 0);
+
+            tmpExtensions[size - 1] = ext;
+            Extensions = tmpExtensions;
         }
 
         public void RemoveExtension(string ext)
         {
-            string[] extensions = this.Extensions;
+            var extensions = Extensions;
             if (extensions != null)
             {
                 if (Array.IndexOf(extensions, ext, extensions.GetLowerBound(0), extensions.Length) >= 0)
                 {
-                    int i = 0;
-                    string[] tmpExtensions = new string[extensions.Length -1];
-                    foreach (string s in extensions)
+                    var i = 0;
+                    var tmpExtensions = new string[extensions.Length - 1];
+                    foreach (var s in extensions)
                     {
                         if (s != ext)
                             tmpExtensions[i++] = s;
                     }
-                    this.Extensions = tmpExtensions;
+                    Extensions = tmpExtensions;
                 }
-            }            
+            }
         }
 
         public bool ContainsExtension(string ext)
         {
-            string[] extensions = this.Extensions;
+            var extensions = Extensions;
             if (extensions == null)
                 return false;
-            
-            if (Array.IndexOf(extensions, ext, extensions.GetLowerBound(0), extensions.Length) >= 0)            
+
+            if (Array.IndexOf(extensions, ext, extensions.GetLowerBound(0), extensions.Length) >= 0)
                 return true;
-            else
-                return false;
+            return false;
         }
+
         #endregion
     }
 }

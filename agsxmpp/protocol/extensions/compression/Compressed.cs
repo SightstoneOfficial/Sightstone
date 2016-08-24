@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.compression
@@ -34,9 +31,9 @@ namespace agsXMPP.protocol.extensions.compression
     public class Compressed : Element
     {
         public Compressed()
-        {            
-            this.TagName    = "compressed";
-            this.Namespace  = Uri.COMPRESS;
+        {
+            TagName = "compressed";
+            Namespace = Uri.COMPRESS;
         }
     }
 }

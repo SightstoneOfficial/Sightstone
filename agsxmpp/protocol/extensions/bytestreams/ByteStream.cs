@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bytestreams
@@ -57,26 +55,20 @@ namespace agsXMPP.protocol.extensions.bytestreams
     */
 
     /// <summary>
-	/// ByteStreams
-	/// </summary>
-	public class ByteStream : Element
-	{
-		public ByteStream()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.BYTESTREAMS;
-		}
+    ///     ByteStreams
+    /// </summary>
+    public class ByteStream : Element
+    {
+        public ByteStream()
+        {
+            TagName = "query";
+            Namespace = Uri.BYTESTREAMS;
+        }
 
         public string Sid
         {
-            set
-            {
-                SetAttribute("sid", value);
-            }
-            get
-            {
-                return GetAttribute("sid");
-            }
+            set { SetAttribute("sid", value); }
+            get { return GetAttribute("sid"); }
         }
 
         public Mode Mode
@@ -91,43 +83,73 @@ namespace agsXMPP.protocol.extensions.bytestreams
             }
         }
 
+
         /// <summary>
-        /// Add a StreamHost
+        ///     The activate Element
+        /// </summary>
+        public Activate Activate
+        {
+            get { return SelectSingleElement(typeof(Activate)) as Activate; }
+            set
+            {
+                if (HasTag(typeof(Activate)))
+                    RemoveTag(typeof(Activate));
+
+                if (value != null)
+                    AddChild(value);
+            }
+        }
+
+        public StreamHostUsed StreamHostUsed
+        {
+            get { return SelectSingleElement(typeof(StreamHostUsed)) as StreamHostUsed; }
+            set
+            {
+                if (HasTag(typeof(StreamHostUsed)))
+                    RemoveTag(typeof(StreamHostUsed));
+
+                if (value != null)
+                    AddChild(value);
+            }
+        }
+
+        /// <summary>
+        ///     Add a StreamHost
         /// </summary>
         /// <returns></returns>
         public StreamHost AddStreamHost()
         {
-            StreamHost sh = new StreamHost();
+            var sh = new StreamHost();
             AddChild(sh);
             return sh;
         }
 
         /// <summary>
-        /// Add a StreamHost
+        ///     Add a StreamHost
         /// </summary>
         /// <param name="sh"></param>
         /// <returns></returns>
         public StreamHost AddStreamHost(StreamHost sh)
-        {            
+        {
             AddChild(sh);
             return sh;
         }
 
         /// <summary>
-        /// Add a StreamHost
+        ///     Add a StreamHost
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="host"></param>
         /// <returns></returns>
         public StreamHost AddStreamHost(Jid jid, string host)
         {
-            StreamHost sh = new StreamHost(jid, host);
+            var sh = new StreamHost(jid, host);
             AddChild(sh);
             return sh;
         }
 
         /// <summary>
-        /// Add a StreamHost
+        ///     Add a StreamHost
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="host"></param>
@@ -135,13 +157,13 @@ namespace agsXMPP.protocol.extensions.bytestreams
         /// <returns></returns>
         public StreamHost AddStreamHost(Jid jid, string host, int port)
         {
-            StreamHost sh = new StreamHost(jid, host, port);
+            var sh = new StreamHost(jid, host, port);
             AddChild(sh);
             return sh;
         }
 
         /// <summary>
-        /// Add a StreamHost
+        ///     Add a StreamHost
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="host"></param>
@@ -150,20 +172,20 @@ namespace agsXMPP.protocol.extensions.bytestreams
         /// <returns></returns>
         public StreamHost AddStreamHost(Jid jid, string host, int port, string zeroconf)
         {
-            StreamHost sh = new StreamHost(jid, host, port, zeroconf);
+            var sh = new StreamHost(jid, host, port, zeroconf);
             AddChild(sh);
             return sh;
         }
-        
+
         /// <summary>
-        /// Get the list of streamhosts
+        ///     Get the list of streamhosts
         /// </summary>
         /// <returns></returns>
         public StreamHost[] GetStreamHosts()
         {
-            ElementList nl = SelectElements(typeof(StreamHost));
-            StreamHost[] hosts = new StreamHost[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(StreamHost));
+            var hosts = new StreamHost[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
                 hosts[i] = (StreamHost) e;
@@ -171,42 +193,5 @@ namespace agsXMPP.protocol.extensions.bytestreams
             }
             return hosts;
         }
-        
-        
-        /// <summary>
-        /// The activate Element
-        /// </summary>
-        public Activate Activate
-        {
-            get
-            {
-                return SelectSingleElement(typeof(Activate)) as Activate;
-
-            }
-            set
-            {
-                if (HasTag(typeof(Activate)))
-                    RemoveTag(typeof(Activate));
-                
-                if (value != null)
-                    this.AddChild(value);
-            }
-        }
-
-        public StreamHostUsed StreamHostUsed
-        {
-            get
-            {
-                return SelectSingleElement(typeof(StreamHostUsed)) as StreamHostUsed;
-            }
-            set
-            {
-                if (HasTag(typeof(StreamHostUsed)))
-                    RemoveTag(typeof(StreamHostUsed));
-                
-                if (value != null)
-                    this.AddChild(value);
-            }
-        }
-	}
+    }
 }

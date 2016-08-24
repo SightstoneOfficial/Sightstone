@@ -17,23 +17,21 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.sasl
 {
-	/// <summary>
-	/// Summary description for Abort.
-	/// </summary>
-	public class Abort : Element
-	{
-		public Abort()
-		{
-			this.TagName	= "abort";
-			this.Namespace	= Uri.SASL;
-		}
-	}
+    /// <summary>
+    ///     Summary description for Abort.
+    /// </summary>
+    public class Abort : Element
+    {
+        public Abort()
+        {
+            TagName = "abort";
+            Namespace = Uri.SASL;
+        }
+    }
 }

@@ -17,17 +17,15 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.server
 {
-    public class Presence : agsXMPP.protocol.client.Presence
+    public class Presence : client.Presence
     {
         public Presence()
         {
-            this.Namespace = Uri.SERVER;
+            Namespace = Uri.SERVER;
         }
     }
 }

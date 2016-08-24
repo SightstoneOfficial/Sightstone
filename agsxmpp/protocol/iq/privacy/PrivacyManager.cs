@@ -17,22 +17,18 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP;
 using agsXMPP.protocol.client;
-using agsXMPP.protocol.iq.privacy;
 
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// Helper class for managing server side privacy lists (blocking communication)
+    ///     Helper class for managing server side privacy lists (blocking communication)
     /// </summary>
     public class PrivacyManager
     {
-        private XmppClientConnection	m_connection	= null;
+        private readonly XmppClientConnection m_connection;
 
         public PrivacyManager(XmppClientConnection con)
         {
@@ -41,7 +37,7 @@ namespace agsXMPP.protocol.iq.privacy
 
 
         /// <summary>
-        /// Retrieving all Privacy Lists
+        ///     Retrieving all Privacy Lists
         /// </summary>
         public void GetLists()
         {
@@ -49,7 +45,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Retrieving all Privacy Lists
+        ///     Retrieving all Privacy Lists
         /// </summary>
         /// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
@@ -76,15 +72,15 @@ namespace agsXMPP.protocol.iq.privacy
 
             */
 
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.get;
+            pIq.Type = IqType.get;
 
             SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Requests a privacy list from the server by its name
+        ///     Requests a privacy list from the server by its name
         /// </summary>
         /// <param name="name">name of the privacy list to retrieve</param>
         public void GetList(string name)
@@ -93,7 +89,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Requests a privacy list from the server by its name
+        ///     Requests a privacy list from the server by its name
         /// </summary>
         /// <param name="name">name of the privacy list to retrieve</param>
         /// <param name="cb">Callback for the server result</param>
@@ -125,16 +121,16 @@ namespace agsXMPP.protocol.iq.privacy
 
             */
 
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.get;
+            pIq.Type = IqType.get;
             pIq.Query.AddList(new List(name));
 
-            SendStanza(pIq, cb, cbArg);            
+            SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Remove a privacy list
+        ///     Remove a privacy list
         /// </summary>
         /// <param name="name">name of the privacy list to remove</param>
         public void RemoveList(string name)
@@ -143,23 +139,23 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Remove a privacy list
+        ///     Remove a privacy list
         /// </summary>
         /// <param name="name">name of the privacy list to remove</param>
         /// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
         public void RemoveList(string name, IqCB cb, object cbArg)
         {
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            pIq.Type = IqType.set;
             pIq.Query.AddList(new List(name));
 
-            SendStanza(pIq, cb, cbArg);            
+            SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Decline the use of any active list
+        ///     Decline the use of any active list
         /// </summary>
         public void DeclineActiveList()
         {
@@ -167,7 +163,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Decline the use of any active list
+        ///     Decline the use of any active list
         /// </summary>
         /// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
@@ -190,16 +186,16 @@ namespace agsXMPP.protocol.iq.privacy
                 <iq type='result' id='active3' to='romeo@example.net/orchard'/>            
             */
 
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            pIq.Type = IqType.set;
             pIq.Query.Active = new Active();
 
             SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Change the active list
+        ///     Change the active list
         /// </summary>
         /// <param name="name"></param>
         public void ChangeActiveList(string name)
@@ -208,7 +204,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Change the active list
+        ///     Change the active list
         /// </summary>
         /// <param name="name"></param>
         /// <param name="cb">Callback for the server result</param>
@@ -246,16 +242,16 @@ namespace agsXMPP.protocol.iq.privacy
              
             */
 
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            pIq.Type = IqType.set;
             pIq.Query.Active = new Active(name);
 
             SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Change the default list
+        ///     Change the default list
         /// </summary>
         /// <param name="name">name of the new default list</param>
         public void ChangeDefaultList(string name)
@@ -264,23 +260,23 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Change the default list
+        ///     Change the default list
         /// </summary>
         /// <param name="name">name of the new default list</param>
         /// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
         public void ChangeDefaultList(string name, IqCB cb, object cbArg)
         {
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            pIq.Type = IqType.set;
             pIq.Query.Default = new Default(name);
 
             SendStanza(pIq, cb, cbArg);
         }
 
         /// <summary>
-        /// Decline the use of the default list
+        ///     Decline the use of the default list
         /// </summary>
         public void DeclineDefaultList()
         {
@@ -288,28 +284,27 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Decline the use of the default list
+        ///     Decline the use of the default list
         /// </summary>
         /// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
         public void DeclineDefaultList(IqCB cb, object cbArg)
         {
-            PrivacyIq pIq = new PrivacyIq();
+            var pIq = new PrivacyIq();
 
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            pIq.Type = IqType.set;
             pIq.Query.Default = new Default();
 
             SendStanza(pIq, cb, cbArg);
         }
 
-      
 
         /// <summary>
-        /// Update the list with the given name and rules.
+        ///     Update the list with the given name and rules.
         /// </summary>
         /// <remarks>
-        /// Specify the desired changes to the list by including all elements/rules in the list 
-        /// (not the "delta")
+        ///     Specify the desired changes to the list by including all elements/rules in the list
+        ///     (not the "delta")
         /// </remarks>
         /// <param name="name">name of the list</param>
         /// <param name="rules">rules of this list</param>
@@ -319,11 +314,11 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Update the list with the given name and rules.
+        ///     Update the list with the given name and rules.
         /// </summary>
         /// <remarks>
-        /// Specify the desired changes to the list by including all elements/rules in the list 
-        /// (not the "delta")
+        ///     Specify the desired changes to the list by including all elements/rules in the list
+        ///     (not the "delta")
         /// </remarks>
         /// <param name="name">name of this list</param>
         /// <param name="rules">rules of this list</param>
@@ -331,11 +326,11 @@ namespace agsXMPP.protocol.iq.privacy
         /// <param name="cbArg">Callback arguments for the result when needed</param>
         public void UpdateList(string name, Item[] rules, IqCB cb, object cbArg)
         {
-            PrivacyIq pIq = new PrivacyIq();
-            pIq.Type = agsXMPP.protocol.client.IqType.set;
+            var pIq = new PrivacyIq();
+            pIq.Type = IqType.set;
 
             // create a new list with the given name
-            List list = new List(name);
+            var list = new List(name);
             list.AddItems(rules);
             // add the list to the query
             pIq.Query.AddList(list);
@@ -344,7 +339,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Add a new list with the given name and rules
+        ///     Add a new list with the given name and rules
         /// </summary>
         /// <param name="name"></param>
         /// <param name="rules"></param>
@@ -353,12 +348,12 @@ namespace agsXMPP.protocol.iq.privacy
             AddList(name, rules, null, null);
         }
 
+        ///// <param name="cb">Callback for the server result</param>
         /// <summary>
-        /// Add a new list with the given name and rules.
-        /// </summary>        
+        ///     Add a new list with the given name and rules.
+        /// </summary>
         /// <param name="name"></param>
         /// <param name="rules"></param>
-        ///// <param name="cb">Callback for the server result</param>
         /// <param name="cbArg">Callback arguments for the result when needed</param>
         public void AddList(string name, Item[] rules, IqCB cb, object cbArg)
         {
@@ -366,7 +361,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Sends a PrivacyIq over the active connection
+        ///     Sends a PrivacyIq over the active connection
         /// </summary>
         /// <param name="pIq"></param>
         /// <param name="cb"></param>
@@ -378,7 +373,5 @@ namespace agsXMPP.protocol.iq.privacy
             else
                 m_connection.IqGrabber.SendIq(pIq, cb, cbArg);
         }
-        
-
     }
 }

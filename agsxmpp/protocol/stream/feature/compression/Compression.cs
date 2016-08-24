@@ -17,13 +17,10 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.extensions.compression;
+using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.stream.feature.compression
 {
@@ -45,12 +42,12 @@ namespace agsXMPP.protocol.stream.feature.compression
 
         public Compression()
         {
-            this.TagName    = "compression";
-            this.Namespace  = Uri.FEATURE_COMPRESS;
+            TagName = "compression";
+            Namespace = Uri.FEATURE_COMPRESS;
         }
 
         /// <summary>
-        /// method/algorithm used to compressing the stream
+        ///     method/algorithm used to compressing the stream
         /// </summary>
         public CompressionMethod Method
         {
@@ -59,14 +56,11 @@ namespace agsXMPP.protocol.stream.feature.compression
                 if (value != CompressionMethod.Unknown)
                     SetTag("method", value.ToString());
             }
-            get
-            {
-                return (CompressionMethod) GetTagEnum("method", typeof(CompressionMethod));
-            }
+            get { return (CompressionMethod) GetTagEnum("method", typeof(CompressionMethod)); }
         }
 
         /// <summary>
-        /// Add a compression method/algorithm
+        ///     Add a compression method/algorithm
         /// </summary>
         /// <param name="method"></param>
         public void AddMethod(CompressionMethod method)
@@ -76,13 +70,13 @@ namespace agsXMPP.protocol.stream.feature.compression
         }
 
         /// <summary>
-        /// Is the given compression method/algrithm supported?
+        ///     Is the given compression method/algrithm supported?
         /// </summary>
         /// <param name="method"></param>
         /// <returns></returns>
         public bool SupportsMethod(CompressionMethod method)
         {
-            ElementList nList = SelectElements(typeof(Method));
+            var nList = SelectElements(typeof(Method));
             foreach (Method m in nList)
             {
                 if (m.CompressionMethod == method)
@@ -93,10 +87,10 @@ namespace agsXMPP.protocol.stream.feature.compression
 
         public Method[] GetMethods()
         {
-            ElementList methods = SelectElements(typeof(Method));
+            var methods = SelectElements(typeof(Method));
 
-            Method[] items = new Method[methods.Count];
-            int i = 0;
+            var items = new Method[methods.Count];
+            var i = 0;
             foreach (Method m in methods)
             {
                 items[i] = m;
@@ -104,6 +98,5 @@ namespace agsXMPP.protocol.stream.feature.compression
             }
             return items;
         }
-      
     }
 }

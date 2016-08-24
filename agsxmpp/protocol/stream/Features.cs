@@ -17,17 +17,14 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP.Xml.Dom;
-using agsXMPP.protocol.tls;
-
-using agsXMPP.protocol.client;
 using agsXMPP.protocol.iq.bind;
+using agsXMPP.protocol.sasl;
 using agsXMPP.protocol.stream.feature;
 using agsXMPP.protocol.stream.feature.compression;
+using agsXMPP.protocol.tls;
+using agsXMPP.Xml.Dom;
 
 //</stream:features>
 // <stream:features>
@@ -49,51 +46,45 @@ using agsXMPP.protocol.stream.feature.compression;
 
 namespace agsXMPP.protocol.stream
 {
-	/// <summary>
-	/// Summary description for Features.
-	/// </summary>
-	public class Features : Element
-	{
-		public Features()
-		{
-			this.TagName	= "features";
-			this.Namespace	= Uri.STREAM;
-		}
+    /// <summary>
+    ///     Summary description for Features.
+    /// </summary>
+    public class Features : Element
+    {
+        public Features()
+        {
+            TagName = "features";
+            Namespace = Uri.STREAM;
+        }
 
-		public StartTls StartTls
-		{
-			get
-			{
-				return SelectSingleElement(typeof(StartTls)) as StartTls;
-			}
-			set
-			{
-				if (HasTag(typeof(StartTls)))
-					RemoveTag(typeof(StartTls));
-                
+        public StartTls StartTls
+        {
+            get { return SelectSingleElement(typeof(StartTls)) as StartTls; }
+            set
+            {
+                if (HasTag(typeof(StartTls)))
+                    RemoveTag(typeof(StartTls));
+
                 if (value != null)
-                    this.AddChild(value);
-			}
-		}
-		
-		public Bind Bind
-		{
-			get
-			{
-				return SelectSingleElement(typeof(Bind)) as Bind;
-			}
-			set
-			{
-				if(HasTag(typeof(Bind)))
-					RemoveTag(typeof(Bind));
-                
+                    AddChild(value);
+            }
+        }
+
+        public Bind Bind
+        {
+            get { return SelectSingleElement(typeof(Bind)) as Bind; }
+            set
+            {
+                if (HasTag(typeof(Bind)))
+                    RemoveTag(typeof(Bind));
+
                 if (value != null)
-				    this.AddChild(value);
-			}
-		}
+                    AddChild(value);
+            }
+        }
 
         // <stream:stream from="beta.soapbox.net" xml:lang="de" id="373af7e9-6107-4729-8cea-e8b8ea05ceea" xmlns="jabber:client" version="1.0" xmlns:stream="http://etherx.jabber.org/streams">
-        
+
         // <stream:features xmlns:stream="http://etherx.jabber.org/streams">
         //      <compression xmlns="http://jabber.org/features/compress"><method>zlib</method></compression>
         //      <starttls xmlns="urn:ietf:params:xml:ns:xmpp-tls" />
@@ -116,77 +107,60 @@ namespace agsXMPP.protocol.stream
                     RemoveTag(typeof(Compression));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
         public Register Register
         {
-            get
-            {
-                return SelectSingleElement(typeof(Register)) as Register;
-            }
+            get { return SelectSingleElement(typeof(Register)) as Register; }
             set
             {
                 if (HasTag(typeof(Register)))
                     RemoveTag(typeof(Register));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
-        public sasl.Mechanisms Mechanisms
+        public Mechanisms Mechanisms
         {
-            get
-            {
-                return SelectSingleElement(typeof(sasl.Mechanisms)) as sasl.Mechanisms;
-            }
+            get { return SelectSingleElement(typeof(Mechanisms)) as Mechanisms; }
             set
             {
-                if (HasTag(typeof(sasl.Mechanisms)))
-                    RemoveTag(typeof(sasl.Mechanisms));
+                if (HasTag(typeof(Mechanisms)))
+                    RemoveTag(typeof(Mechanisms));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
-		public bool SupportsBind
-		{
-			get { return Bind!=null ? true : false; }
-		}
+        public bool SupportsBind
+        {
+            get { return Bind != null ? true : false; }
+        }
 
-		public bool SupportsStartTls
-		{
-			get
-			{				
-				return StartTls!=null ? true : false; 
-			}
-		}
+        public bool SupportsStartTls
+        {
+            get { return StartTls != null ? true : false; }
+        }
 
         /// <summary>
-        /// Is Stream Compression supported?
+        ///     Is Stream Compression supported?
         /// </summary>
         public bool SupportsCompression
         {
-            get
-            {
-                return Compression != null ? true : false;
-            }
+            get { return Compression != null ? true : false; }
         }
 
         /// <summary>
-        /// Is Registration supported?
+        ///     Is Registration supported?
         /// </summary>
         public bool SupportsRegistration
         {
-            get
-            {
-                return Register != null ? true : false;
-            }
+            get { return Register != null ? true : false; }
         }
-
-		
-	}
+    }
 }

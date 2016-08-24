@@ -17,12 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.ibb
 {
@@ -42,29 +37,28 @@ namespace agsXMPP.protocol.extensions.ibb
          </xs:complexType>
        </xs:element>
     */
+
     public class Open : Base
     {
         /// <summary>
-        /// 
         /// </summary>
         public Open()
         {
-            this.TagName    = "open";            
+            TagName = "open";
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="sid"></param>
         /// <param name="blocksize"></param>
         public Open(string sid, long blocksize) : this()
         {
-            this.Sid        = sid;
-            this.BlockSize  = blocksize;
-        }  
+            Sid = sid;
+            BlockSize = blocksize;
+        }
 
         /// <summary>
-        /// Block size
+        ///     Block size
         /// </summary>
         public long BlockSize
         {

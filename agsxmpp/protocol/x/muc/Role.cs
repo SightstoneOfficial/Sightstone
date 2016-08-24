@@ -17,23 +17,21 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.x.muc
 {
-	/// <summary>
-	/// There are four defined roles that an occupant may have
-	/// </summary>
-	public enum Role
-	{
-		/// <summary>
-		/// the absence of a role
-		/// </summary>
-		none,
-		moderator,
-		participant,
-		visitor		
-	}
+    /// <summary>
+    ///     There are four defined roles that an occupant may have
+    /// </summary>
+    public enum Role
+    {
+        /// <summary>
+        ///     the absence of a role
+        /// </summary>
+        none,
+        moderator,
+        participant,
+        visitor
+    }
 }

@@ -17,20 +17,18 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.session
 {
-	/// <summary>
-	/// Starting the session, this is done after resource binding
-	/// </summary>
-	public class SessionIq : IQ
-	{
-		/*
+    /// <summary>
+    ///     Starting the session, this is done after resource binding
+    /// </summary>
+    public class SessionIq : IQ
+    {
+        /*
 		SEND:	<iq xmlns="jabber:client" id="agsXMPP_2" type="set" to="jabber.ru">
 					<session xmlns="urn:ietf:params:xml:ns:xmpp-session" />
 				</iq>
@@ -38,23 +36,23 @@ namespace agsXMPP.protocol.iq.session
 					<session xmlns="urn:ietf:params:xml:ns:xmpp-session" />
 				</iq> 
 		 */
-		private Session m_Session = new Session();
-		
-		public SessionIq()
-		{
-			this.GenerateId();
-			this.AddChild(m_Session);
-		}
+        private readonly Session m_Session = new Session();
 
-		public SessionIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public SessionIq()
+        {
+            GenerateId();
+            AddChild(m_Session);
+        }
 
-		public SessionIq(IqType type, Jid to) : this()
-		{			
-			this.Type = type;
-			this.To = to;
-		}		
-	}
+        public SessionIq(IqType type) : this()
+        {
+            Type = type;
+        }
+
+        public SessionIq(IqType type, Jid to) : this()
+        {
+            Type = type;
+            To = to;
+        }
+    }
 }

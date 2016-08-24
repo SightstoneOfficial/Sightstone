@@ -17,15 +17,13 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.x.data
 {
-	/*
+    /*
 	<x xmlns='jabber:x:data'
 		type='{form-type}'>
 		<title/>
@@ -52,48 +50,51 @@ namespace agsXMPP.protocol.x.data
 	</xs:element>
 	*/
 
-	/// <summary>
-	/// Field Option.
-	/// </summary>
-	public class Option : Element
-	{
-		#region << Constructors >>
-		public Option()
-		{
-			this.TagName	= "option";
-			this.Namespace	= Uri.X_DATA;
-		}
+    /// <summary>
+    ///     Field Option.
+    /// </summary>
+    public class Option : Element
+    {
+        #region << Properties >>
 
-		public Option(string label, string val) : this()
-		{
-			Label		= label;
-			SetValue(val);
-		}
-		#endregion
+        /// <summary>
+        ///     Label of the option
+        /// </summary>
+        public string Label
+        {
+            get { return GetAttribute("label"); }
+            set { SetAttribute("label", value); }
+        }
 
-		#region << Properties >>
-		/// <summary>
-		/// Label of the option
-		/// </summary>
-		public string Label
-		{
-			get { return GetAttribute("label"); }
-			set { SetAttribute("label", value); }
-		}	
-		#endregion
+        #endregion
 
+        /// <summary>
+        ///     Value of the Option
+        /// </summary>
+        public string GetValue()
+        {
+            return GetTag(typeof(Value));
+        }
 
-		/// <summary>
-		/// Value of the Option
-		/// </summary>
-		public string GetValue()
-		{	
-			return GetTag(typeof(Value));			
-		}
+        public void SetValue(string val)
+        {
+            SetTag(typeof(Value), val);
+        }
 
-		public void SetValue(string val)
-		{	
-			SetTag(typeof(Value), val);
-		}			
-	}
+        #region << Constructors >>
+
+        public Option()
+        {
+            TagName = "option";
+            Namespace = Uri.X_DATA;
+        }
+
+        public Option(string label, string val) : this()
+        {
+            Label = label;
+            SetValue(val);
+        }
+
+        #endregion
+    }
 }

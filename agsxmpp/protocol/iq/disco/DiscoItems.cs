@@ -17,17 +17,14 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.disco
 {
-	/*
+    /*
 	Example 10. Requesting all items
 
 	<iq type='get'
@@ -76,49 +73,49 @@ namespace agsXMPP.protocol.iq.disco
       
     */
 
-	/// <summary>
-	/// Discovering the Items Associated with a Jabber Entity
-	/// </summary>
-	public class DiscoItems : IQ
-	{
-		public DiscoItems()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.DISCO_ITEMS;
-		}
+    /// <summary>
+    ///     Discovering the Items Associated with a Jabber Entity
+    /// </summary>
+    public class DiscoItems : IQ
+    {
+        public DiscoItems()
+        {
+            TagName = "query";
+            Namespace = Uri.DISCO_ITEMS;
+        }
 
-		/// <summary>
-		/// The node to discover (Optional)
-		/// </summary>
-		public string Node
-		{
-			get { return GetAttribute("node"); }
-			set { SetAttribute("node", value); }
-		}
+        /// <summary>
+        ///     The node to discover (Optional)
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
 
-		public DiscoItem AddDiscoItem()
-		{
-			DiscoItem item = new DiscoItem();
-			AddChild(item);
-			return item;
-		}
+        public DiscoItem AddDiscoItem()
+        {
+            var item = new DiscoItem();
+            AddChild(item);
+            return item;
+        }
 
-		public void AddDiscoItem(DiscoItem item)
-		{
-			AddChild(item);			
-		}
+        public void AddDiscoItem(DiscoItem item)
+        {
+            AddChild(item);
+        }
 
-		public DiscoItem[] GetDiscoItems()
-		{
-            ElementList nl = SelectElements(typeof(DiscoItem));
-			DiscoItem[] items = new DiscoItem[nl.Count];
-			int i = 0;
-			foreach (Element e in nl)
-			{
-				items[i] = (DiscoItem) e;
-				i++;
-			}
-			return items;
-		}
-	}
+        public DiscoItem[] GetDiscoItems()
+        {
+            var nl = SelectElements(typeof(DiscoItem));
+            var items = new DiscoItem[nl.Count];
+            var i = 0;
+            foreach (Element e in nl)
+            {
+                items[i] = (DiscoItem) e;
+                i++;
+            }
+            return items;
+        }
+    }
 }

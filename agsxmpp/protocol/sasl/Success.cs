@@ -17,24 +17,23 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 // <success xmlns='urn:ietf:params:xml:ns:xmpp-sasl'/>
+
 namespace agsXMPP.protocol.sasl
 {
-	/// <summary>
-	/// Summary description for Success.
-	/// </summary>
-	public class Success : Element
-	{
-		public Success()
-		{
-			this.TagName	= "success";
-			this.Namespace	= Uri.SASL;
-		}
-	}
+    /// <summary>
+    ///     Summary description for Success.
+    /// </summary>
+    public class Success : Element
+    {
+        public Success()
+        {
+            TagName = "success";
+            Namespace = Uri.SASL;
+        }
+    }
 }

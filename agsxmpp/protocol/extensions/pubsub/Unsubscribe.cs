@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
@@ -45,16 +42,23 @@ namespace agsXMPP.protocol.extensions.pubsub
 
     public class Unsubscribe : Subscribe
     {
-        #region << Constructors >>
-        public Unsubscribe() : base()
+        public string SubId
         {
-            this.TagName = "unsubscribe";
+            get { return GetAttribute("subid"); }
+            set { SetAttribute("subid", value); }
+        }
+
+        #region << Constructors >>
+
+        public Unsubscribe()
+        {
+            TagName = "unsubscribe";
         }
 
         public Unsubscribe(string node, Jid jid) : this()
         {
-            this.Node   = node;
-            this.Jid    = jid;
+            Node = node;
+            Jid = jid;
         }
 
         public Unsubscribe(string node, Jid jid, string subid)
@@ -62,13 +66,7 @@ namespace agsXMPP.protocol.extensions.pubsub
         {
             SubId = subid;
         }
+
         #endregion
-
-        public string SubId
-        {
-            get { return GetAttribute("subid"); }
-            set { SetAttribute("subid", value); }
-        }        
-
     }
 }

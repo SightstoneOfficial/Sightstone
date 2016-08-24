@@ -18,37 +18,34 @@
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
+
 using System;
 using System.Security.Principal;
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.sasl;
+using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.Sasl.Gssapi
 {
     /// <summary>
-    /// Handels the SASL Digest MD5 authentication
+    ///     Handels the SASL Digest MD5 authentication
     /// </summary>
     public class GssapiMechanism : Mechanism
     {
-        SSPIHelper sspiHelper;
-        
-        public GssapiMechanism()
-        {
-        }
+        private SSPIHelper sspiHelper;
 
         public override void Init(XmppClientConnection con)
         {
             XmppClientConnection = con;
 
-            string kerbPrinc = XmppClientConnection.KerberosPrincipal;
-            
+            var kerbPrinc = XmppClientConnection.KerberosPrincipal;
+
             /*
              * try to build the kerberos principal if none is sent by the server or provided by the user.
              * XCP send the kerberos pricipal, Openfire doesnt.
              */
             if (kerbPrinc == null)
-                kerbPrinc = string.Format("xmpp/{0}@{1}", XmppClientConnection.Server, GetNtDomain());   
-            
+                kerbPrinc = string.Format("xmpp/{0}@{1}", XmppClientConnection.Server, GetNtDomain());
+
             //if (XmppClientConnection.KerberosPrincipal != null)
             //    sspiHelper = new SSPIHelper(XmppClientConnection.KerberosPrincipal);
             //else
@@ -56,14 +53,14 @@ namespace agsXMPP.Sasl.Gssapi
 
             sspiHelper = new SSPIHelper(kerbPrinc);
 
-            Auth auth = new Auth(MechanismType.GSSAPI);
-            
-            byte[]  clientToken;
+            var auth = new Auth(MechanismType.GSSAPI);
+
+            byte[] clientToken;
 
             sspiHelper.Process(null, out clientToken);
-           
+
             auth.Value = Convert.ToBase64String(clientToken);
-            
+
             XmppClientConnection.Send(auth);
         }
 
@@ -71,12 +68,12 @@ namespace agsXMPP.Sasl.Gssapi
         {
             if (e is Challenge)
             {
-                Challenge c = e as Challenge;
+                var c = e as Challenge;
                 Response resp;
 
                 byte[] outBytes;
-                byte[] inBytes = Convert.FromBase64String(c.Value);
-               
+                var inBytes = Convert.FromBase64String(c.Value);
+
                 sspiHelper.Process(inBytes, out outBytes);
 
                 if (outBytes == null)
@@ -95,7 +92,7 @@ namespace agsXMPP.Sasl.Gssapi
 
 
         /// <summary>
-        /// returns the NT domain, tis is used for building the kerberos principal when none is provided.
+        ///     returns the NT domain, tis is used for building the kerberos principal when none is provided.
         /// </summary>
         /// <returns></returns>
         internal string GetNtDomain()

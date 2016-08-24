@@ -17,16 +17,13 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP.protocol;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.disco
 {
-	/*
+    /*
 	Example 10. Requesting all items
 
 	<iq type='get'
@@ -65,30 +62,22 @@ namespace agsXMPP.protocol.iq.disco
       
      */
 
-	/// <summary>
-	/// Discovering the Items Associated with a Jabber Entity
-	/// </summary>
-	public class DiscoItemsIq : IQ
-	{
-		private DiscoItems m_DiscoItems = new DiscoItems();
-	
-		public DiscoItemsIq()
-		{
-			base.Query = m_DiscoItems;
-			this.GenerateId();
-		}
-
-		public DiscoItemsIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}	
-
-        public new DiscoItems Query
+    /// <summary>
+    ///     Discovering the Items Associated with a Jabber Entity
+    /// </summary>
+    public class DiscoItemsIq : IQ
+    {
+        public DiscoItemsIq()
         {
-            get
-            {
-                return m_DiscoItems;
-            }
+            base.Query = Query;
+            GenerateId();
         }
-	}
+
+        public DiscoItemsIq(IqType type) : this()
+        {
+            Type = type;
+        }
+
+        public new DiscoItems Query { get; } = new DiscoItems();
+    }
 }

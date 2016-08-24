@@ -17,29 +17,15 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.x.data;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.pubsub.owner
 {
     public class Configure : Element
     {
-        #region << Constructor >>
-        public Configure()
-        {
-            TagName    = "configure";
-            Namespace  = Uri.PUBSUB_OWNER;
-        }
-
-        public Configure(string node) : this()
-        {
-            Node = node;
-        }
-        #endregion
-
         public string Node
         {
             get { return GetAttribute("node"); }
@@ -47,14 +33,11 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
         }
 
         /// <summary>
-        /// The x-Data Element
+        ///     The x-Data Element
         /// </summary>
         public Data Data
         {
-            get
-            {
-                return SelectSingleElement(typeof(Data)) as Data;
-            }
+            get { return SelectSingleElement(typeof(Data)) as Data; }
             set
             {
                 if (HasTag(typeof(Data)))
@@ -64,5 +47,20 @@ namespace agsXMPP.protocol.extensions.pubsub.owner
                     AddChild(value);
             }
         }
+
+        #region << Constructor >>
+
+        public Configure()
+        {
+            TagName = "configure";
+            Namespace = Uri.PUBSUB_OWNER;
+        }
+
+        public Configure(string node) : this()
+        {
+            Node = node;
+        }
+
+        #endregion
     }
 }

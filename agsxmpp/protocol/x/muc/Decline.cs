@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.x.muc
 {
@@ -54,30 +51,32 @@ namespace agsXMPP.protocol.x.muc
       </x>
     </message>
     */
-     
+
     public class Decline : Invitation
     {
         #region << Constructors >>
-        public Decline() : base()
+
+        public Decline()
         {
-            this.TagName    = "decline";            
+            TagName = "decline";
         }
-        
+
         public Decline(string reason) : this()
         {
-            this.Reason = reason;
+            Reason = reason;
         }
 
         public Decline(Jid to) : this()
         {
-            this.To = to;
+            To = to;
         }
 
-        public Decline(Jid to, string reason): this()
-        {            
-            this.To     = to;
-            this.Reason = reason;
+        public Decline(Jid to, string reason) : this()
+        {
+            To = to;
+            Reason = reason;
         }
+
         #endregion
     }
 }

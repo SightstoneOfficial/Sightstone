@@ -22,29 +22,33 @@
  * xpnet is a deriviative of James Clark's XP parser.
  * See copying.txt for more info.
  */
+
+using System;
+
 namespace agsXMPP.Xml.Xpnet
 {
     /// <summary>
-    /// Base class for other exceptions
+    ///     Base class for other exceptions
     /// </summary>
-    public class TokenException : System.Exception
+    public class TokenException : Exception
     {
     }
 
     /// <summary>
-    /// An empty token was detected.  This only happens with a buffer of length 0 is passed in
-    /// to the parser.
+    ///     An empty token was detected.  This only happens with a buffer of length 0 is passed in
+    ///     to the parser.
     /// </summary>
     public class EmptyTokenException : TokenException
     {
     }
 
     /// <summary>
-    /// End of prolog.
+    ///     End of prolog.
     /// </summary>
     public class EndOfPrologException : TokenException
     {
     }
+
     /**
      * Thrown to indicate that the byte subarray being tokenized is a legal XML
      * token, but that subsequent bytes in the same entity could be part of
@@ -52,84 +56,78 @@ namespace agsXMPP.Xml.Xpnet
      * would throw this if the byte subarray consists of a legal XML name.
      * @version $Revision: 1.3 $ $Date: 1998/02/17 04:24:06 $
      */
+
     public class ExtensibleTokenException : TokenException
     {
-        private TOK tokType;
-
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="tokType"></param>
         public ExtensibleTokenException(TOK tokType)
         {
-            this.tokType = tokType;
+            TokenType = tokType;
         }
 
         /**
          * Returns the type of token in the byte subarrary.
          */
-        public TOK TokenType
-        {
-            get { return tokType; }
-        }
+
+        public TOK TokenType { get; }
     }
 
     /// <summary>
-    /// Several kinds of token problems.
+    ///     Several kinds of token problems.
     /// </summary>
     public class InvalidTokenException : TokenException
     {
-        private int offset;
-        private byte type;
-
         /// <summary>
-        /// An illegal character
+        ///     An illegal character
         /// </summary>
         public const byte ILLEGAL_CHAR = 0;
+
         /// <summary>
-        /// Doc prefix wasn't XML
+        ///     Doc prefix wasn't XML
         /// </summary>
         public const byte XML_TARGET = 1;
+
         /// <summary>
-        /// More than one attribute with the same name on the same element
+        ///     More than one attribute with the same name on the same element
         /// </summary>
         public const byte DUPLICATE_ATTRIBUTE = 2;
 
+        private readonly byte type;
+
         /// <summary>
-        /// Some other type of bad token detected
+        ///     Some other type of bad token detected
         /// </summary>
         /// <param name="offset"></param>
         /// <param name="type"></param>
         public InvalidTokenException(int offset, byte type)
         {
-            this.offset = offset;
+            Offset = offset;
             this.type = type;
         }
 
         /// <summary>
-        /// Illegal character detected
+        ///     Illegal character detected
         /// </summary>
         /// <param name="offset"></param>
         public InvalidTokenException(int offset)
         {
-            this.offset = offset;
-            this.type = ILLEGAL_CHAR;
+            Offset = offset;
+            type = ILLEGAL_CHAR;
         }
 
         /// <summary>
-        /// Offset into the buffer where the problem ocurred.
+        ///     Offset into the buffer where the problem ocurred.
         /// </summary>
-        public int Offset
-        {
-            get { return this.offset; }
-        }
-        
+        public int Offset { get; }
+
         /// <summary>
-        /// Type of exception
+        ///     Type of exception
         /// </summary>
         public int Type
         {
-            get { return this.type; }
+            get { return type; }
         }
     }
 
@@ -139,31 +137,27 @@ namespace agsXMPP.Xml.Xpnet
      * more bytes were added.
      * @version $Revision: 1.2 $ $Date: 1998/02/17 04:24:11 $
      */
+
     public class PartialCharException : PartialTokenException
     {
-        private int leadByteIndex;
-  
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="leadByteIndex"></param>
-        public PartialCharException(int leadByteIndex) 
+        public PartialCharException(int leadByteIndex)
         {
-            this.leadByteIndex = leadByteIndex;
+            LeadByteIndex = leadByteIndex;
         }
 
         /**
          * Returns the index of the first byte that is not part of the complete
          * encoding of a character.
          */
-        public int LeadByteIndex 
-        {
-            get { return leadByteIndex; }
-        }
+
+        public int LeadByteIndex { get; }
     }
 
     /// <summary>
-    /// A partial token was received.  Try again, after you add more bytes to the buffer.
+    ///     A partial token was received.  Try again, after you add more bytes to the buffer.
     /// </summary>
     public class PartialTokenException : TokenException
     {

@@ -17,26 +17,24 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.tls
 {
-	// Step 5: Server informs client that it is allowed to proceed:
-	// <proceed xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
+    // Step 5: Server informs client that it is allowed to proceed:
+    // <proceed xmlns='urn:ietf:params:xml:ns:xmpp-tls'/>
 
-	/// <summary>
-	/// Summary description for Proceed.
-	/// </summary>
-	public class Proceed : Element
-	{
-		public Proceed()
-		{
-			this.TagName	= "proceed";
-			this.Namespace	= Uri.TLS;
-		}
-	}
+    /// <summary>
+    ///     Summary description for Proceed.
+    /// </summary>
+    public class Proceed : Element
+    {
+        public Proceed()
+        {
+            TagName = "proceed";
+            Namespace = Uri.TLS;
+        }
+    }
 }

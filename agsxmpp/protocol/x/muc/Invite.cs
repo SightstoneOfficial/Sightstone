@@ -17,11 +17,8 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
-using agsXMPP.Xml.Dom;
 using agsXMPP.protocol.extensions.nickname;
 
 namespace agsXMPP.protocol.x.muc
@@ -41,46 +38,20 @@ namespace agsXMPP.protocol.x.muc
     */
 
     /// <summary>
-    /// Invite other users t a chatroom
+    ///     Invite other users t a chatroom
     /// </summary>
     public class Invite : Invitation
     {
-        #region << Constructors >>
-        public Invite() : base()
-        {
-            this.TagName    = "invite";            
-        }
-        
-        public Invite(string reason) : this()
-        {
-            this.Reason = reason;
-        }
-
-        public Invite(Jid to) : this()
-        {
-            this.To = to;
-        }
-
-        public Invite(Jid to, string reason): this()
-        {            
-            this.To     = to;
-            this.Reason = reason;
-        }
-        #endregion
-
         /*
             <invite to='wiccarocks@shakespeare.lit/laptop'>
                 <reason>This coven needs both wiccarocks and hag66.</reason>
                 <continue/>
             </invite>
          */
- 
+
         public bool Continue
         {
-            get
-            {
-                return GetTag("continue") == null ? false : true;
-            }
+            get { return GetTag("continue") == null ? false : true; }
             set
             {
                 if (value)
@@ -91,25 +62,44 @@ namespace agsXMPP.protocol.x.muc
         }
 
         /// <summary>
-        /// Nickname Element
+        ///     Nickname Element
         /// </summary>
         public Nickname Nickname
         {
-            get
-            {
-                return SelectSingleElement(typeof(Nickname)) as Nickname;
-            }
+            get { return SelectSingleElement(typeof(Nickname)) as Nickname; }
             set
             {
                 if (HasTag(typeof(Nickname)))
                     RemoveTag(typeof(Nickname));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
-        
 
+        #region << Constructors >>
+
+        public Invite()
+        {
+            TagName = "invite";
+        }
+
+        public Invite(string reason) : this()
+        {
+            Reason = reason;
+        }
+
+        public Invite(Jid to) : this()
+        {
+            To = to;
+        }
+
+        public Invite(Jid to, string reason) : this()
+        {
+            To = to;
+            Reason = reason;
+        }
+
+        #endregion
     }
-
 }

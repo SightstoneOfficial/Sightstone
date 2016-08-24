@@ -17,50 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
-
 
 namespace agsXMPP.protocol.iq.rpc
 {
     /// <summary>
-    /// RpcIq.
+    ///     RpcIq.
     /// </summary>
     public class RpcIq : IQ
     {
-        private Rpc m_Rpc = new Rpc();
-
         public RpcIq()
         {
-            base.Query = m_Rpc;
-            this.GenerateId();
+            base.Query = Query;
+            GenerateId();
         }
 
         public RpcIq(IqType type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public RpcIq(IqType type, Jid to) : this(type)
         {
-            this.To = to;
+            To = to;
         }
 
         public RpcIq(IqType type, Jid to, Jid from) : this(type, to)
         {
-            this.From = from;
+            From = from;
         }
 
-        public new Rpc Query
-        {
-            get
-            {
-                return m_Rpc;
-            }
-        }
-
+        public new Rpc Query { get; } = new Rpc();
     }
 }

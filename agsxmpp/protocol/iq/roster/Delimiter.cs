@@ -19,18 +19,16 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.roster
 {
-	/// <summary>
-	/// Extension JEP-0083, delimiter for nested roster groups
-	/// </summary>
-	public class Delimiter : Element
-	{
-		/*
+    /// <summary>
+    ///     Extension JEP-0083, delimiter for nested roster groups
+    /// </summary>
+    public class Delimiter : Element
+    {
+        /*
 		3.1 Querying for the delimiter 
 		All compliant clients SHOULD query for an existing delimiter at login.
 
@@ -54,16 +52,16 @@ namespace agsXMPP.protocol.iq.roster
 		</query>
 		</iq>
 		*/
-		public Delimiter()
-		{
-			this.TagName	= "roster";
-            this.Namespace	= Uri.ROSTER_DELIMITER;
-		}
 
-		public Delimiter(string delimiter) : this()
-		{
-			this.Value = delimiter;
-		}
+        public Delimiter()
+        {
+            TagName = "roster";
+            Namespace = Uri.ROSTER_DELIMITER;
+        }
 
-	}
+        public Delimiter(string delimiter) : this()
+        {
+            Value = delimiter;
+        }
+    }
 }

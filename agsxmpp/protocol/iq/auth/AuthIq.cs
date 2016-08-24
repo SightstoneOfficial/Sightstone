@@ -17,48 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.auth
 {
-	/// <summary>
-	/// Summary description for AuthIq.
-	/// </summary>
-	public class AuthIq : IQ
-	{
-		private Auth m_Auth	= new Auth();
-		
-		public AuthIq()
-		{		
-			base.Query = m_Auth;
-			this.GenerateId();			
-		}
+    /// <summary>
+    ///     Summary description for AuthIq.
+    /// </summary>
+    public class AuthIq : IQ
+    {
+        public AuthIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public AuthIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public AuthIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public AuthIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public AuthIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public AuthIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
+        public AuthIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public new Auth Query
-		{
-			get
-			{
-				return m_Auth;
-			}
-		}
-	}
+        public new Auth Query { get; } = new Auth();
+    }
 }

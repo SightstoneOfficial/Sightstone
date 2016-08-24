@@ -17,48 +17,38 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.time
 {
-	/// <summary>
-	/// Summary description for TimeIq.
-	/// </summary>
-	public class TimeIq : IQ
-	{
-		private Time m_Time = new Time();
-		
-		public TimeIq()
-		{		
-			base.Query = m_Time;
-			this.GenerateId();
-		}
+    /// <summary>
+    ///     Summary description for TimeIq.
+    /// </summary>
+    public class TimeIq : IQ
+    {
+        public TimeIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-		public TimeIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public TimeIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public TimeIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
+        public TimeIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public TimeIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
+        public TimeIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public new Time Query
-		{
-			get
-			{
-				return m_Time;
-			}
-		}
-	}
+        public new Time Query { get; } = new Time();
+    }
 }

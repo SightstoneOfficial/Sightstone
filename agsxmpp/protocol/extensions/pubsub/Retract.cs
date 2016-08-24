@@ -17,19 +17,13 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
-
-using agsXMPP.Xml.Dom;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
     // Publish and retract looks exactly the same, so inherit from publish here
     public class Retract : Publish
     {
-
         /*
             A service SHOULD allow a publisher to delete an item once it has been published to a node that 
             supports persistent items.
@@ -50,20 +44,19 @@ namespace agsXMPP.protocol.extensions.pubsub
             </iq>
         */
 
-        public Retract() : base()
+        public Retract()
         {
-            this.TagName    = "retract";            
+            TagName = "retract";
         }
 
         public Retract(string node) : this()
         {
-            this.Node = node;
+            Node = node;
         }
 
         public Retract(string node, string id) : this(node)
         {
-            this.AddItem(new Item(id));
+            AddItem(new Item(id));
         }
-        
     }
 }

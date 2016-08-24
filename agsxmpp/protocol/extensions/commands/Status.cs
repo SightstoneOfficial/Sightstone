@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol.extensions.commands
 {
     /*
@@ -34,6 +32,7 @@ namespace agsXMPP.protocol.extensions.commands
         </xs:simpleType>
       </xs:attribute>
     */
+
     public enum Status
     {
         NONE = -1,

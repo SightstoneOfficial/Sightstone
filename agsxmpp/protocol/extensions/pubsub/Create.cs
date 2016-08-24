@@ -17,11 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-
-using agsXMPP.Xml.Dom;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
@@ -48,27 +44,27 @@ namespace agsXMPP.protocol.extensions.pubsub
         */
 
         #region << Constructors >>
-        public Create() : base()
+
+        public Create()
         {
-            this.TagName = "create";            
+            TagName = "create";
         }
 
         public Create(string node) : this()
         {
-            this.Node = node;
+            Node = node;
         }
 
         public Create(Type type) : this()
         {
-            this.Type = type;
+            Type = type;
         }
 
         public Create(string node, Type type) : this(node)
         {
-            this.Type = type;
+            Type = type;
         }
-        #endregion
 
-       
+        #endregion
     }
 }

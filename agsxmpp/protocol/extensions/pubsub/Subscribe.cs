@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -28,6 +25,29 @@ namespace agsXMPP.protocol.extensions.pubsub
 {
     public class Subscribe : Element
     {
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+
+        public Jid Jid
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
+                else
+                    RemoveAttribute("jid");
+            }
+        }
+
         /*
         Example 25. Entity subscribes to a node
 
@@ -42,42 +62,21 @@ namespace agsXMPP.protocol.extensions.pubsub
           </pubsub>
         </iq>
         */
+
         #region << Constructors >>
+
         public Subscribe()
         {
-            this.TagName    = "subscribe";
-            this.Namespace  = Uri.PUBSUB;
+            TagName = "subscribe";
+            Namespace = Uri.PUBSUB;
         }
 
         public Subscribe(string node, Jid jid) : this()
         {
-            this.Node   = node;
-            this.Jid    = jid;
+            Node = node;
+            Jid = jid;
         }
+
         #endregion
-
-        public string Node
-        {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
-        }
-
-        public Jid Jid
-		{
-			get 
-			{ 
-				if (HasAttribute("jid"))
-					return new Jid(this.GetAttribute("jid"));
-				else
-					return null;
-			}
-			set 
-			{
-                if (value != null)
-                    this.SetAttribute("jid", value.ToString());
-                else
-                    RemoveAttribute("jid");
-			}
-		}
     }
 }

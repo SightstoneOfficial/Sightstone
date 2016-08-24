@@ -17,56 +17,46 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
 using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.storage
 {
+    //	Once such data has been set, the avatar can be retrieved by any requesting client from the avatar-generating client's public XML storage:
+    //
+    //	Example 8.
+    //
+    //	<iq id='1' type='get' to='user@server'>
+    //		<query xmlns='storage:client:avatar'/>
+    //	</iq>  
 
-	//	Once such data has been set, the avatar can be retrieved by any requesting client from the avatar-generating client's public XML storage:
-	//
-	//	Example 8.
-	//
-	//	<iq id='1' type='get' to='user@server'>
-	//		<query xmlns='storage:client:avatar'/>
-	//	</iq>  
+    /// <summary>
+    ///     Summary description for AvatarIq.
+    /// </summary>
+    public class AvatarIq : IQ
+    {
+        public AvatarIq()
+        {
+            base.Query = Query;
+            GenerateId();
+        }
 
-	/// <summary>
-	/// Summary description for AvatarIq.
-	/// </summary>
-	public class AvatarIq : IQ
-	{
-		private Avatar m_Avatar = new Avatar();
+        public AvatarIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public AvatarIq()
-		{			
-			base.Query = m_Avatar;
-			this.GenerateId();
-		}
+        public AvatarIq(IqType type, Jid to) : this(type)
+        {
+            To = to;
+        }
 
-		public AvatarIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}
+        public AvatarIq(IqType type, Jid to, Jid from) : this(type, to)
+        {
+            From = from;
+        }
 
-		public AvatarIq(IqType type, Jid to) : this(type)
-		{
-			this.To = to;
-		}
-
-		public AvatarIq(IqType type, Jid to, Jid from) : this(type, to)
-		{
-			this.From = from;
-		}
-
-		public new Avatar Query
-		{
-			get
-			{
-				return m_Avatar;
-			}
-		}		
-	}
+        public new Avatar Query { get; } = new Avatar();
+    }
 }

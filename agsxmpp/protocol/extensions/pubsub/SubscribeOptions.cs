@@ -17,15 +17,12 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.pubsub
 {
-
     /*
         <xs:element name='subscribe-options'>
             <xs:complexType>
@@ -58,30 +55,31 @@ namespace agsXMPP.protocol.extensions.pubsub
 
     public class SubscribeOptions : Element
     {
-        #region << Constructors >>
-        public SubscribeOptions()
-        {
-            this.TagName    = "subscribe-options";
-            this.Namespace  = Uri.PUBSUB;
-        }
-
-        public SubscribeOptions(bool required)
-        {
-            this.Required = required;
-        }
-        #endregion
-
         public bool Required
         {
             get { return HasTag("required"); }
-            set 
+            set
             {
                 if (value)
                     SetTag("required");
                 else
-                    RemoveTag("required");       
+                    RemoveTag("required");
             }
         }
 
+        #region << Constructors >>
+
+        public SubscribeOptions()
+        {
+            TagName = "subscribe-options";
+            Namespace = Uri.PUBSUB;
+        }
+
+        public SubscribeOptions(bool required)
+        {
+            Required = required;
+        }
+
+        #endregion
     }
 }

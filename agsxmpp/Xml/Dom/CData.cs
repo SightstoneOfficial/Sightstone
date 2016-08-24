@@ -22,7 +22,6 @@
 namespace agsXMPP.Xml.Dom
 {
     /// <summary>
-    /// 
     /// </summary>
     public class CData : Node
     {

@@ -19,9 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bytestreams
@@ -44,23 +41,24 @@ namespace agsXMPP.protocol.extensions.bytestreams
             </xs:complexType>
         </xs:element>
     */
+
     public class StreamHost : Element
     {
         public StreamHost()
         {
-            this.TagName    = "streamhost";
-            this.Namespace  = Uri.BYTESTREAMS;
+            TagName = "streamhost";
+            Namespace = Uri.BYTESTREAMS;
         }
 
         public StreamHost(Jid jid, string host) : this()
         {
-            Jid     = jid;
-            Host    = host;
+            Jid = jid;
+            Host = host;
         }
 
-        public StreamHost(Jid jid, string host, int port) : this(jid, host)            
-        {            
-            Port    = port;
+        public StreamHost(Jid jid, string host, int port) : this(jid, host)
+        {
+            Port = port;
         }
 
         public StreamHost(Jid jid, string host, int port, string zeroconf) : this(jid, host, port)
@@ -69,7 +67,7 @@ namespace agsXMPP.protocol.extensions.bytestreams
         }
 
         /// <summary>
-        /// a port associated with the hostname or IP address for SOCKS5 communications over TCP
+        ///     a port associated with the hostname or IP address for SOCKS5 communications over TCP
         /// </summary>
         public int Port
         {
@@ -78,38 +76,37 @@ namespace agsXMPP.protocol.extensions.bytestreams
         }
 
         /// <summary>
-        /// the hostname or IP address of the StreamHost for SOCKS5 communications over TCP
+        ///     the hostname or IP address of the StreamHost for SOCKS5 communications over TCP
         /// </summary>
         public string Host
         {
             get { return GetAttribute("host"); }
             set { SetAttribute("host", value); }
         }
-        
+
         /// <summary>
-        /// The XMPP/Jabber id of the streamhost
+        ///     The XMPP/Jabber id of the streamhost
         /// </summary>
         public Jid Jid
         {
             get
             {
                 if (HasAttribute("jid"))
-                    return new Jid(this.GetAttribute("jid"));
-                else
-                    return null;
+                    return new Jid(GetAttribute("jid"));
+                return null;
             }
             set
             {
                 if (value != null)
-                    this.SetAttribute("jid", value.ToString());
+                    SetAttribute("jid", value.ToString());
                 else
                     RemoveAttribute("jid");
             }
         }
 
         /// <summary>
-        /// a zeroconf [5] identifier to which an entity may connect, for which the service identifier and 
-        /// protocol name SHOULD be "_jabber.bytestreams".
+        ///     a zeroconf [5] identifier to which an entity may connect, for which the service identifier and
+        ///     protocol name SHOULD be "_jabber.bytestreams".
         /// </summary>
         public string Zeroconf
         {

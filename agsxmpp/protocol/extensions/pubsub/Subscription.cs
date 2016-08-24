@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -27,6 +25,78 @@ namespace agsXMPP.protocol.extensions.pubsub
 {
     public class Subscription : Element
     {
+        /// <summary>
+        ///     Node (optional)
+        /// </summary>
+        public string Node
+        {
+            get { return GetAttribute("node"); }
+            set { SetAttribute("node", value); }
+        }
+
+        public Jid Jid
+        {
+            get
+            {
+                if (HasAttribute("jid"))
+                    return new Jid(GetAttribute("jid"));
+                return null;
+            }
+            set
+            {
+                if (value != null)
+                    SetAttribute("jid", value.ToString());
+                else
+                    RemoveAttribute("jid");
+            }
+        }
+
+        /// <summary>
+        ///     Subscription ID (optional)
+        /// </summary>
+        public string SubId
+        {
+            get { return GetAttribute("subid"); }
+            set
+            {
+                if (value != null)
+                    SetAttribute("subid", value);
+                else
+                    RemoveAttribute("subid");
+            }
+        }
+
+        //public Affiliation Affiliation
+        //{
+        //    get 
+        //    {
+        //        return (Affiliation)GetAttributeEnum("affiliation", typeof(Affiliation)); 
+        //    }
+        //    set 
+        //    {
+        //        SetAttribute("affiliation", value.ToString()); 
+        //    }
+        //}
+
+        public SubscriptionState SubscriptionState
+        {
+            get { return (SubscriptionState) GetAttributeEnum("subscription", typeof(SubscriptionState)); }
+            set { SetAttribute("subscription", value.ToString()); }
+        }
+
+        public SubscribeOptions SubscribeOptions
+        {
+            get { return SelectSingleElement(typeof(SubscribeOptions)) as SubscribeOptions; }
+            set
+            {
+                if (HasTag(typeof(SubscribeOptions)))
+                    RemoveTag(typeof(SubscribeOptions));
+
+                if (value != null)
+                    AddChild(value);
+            }
+        }
+
         /*
             Example 23. Service replies with success
 
@@ -85,125 +155,43 @@ namespace agsXMPP.protocol.extensions.pubsub
         */
 
         #region << Constructors >>
+
         public Subscription()
         {
-            this.TagName = "subscription";
-            this.Namespace  = Uri.PUBSUB;
+            TagName = "subscription";
+            Namespace = Uri.PUBSUB;
         }
 
         public Subscription(Jid jid) : this()
         {
-            this.Jid = jid;   
+            Jid = jid;
         }
 
         public Subscription(Jid jid, SubscriptionState subType) : this(jid)
         {
-            this.SubscriptionState = subType;
+            SubscriptionState = subType;
         }
 
         public Subscription(Jid jid, string node) : this()
         {
-            this.Node = node;
+            Node = node;
         }
 
         public Subscription(Jid jid, string node, SubscriptionState subType) : this(jid, node)
         {
-            this.SubscriptionState = subType;
+            SubscriptionState = subType;
         }
 
         public Subscription(Jid jid, string node, string subId) : this(jid, node)
         {
-            this.SubId = subId;
+            SubId = subId;
         }
 
         public Subscription(Jid jid, string node, string subId, SubscriptionState subType) : this(jid, node, subId)
         {
-            this.SubscriptionState = subType;
+            SubscriptionState = subType;
         }
+
         #endregion
-
-        /// <summary>
-        /// Node (optional)
-        /// </summary>
-        public string Node
-        {
-            get { return GetAttribute("node"); }
-            set { SetAttribute("node", value); }
-        }
-
-        public Jid Jid
-        {
-            get
-            {
-                if (HasAttribute("jid"))
-                    return new Jid(this.GetAttribute("jid"));
-                else
-                    return null;
-            }
-            set
-            {
-                if (value != null)
-                    this.SetAttribute("jid", value.ToString());
-                else
-                    RemoveAttribute("jid");
-            }
-        }
-
-        /// <summary>
-        /// Subscription ID (optional)
-        /// </summary>
-        public string SubId
-        {
-            get { return GetAttribute("subid"); }
-            set 
-            {
-                if (value != null)
-                    SetAttribute("subid", value);
-                else
-                    RemoveAttribute("subid");
-            }
-        }
-
-        //public Affiliation Affiliation
-        //{
-        //    get 
-        //    {
-        //        return (Affiliation)GetAttributeEnum("affiliation", typeof(Affiliation)); 
-        //    }
-        //    set 
-        //    {
-        //        SetAttribute("affiliation", value.ToString()); 
-        //    }
-        //}
-
-        public SubscriptionState SubscriptionState
-        {
-            get
-            {
-                return (SubscriptionState) GetAttributeEnum("subscription", typeof(SubscriptionState));
-            }
-            set
-            {
-                SetAttribute("subscription", value.ToString());
-            }
-        }
-
-        public SubscribeOptions SubscribeOptions
-        {
-            get
-            {
-                return SelectSingleElement(typeof(SubscribeOptions)) as SubscribeOptions;
-
-            }
-            set
-            {
-                if (HasTag(typeof(SubscribeOptions)))
-                    RemoveTag(typeof(SubscribeOptions));
-
-                if (value != null)
-                    this.AddChild(value);
-            }
-        }
-
     }
 }

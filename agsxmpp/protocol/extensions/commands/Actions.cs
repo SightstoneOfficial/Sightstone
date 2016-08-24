@@ -19,8 +19,6 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.commands
@@ -50,35 +48,32 @@ namespace agsXMPP.protocol.extensions.commands
         <complete/>
       </actions>
     */
+
     public class Actions : Element
     {
         public Actions()
         {
-            this.TagName    = "actions";
-            this.Namespace  = Uri.COMMANDS;
+            TagName = "actions";
+            Namespace = Uri.COMMANDS;
         }
 
         /// <summary>
-        /// Optional Execute Action, only complete, next and previous is allowed
+        ///     Optional Execute Action, only complete, next and previous is allowed
         /// </summary>
         public Action Execute
         {
-			get 
-			{ 
-				return (Action) GetAttributeEnum("execute", typeof(Action)); 
-			}
-			set 
-			{ 
-				if (value == Action.NONE)
+            get { return (Action) GetAttributeEnum("execute", typeof(Action)); }
+            set
+            {
+                if (value == Action.NONE)
                     RemoveAttribute("execute");
-				else
+                else
                     SetAttribute("execute", value.ToString());
-			}
-		}
+            }
+        }
 
 
         /// <summary>
-        /// 
         /// </summary>
         public bool Complete
         {
@@ -86,9 +81,9 @@ namespace agsXMPP.protocol.extensions.commands
             set
             {
                 if (value)
-                    this.SetTag("complete");
+                    SetTag("complete");
                 else
-                    this.RemoveTag("complete");
+                    RemoveTag("complete");
             }
         }
 
@@ -98,9 +93,9 @@ namespace agsXMPP.protocol.extensions.commands
             set
             {
                 if (value)
-                    this.SetTag("next");
+                    SetTag("next");
                 else
-                    this.RemoveTag("next");
+                    RemoveTag("next");
             }
         }
 
@@ -110,21 +105,21 @@ namespace agsXMPP.protocol.extensions.commands
             set
             {
                 if (value)
-                    this.SetTag("prev");
+                    SetTag("prev");
                 else
-                    this.RemoveTag("prev");
+                    RemoveTag("prev");
             }
         }
 
         /// <summary>
-        /// Actions, only complete, prev and next are allowed here and can be combined
+        ///     Actions, only complete, prev and next are allowed here and can be combined
         /// </summary>
         public Action Action
         {
             get
             {
                 Action res = 0;
-                
+
                 if (Complete)
                     res |= Action.complete;
                 if (Previous)
@@ -134,22 +129,21 @@ namespace agsXMPP.protocol.extensions.commands
 
                 if (res == 0)
                     return Action.NONE;
-                else
-                    return res;
+                return res;
             }
             set
             {
                 if (value == Action.NONE)
-                {                    
-                    Complete    = false;
-                    Previous    = false;                    
-                    Next        = false;
+                {
+                    Complete = false;
+                    Previous = false;
+                    Next = false;
                 }
                 else
                 {
-                    Complete    = ((value & Action.complete) == Action.complete);
-                    Previous    = ((value & Action.prev) == Action.prev);
-                    Next        = ((value & Action.next) == Action.next);                    
+                    Complete = (value & Action.complete) == Action.complete;
+                    Previous = (value & Action.prev) == Action.prev;
+                    Next = (value & Action.next) == Action.next;
                 }
             }
         }

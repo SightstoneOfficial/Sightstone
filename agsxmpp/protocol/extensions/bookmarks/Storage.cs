@@ -19,14 +19,11 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bookmarks
 {
     /// <summary>
-    /// 
     /// </summary>
     public class Storage : Element
     {
@@ -44,14 +41,15 @@ namespace agsXMPP.protocol.extensions.bookmarks
               </query>
             </iq>   
         */
+
         public Storage()
         {
-            TagName    = "storage";
-            Namespace  = Uri.STORAGE_BOOKMARKS;
+            TagName = "storage";
+            Namespace = Uri.STORAGE_BOOKMARKS;
         }
-        
+
         /// <summary>
-        /// Add a conference bookmark to the storage object
+        ///     Add a conference bookmark to the storage object
         /// </summary>
         /// <param name="conf"></param>
         /// <returns></returns>
@@ -62,7 +60,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Add a conference bookmark to the storage object
+        ///     Add a conference bookmark to the storage object
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="name"></param>
@@ -73,7 +71,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Add a conference bookmark to the storage object
+        ///     Add a conference bookmark to the storage object
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="name"></param>
@@ -85,7 +83,7 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// Add a conference bookmark to the storage object
+        ///     Add a conference bookmark to the storage object
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="name"></param>
@@ -98,7 +96,6 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="jid"></param>
         /// <param name="name"></param>
@@ -112,36 +109,36 @@ namespace agsXMPP.protocol.extensions.bookmarks
         }
 
         /// <summary>
-        /// add multiple conference bookmarks
+        ///     add multiple conference bookmarks
         /// </summary>
         /// <param name="confs"></param>
         public void AddConferences(Conference[] confs)
         {
-            foreach (Conference conf in confs)
+            foreach (var conf in confs)
             {
                 AddConference(conf);
             }
         }
 
         /// <summary>
-        /// get all conference booksmarks
+        ///     get all conference booksmarks
         /// </summary>
         /// <returns></returns>
         public Conference[] GetConferences()
         {
-            ElementList nl = SelectElements(typeof(Conference));
-            Conference[] items = new Conference[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Conference));
+            var items = new Conference[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
-                items[i] = (Conference)e;
+                items[i] = (Conference) e;
                 i++;
             }
             return items;
         }
 
         /// <summary>
-        /// add a url bookmark
+        ///     add a url bookmark
         /// </summary>
         /// <param name="url"></param>
         /// <returns></returns>
@@ -153,30 +150,30 @@ namespace agsXMPP.protocol.extensions.bookmarks
 
         public Url AddUrl(string address, string name)
         {
-            return AddUrl(new Url(address, name));            
+            return AddUrl(new Url(address, name));
         }
 
         /// <summary>
-        /// add multiple url bookmarks
+        ///     add multiple url bookmarks
         /// </summary>
         /// <param name="urls"></param>
         public void AddUrls(Url[] urls)
         {
-            foreach (Url url in urls)
+            foreach (var url in urls)
             {
                 AddUrl(url);
-            }           
+            }
         }
 
         /// <summary>
-        /// Get all url bookmarks
+        ///     Get all url bookmarks
         /// </summary>
         /// <returns></returns>
         public Url[] GetUrls()
         {
-            ElementList nl = SelectElements(typeof(Url));
-            Url[] items = new Url[nl.Count];
-            int i = 0;
+            var nl = SelectElements(typeof(Url));
+            var items = new Url[nl.Count];
+            var i = 0;
             foreach (Element e in nl)
             {
                 items[i] = (Url) e;

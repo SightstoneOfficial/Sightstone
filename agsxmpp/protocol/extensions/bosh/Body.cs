@@ -19,19 +19,16 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.bosh
 {
-    
     public class Body : Element
     {
         public Body()
         {
-            this.TagName = "body";
-            this.Namespace = Uri.HTTP_BIND;
+            TagName = "body";
+            Namespace = Uri.HTTP_BIND;
         }
 
         /*
@@ -65,13 +62,13 @@ namespace agsXMPP.protocol.extensions.bosh
               charsets='ISO_8859-1 ISO-2022-JP'
               xmlns='http://jabber.org/protocol/httpbind'/>
         */
-        
+
         public string Sid
         {
             get { return GetAttribute("sid"); }
             set { SetAttribute("sid", value); }
         }
-         
+
         public long Rid
         {
             get { return GetAttributeLong("rid"); }
@@ -91,9 +88,10 @@ namespace agsXMPP.protocol.extensions.bosh
         }
 
         /// <summary>
-        /// Specifies the longest time (in seconds) that the connection manager is allowed to wait before responding to any request 
-        /// during the session. This enables the client to limit the delay before it discovers any network failure, 
-        /// and to prevent its HTTP/TCP connection from expiring due to inactivity.
+        ///     Specifies the longest time (in seconds) that the connection manager is allowed to wait before responding to any
+        ///     request
+        ///     during the session. This enables the client to limit the delay before it discovers any network failure,
+        ///     and to prevent its HTTP/TCP connection from expiring due to inactivity.
         /// </summary>
         public int Wait
         {
@@ -102,9 +100,11 @@ namespace agsXMPP.protocol.extensions.bosh
         }
 
         /// <summary>
-        /// If the connection manager supports session pausing (inactivity) then it SHOULD advertise that to the client by including a 'maxpause'
-        /// attribute in the session creation response element. The value of the attribute indicates the maximum length of a temporary 
-        /// session pause (in seconds) that a client MAY request.
+        ///     If the connection manager supports session pausing (inactivity) then it SHOULD advertise that to the client by
+        ///     including a 'maxpause'
+        ///     attribute in the session creation response element. The value of the attribute indicates the maximum length of a
+        ///     temporary
+        ///     session pause (in seconds) that a client MAY request.
         /// </summary>
         public int MaxPause
         {
@@ -131,7 +131,7 @@ namespace agsXMPP.protocol.extensions.bosh
         }
 
         /// <summary>
-        /// Specifies the target domain of the first stream.
+        ///     Specifies the target domain of the first stream.
         /// </summary>
         public Jid To
         {
@@ -146,24 +146,29 @@ namespace agsXMPP.protocol.extensions.bosh
         }
 
         /// <summary>
-        /// specifies the maximum number of requests the connection manager is allowed to keep waiting at any one time during the session. 
-        /// If the client is not able to use HTTP Pipelining then this SHOULD be set to "1".
+        ///     specifies the maximum number of requests the connection manager is allowed to keep waiting at any one time during
+        ///     the session.
+        ///     If the client is not able to use HTTP Pipelining then this SHOULD be set to "1".
         /// </summary>
         public int Hold
         {
             get { return GetAttributeInt("hold"); }
             set { SetAttribute("hold", value); }
-        }             
-        
+        }
+
         /// <summary>
-        /// <para>
-        /// Specifies the highest version of the BOSH protocol that the client supports. 
-        /// The numbering scheme is "<major>.<minor>" (where the minor number MAY be incremented higher than a single digit, 
-        /// so it MUST be treated as a separate integer).
-        /// </para>
-        /// <remarks>
-        /// The 'ver' attribute should not be confused with the version of any protocol being transported.
-        /// </remarks>
+        ///     <para>
+        ///         Specifies the highest version of the BOSH protocol that the client supports.
+        ///         The numbering scheme is "
+        ///         <major>
+        ///             .
+        ///             <minor>
+        ///                 " (where the minor number MAY be incremented higher than a single digit,
+        ///                 so it MUST be treated as a separate integer).
+        ///     </para>
+        ///     <remarks>
+        ///         The 'ver' attribute should not be confused with the version of any protocol being transported.
+        ///     </remarks>
         /// </summary>
         public string Version
         {
@@ -198,10 +203,10 @@ namespace agsXMPP.protocol.extensions.bosh
         public string XmppVersion
         {
             get { return GetAttribute("xmpp:version"); }
-            set 
+            set
             {
                 AddBoshNamespace();
-                SetAttribute("xmpp:version", value); 
+                SetAttribute("xmpp:version", value);
             }
         }
 
@@ -211,13 +216,13 @@ namespace agsXMPP.protocol.extensions.bosh
             set
             {
                 AddBoshNamespace();
-                SetAttribute("xmpp:restart", value); 
+                SetAttribute("xmpp:restart", value);
             }
         }
 
         internal void AddBoshNamespace()
         {
-            this.SetAttribute("xmlns:xmpp", "urn:xmpp:xbosh"); 
+            SetAttribute("xmlns:xmpp", "urn:xmpp:xbosh");
         }
     }
 }

@@ -24,18 +24,18 @@ using agsXMPP.Xml.Dom;
 namespace agsXMPP.protocol.extensions.chatstates
 {
     /// <summary>
-    /// User has not been actively participating in the chat session.
-    /// User has not interacted with the chat interface for an intermediate period of time (e.g., 30 seconds).
+    ///     User has not been actively participating in the chat session.
+    ///     User has not interacted with the chat interface for an intermediate period of time (e.g., 30 seconds).
     /// </summary>
     public class Inactive : Element
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="Inactive"/> class.
+        ///     Initializes a new instance of the <see cref="Inactive" /> class.
         /// </summary>
         public Inactive()
         {
-            TagName    = Chatstate.inactive.ToString();
-            Namespace  = Uri.CHATSTATES;
+            TagName = Chatstate.inactive.ToString();
+            Namespace = Uri.CHATSTATES;
         }
     }
 }

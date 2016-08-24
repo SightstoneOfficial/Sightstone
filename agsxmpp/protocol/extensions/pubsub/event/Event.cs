@@ -17,10 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -30,58 +27,47 @@ namespace agsXMPP.protocol.extensions.pubsub.@event
     {
         public Event()
         {
-            this.TagName    = "event";
-            this.Namespace  = Uri.PUBSUB_EVENT;
+            TagName = "event";
+            Namespace = Uri.PUBSUB_EVENT;
         }
 
 
         public Delete Delete
         {
-            get
-            {
-                return SelectSingleElement(typeof(Delete)) as Delete;
-
-            }
+            get { return SelectSingleElement(typeof(Delete)) as Delete; }
             set
             {
                 if (HasTag(typeof(Delete)))
                     RemoveTag(typeof(Delete));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
         public Purge Purge
         {
-            get
-            {
-                return SelectSingleElement(typeof(Purge)) as Purge;
-
-            }
+            get { return SelectSingleElement(typeof(Purge)) as Purge; }
             set
             {
                 if (HasTag(typeof(Purge)))
                     RemoveTag(typeof(Purge));
-                
+
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
 
         public Items Items
         {
-            get
-            {
-                return SelectSingleElement(typeof(Items)) as Items;
-            }
+            get { return SelectSingleElement(typeof(Items)) as Items; }
             set
             {
                 if (HasTag(typeof(Items)))
                     RemoveTag(typeof(Items));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
     }

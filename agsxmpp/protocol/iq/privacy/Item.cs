@@ -17,98 +17,26 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// This class represents a rule which is used for blocking communication
+    ///     This class represents a rule which is used for blocking communication
     /// </summary>
     public class Item : Element
     {
-
-        #region << Constructors >>
-        /// <summary>
-        /// Default Contructor
-        /// </summary>
-        public Item()
-        {
-            this.TagName    = "item";
-            this.Namespace  = Uri.IQ_PRIVACY;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="order"></param>
-        public Item(Action action, int order) : this()
-        {
-            Action  = action;
-            Order   = order;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="order"></param>
-        /// <param name="block"></param>
-        public Item(Action action, int order, Stanza stanza) : this(action, order)
-        {
-            Stanza = stanza;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="order"></param>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        public Item(Action action, int order, Type type, string value) : this(action, order)
-        {
-            Type    = type;
-            Val     = value;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="action"></param>
-        /// <param name="order"></param>
-        /// <param name="type"></param>
-        /// <param name="value"></param>
-        /// <param name="block"></param>
-        public Item(Action action, int order, Type type, string value, Stanza stanza) : this(action, order, type, value)
-        {
-            Stanza = stanza;
-        }
-        #endregion
-
         public Action Action
-		{
-			get 
-			{
-                return (Action)GetAttributeEnum("action", typeof(Action)); 
-			}
-			set 
-			{ 
-				SetAttribute("action", value.ToString()); 
-			}
-		}
+        {
+            get { return (Action) GetAttributeEnum("action", typeof(Action)); }
+            set { SetAttribute("action", value.ToString()); }
+        }
 
         public Type Type
         {
-            get
-            {
-                return (Type)GetAttributeEnum("type", typeof(Type));
-            }
+            get { return (Type) GetAttributeEnum("type", typeof(Type)); }
             set
             {
                 if (value != Type.NONE)
@@ -119,7 +47,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// The order of this rule
+        ///     The order of this rule
         /// </summary>
         public int Order
         {
@@ -128,7 +56,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// The value to match of this rule
+        ///     The value to match of this rule
         /// </summary>
         public string Val
         {
@@ -137,7 +65,7 @@ namespace agsXMPP.protocol.iq.privacy
         }
 
         /// <summary>
-        /// Block Iq stanzas
+        ///     Block Iq stanzas
         /// </summary>
         public bool BlockIq
         {
@@ -145,14 +73,14 @@ namespace agsXMPP.protocol.iq.privacy
             set
             {
                 if (value)
-                    this.SetTag("iq");
+                    SetTag("iq");
                 else
-                    this.RemoveTag("iq");
+                    RemoveTag("iq");
             }
         }
 
         /// <summary>
-        /// Block messages
+        ///     Block messages
         /// </summary>
         public bool BlockMessage
         {
@@ -160,14 +88,14 @@ namespace agsXMPP.protocol.iq.privacy
             set
             {
                 if (value)
-                    this.SetTag("message");
+                    SetTag("message");
                 else
-                    this.RemoveTag("message");
+                    RemoveTag("message");
             }
         }
 
         /// <summary>
-        /// Block incoming presence
+        ///     Block incoming presence
         /// </summary>
         public bool BlockIncomingPresence
         {
@@ -175,14 +103,14 @@ namespace agsXMPP.protocol.iq.privacy
             set
             {
                 if (value)
-                    this.SetTag("presence-in");
+                    SetTag("presence-in");
                 else
-                    this.RemoveTag("presence-in");
+                    RemoveTag("presence-in");
             }
         }
 
         /// <summary>
-        /// Block outgoing presence
+        ///     Block outgoing presence
         /// </summary>
         public bool BlockOutgoingPresence
         {
@@ -190,30 +118,30 @@ namespace agsXMPP.protocol.iq.privacy
             set
             {
                 if (value)
-                    this.SetTag("presence-out");
+                    SetTag("presence-out");
                 else
-                    this.RemoveTag("presence-out");
+                    RemoveTag("presence-out");
             }
         }
-        
+
         /// <summary>
-        /// which stanzas should be blocked?
+        ///     which stanzas should be blocked?
         /// </summary>
         public Stanza Stanza
         {
             get
             {
-                Stanza result = Stanza.All;
+                var result = Stanza.All;
 
                 if (BlockIq)
                     result |= Stanza.Iq;
-                if (BlockMessage) 
+                if (BlockMessage)
                     result |= Stanza.Message;
                 if (BlockIncomingPresence)
                     result |= Stanza.IncomingPresence;
                 if (BlockOutgoingPresence)
                     result |= Stanza.OutgoingPresence;
-                
+
                 return result;
             }
             set
@@ -221,19 +149,76 @@ namespace agsXMPP.protocol.iq.privacy
                 if (value == Stanza.All)
                 {
                     // Block All Communications
-                    BlockIq                 = false;
-                    BlockMessage            = false;
-                    BlockIncomingPresence   = false;
-                    BlockOutgoingPresence   = false;
+                    BlockIq = false;
+                    BlockMessage = false;
+                    BlockIncomingPresence = false;
+                    BlockOutgoingPresence = false;
                 }
                 else
                 {
-                    BlockIq                 = ((value & Stanza.Iq) == Stanza.Iq);
-                    BlockMessage            = ((value & Stanza.Message) == Stanza.Message);
-                    BlockIncomingPresence   = ((value & Stanza.IncomingPresence) == Stanza.IncomingPresence);
-                    BlockOutgoingPresence   = ((value & Stanza.OutgoingPresence) == Stanza.OutgoingPresence);
+                    BlockIq = (value & Stanza.Iq) == Stanza.Iq;
+                    BlockMessage = (value & Stanza.Message) == Stanza.Message;
+                    BlockIncomingPresence = (value & Stanza.IncomingPresence) == Stanza.IncomingPresence;
+                    BlockOutgoingPresence = (value & Stanza.OutgoingPresence) == Stanza.OutgoingPresence;
                 }
             }
         }
+
+        #region << Constructors >>
+
+        /// <summary>
+        ///     Default Contructor
+        /// </summary>
+        public Item()
+        {
+            TagName = "item";
+            Namespace = Uri.IQ_PRIVACY;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="order"></param>
+        public Item(Action action, int order) : this()
+        {
+            Action = action;
+            Order = order;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="order"></param>
+        /// <param name="block"></param>
+        public Item(Action action, int order, Stanza stanza) : this(action, order)
+        {
+            Stanza = stanza;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="order"></param>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        public Item(Action action, int order, Type type, string value) : this(action, order)
+        {
+            Type = type;
+            Val = value;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="action"></param>
+        /// <param name="order"></param>
+        /// <param name="type"></param>
+        /// <param name="value"></param>
+        /// <param name="block"></param>
+        public Item(Action action, int order, Type type, string value, Stanza stanza) : this(action, order, type, value)
+        {
+            Stanza = stanza;
+        }
+
+        #endregion
     }
 }

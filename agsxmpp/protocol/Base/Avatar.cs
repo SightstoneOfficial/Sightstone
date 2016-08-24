@@ -24,50 +24,44 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.Base
 {
-	// Avatar is in multiple Namespaces. So better to work with a Base class
+    // Avatar is in multiple Namespaces. So better to work with a Base class
 
-	/// <summary>
-	/// Summary description for Avatar.
-	/// </summary>
-	public class Avatar : Element
-	{		
-		public Avatar()
-		{
-			this.TagName	= "query";				
-		}
+    /// <summary>
+    ///     Summary description for Avatar.
+    /// </summary>
+    public class Avatar : Element
+    {
+        public Avatar()
+        {
+            TagName = "query";
+        }
 
-		public byte[] Data
-		{
-			get
-			{
-				if ( HasTag("data") )
-					return Convert.FromBase64String(GetTag("data"));
-				else
-					return null;
-			}
-			set
-			{
-				SetTag("data", Convert.ToBase64String(value, 0, value.Length));
-			}
-		}
+        public byte[] Data
+        {
+            get
+            {
+                if (HasTag("data"))
+                    return Convert.FromBase64String(GetTag("data"));
+                return null;
+            }
+            set { SetTag("data", Convert.ToBase64String(value, 0, value.Length)); }
+        }
 
-		public string MimeType
-		{
-			get
-			{
-				Element data = SelectSingleElement("data");
-				if (data != null)
-					return GetAttribute("mimetype");
-				else
-					return null;
-			}
-			set
-			{
-				Element data = SelectSingleElement("data");
-				if (data != null)
-					SetAttribute("mimetype", value);
-			}
-		}
-	}
-	
+        public string MimeType
+        {
+            get
+            {
+                var data = SelectSingleElement("data");
+                if (data != null)
+                    return GetAttribute("mimetype");
+                return null;
+            }
+            set
+            {
+                var data = SelectSingleElement("data");
+                if (data != null)
+                    SetAttribute("mimetype", value);
+            }
+        }
+    }
 }

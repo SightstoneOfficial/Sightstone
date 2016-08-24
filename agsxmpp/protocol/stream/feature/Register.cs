@@ -17,11 +17,10 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
+
 //<stream:stream xmlns:stream='http://etherx.jabber.org/streams/'
 //xmlns='jabber:client'
 //from='somedomain'
@@ -33,15 +32,14 @@ using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.stream.feature
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public class Register : Element
-	{
-		public Register()
-		{
-			this.TagName	= "register";
-			this.Namespace	= Uri.FEATURE_IQ_REGISTER;
-		}
-	}
+    /// <summary>
+    /// </summary>
+    public class Register : Element
+    {
+        public Register()
+        {
+            TagName = "register";
+            Namespace = Uri.FEATURE_IQ_REGISTER;
+        }
+    }
 }

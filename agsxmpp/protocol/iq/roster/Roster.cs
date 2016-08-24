@@ -17,47 +17,43 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.iq.roster
 {
+    /// <summary>
+    ///     Zusammenfassung für Roster.
+    /// </summary>
+    public class Roster : Element
+    {
+        // Request Roster:
+        // <iq id='someid' to='myjabber.net' type='get'>
+        //		<query xmlns='jabber:iq:roster'/>
+        // </iq>
+        public Roster()
+        {
+            TagName = "query";
+            Namespace = Uri.IQ_ROSTER;
+        }
 
-	/// <summary>
-	/// Zusammenfassung für Roster.
-	/// </summary>
-	public class Roster : Element
-	{
+        public RosterItem[] GetRoster()
+        {
+            var nl = SelectElements(typeof(RosterItem));
+            var i = 0;
+            var result = new RosterItem[nl.Count];
+            foreach (RosterItem ri in nl)
+            {
+                result[i] = ri;
+                i++;
+            }
+            return result;
+        }
 
-		// Request Roster:
-		// <iq id='someid' to='myjabber.net' type='get'>
-		//		<query xmlns='jabber:iq:roster'/>
-		// </iq>
-		public Roster()
-		{
-			this.TagName	= "query";
-			this.Namespace	= Uri.IQ_ROSTER;
-		}
-
-		public RosterItem[] GetRoster()
-		{
-            ElementList nl = SelectElements(typeof(RosterItem));
-			int i = 0;
-			RosterItem[] result = new RosterItem[nl.Count];
-			foreach (RosterItem ri in nl)
-			{				
-				result[i] = (RosterItem) ri;
-				i++;
-			}
-			return result;
-		}
-		
-		public void AddRosterItem(RosterItem r)
-		{
-			this.ChildNodes.Add(r);
-		}		
-	}
+        public void AddRosterItem(RosterItem r)
+        {
+            ChildNodes.Add(r);
+        }
+    }
 }

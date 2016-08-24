@@ -19,38 +19,40 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-using System.Text;
-
 namespace agsXMPP.protocol.extensions.chatstates
 {
     /// <summary>
-    /// Enumeration of supported Chatstates (JEP-0085)
+    ///     Enumeration of supported Chatstates (JEP-0085)
     /// </summary>
     public enum Chatstate
     {
         /// <summary>
-        /// No Chatstate at all
+        ///     No Chatstate at all
         /// </summary>
         None,
+
         /// <summary>
-        /// Active Chatstate
+        ///     Active Chatstate
         /// </summary>
         active,
+
         /// <summary>
-        /// Inactive Chatstate
+        ///     Inactive Chatstate
         /// </summary>
         inactive,
+
         /// <summary>
-        /// Composing Chatstate
+        ///     Composing Chatstate
         /// </summary>
         composing,
+
         /// <summary>
-        /// Gone Chatstate
+        ///     Gone Chatstate
         /// </summary>
         gone,
+
         /// <summary>
-        /// Paused Chatstate
+        ///     Paused Chatstate
         /// </summary>
         paused
     }

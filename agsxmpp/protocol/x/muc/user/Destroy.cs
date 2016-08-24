@@ -19,16 +19,15 @@
  * http://www.ag-software.de														 *
  * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
-using System;
-
 namespace agsXMPP.protocol.x.muc.user
 {
-    public class Destroy : agsXMPP.protocol.x.muc.owner.Destroy
+    public class Destroy : owner.Destroy
     {
         #region << Constructor >>
-        public Destroy() : base()
+
+        public Destroy()
         {
-            this.Namespace = Uri.MUC_USER;
+            Namespace = Uri.MUC_USER;
         }
 
         public Destroy(string reason)
@@ -49,6 +48,7 @@ namespace agsXMPP.protocol.x.muc.user
             Reason = reason;
             AlternateVenue = altVenue;
         }
-        #endregion  
+
+        #endregion
     }
 }

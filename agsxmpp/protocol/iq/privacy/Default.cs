@@ -17,21 +17,18 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
-using System.Text;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 namespace agsXMPP.protocol.iq.privacy
 {
     /// <summary>
-    /// The default list
+    ///     The default list
     /// </summary>
     public class Default : List
     {
         public Default()
         {
-            this.TagName = "default";
+            TagName = "default";
         }
 
         public Default(string name) : this()

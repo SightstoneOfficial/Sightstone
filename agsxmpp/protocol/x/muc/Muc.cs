@@ -17,9 +17,7 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.Xml.Dom;
 
@@ -32,43 +30,42 @@ namespace agsXMPP.protocol.x.muc
         </x>
      
      */
-      
+
     /// <summary>
-    /// Summary description for MucUser.
+    ///     Summary description for MucUser.
     /// </summary>
     public class Muc : Element
     {
         #region << Constructor >>
+
         public Muc()
         {
-            this.TagName    = "x";
-            this.Namespace  = Uri.MUC;
+            TagName = "x";
+            Namespace = Uri.MUC;
         }
+
         #endregion
 
         public string Password
-		{
-			set	{ SetTag("password", value); }
-			get { return GetTag("password"); }
-		}
+        {
+            set { SetTag("password", value); }
+            get { return GetTag("password"); }
+        }
 
         /// <summary>
-        /// The History object
+        ///     The History object
         /// </summary>
         public History History
         {
-            get
-            {
-                return SelectSingleElement(typeof(History)) as History;
-            }
+            get { return SelectSingleElement(typeof(History)) as History; }
             set
             {
                 if (HasTag(typeof(History)))
                     RemoveTag(typeof(History));
 
                 if (value != null)
-                    this.AddChild(value);
+                    AddChild(value);
             }
         }
     }
-}  
+}

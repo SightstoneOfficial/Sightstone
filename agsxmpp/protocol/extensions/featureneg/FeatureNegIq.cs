@@ -17,23 +17,19 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
-
-using System;
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using agsXMPP.protocol.client;
 
-using agsXMPP.Xml.Dom;
-
 namespace agsXMPP.protocol.extensions.featureneg
 {
-	/// <summary>
-	/// JEP-0020: Feature Negotiation
-	/// This JEP defines a A protocol that enables two Jabber entities to mutually negotiate feature options.
-	/// </summary>
-	public class FeatureNegIq : IQ
-	{
-		/*
+    /// <summary>
+    ///     JEP-0020: Feature Negotiation
+    ///     This JEP defines a A protocol that enables two Jabber entities to mutually negotiate feature options.
+    /// </summary>
+    public class FeatureNegIq : IQ
+    {
+        /*
 		<iq type='get'
 			from='romeo@montague.net/orchard'
 			to='juliet@capulet.com/balcony'
@@ -56,25 +52,17 @@ namespace agsXMPP.protocol.extensions.featureneg
 		</iq>
 		*/
 
-		private FeatureNeg m_FeatureNeg = new FeatureNeg();
+        public FeatureNegIq()
+        {
+            AddChild(FeatureNeg);
+            GenerateId();
+        }
 
-		public FeatureNegIq()
-		{		
-			this.AddChild(m_FeatureNeg);
-			this.GenerateId();
-		}
+        public FeatureNegIq(IqType type) : this()
+        {
+            Type = type;
+        }
 
-		public FeatureNegIq(IqType type) : this()
-		{			
-			this.Type = type;		
-		}	
-
-		public FeatureNeg FeatureNeg
-		{
-			get
-			{
-				return m_FeatureNeg;
-			}
-		}
-	}
+        public FeatureNeg FeatureNeg { get; } = new FeatureNeg();
+    }
 }

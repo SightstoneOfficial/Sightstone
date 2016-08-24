@@ -23,35 +23,27 @@ using agsXMPP.protocol.client;
 
 namespace agsXMPP.protocol.iq.bind
 {
-	/// <summary>
-	/// Summary description for BindIq.
-	/// </summary>
-	public class BindIq : IQ
-	{
-		private Bind m_Bind = new Bind();
-		
-		public BindIq()
-		{
-			GenerateId();
-			AddChild(m_Bind);
-		}
-
-		public BindIq(IqType type) : this()
-		{			
-			Type = type;
-		}
-
-		public BindIq(IqType type, string resource) : this(type)
-		{			
-			m_Bind.Resource = resource;
-		}
-
-        public new Bind Query
+    /// <summary>
+    ///     Summary description for BindIq.
+    /// </summary>
+    public class BindIq : IQ
+    {
+        public BindIq()
         {
-            get
-            {
-                return m_Bind;
-            }
+            GenerateId();
+            AddChild(Query);
         }
-	}
+
+        public BindIq(IqType type) : this()
+        {
+            Type = type;
+        }
+
+        public BindIq(IqType type, string resource) : this(type)
+        {
+            Query.Resource = resource;
+        }
+
+        public new Bind Query { get; } = new Bind();
+    }
 }

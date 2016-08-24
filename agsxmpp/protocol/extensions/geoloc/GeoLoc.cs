@@ -17,11 +17,10 @@
  *																					 *
  * For general enquiries visit our website at:										 *
  * http://www.ag-software.de														 *
- * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */ 
+ * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * * */
 
 using System;
-using System.Text;
-
+using agsXMPP.Util;
 using agsXMPP.Xml.Dom;
 
 namespace agsXMPP.protocol.extensions.geoloc
@@ -42,38 +41,16 @@ namespace agsXMPP.protocol.extensions.geoloc
     */
 
     /// <summary>
-    /// XEP-0080 Geographical Location (GeoLoc)
-    /// This JEP defines a format for capturing data about an entity's geographical location (geoloc).
-    /// The namespace defined herein is intended to provide a semi-structured format for 
-    /// describing a geographical location that may change fairly frequently, 
-    /// where the geoloc information is provided as Global Positioning System (GPS) coordinates.
+    ///     XEP-0080 Geographical Location (GeoLoc)
+    ///     This JEP defines a format for capturing data about an entity's geographical location (geoloc).
+    ///     The namespace defined herein is intended to provide a semi-structured format for
+    ///     describing a geographical location that may change fairly frequently,
+    ///     where the geoloc information is provided as Global Positioning System (GPS) coordinates.
     /// </summary>
     public class GeoLoc : Element
     {
-        #region << Constructors >>
         /// <summary>
-        /// 
-        /// </summary>
-        public GeoLoc()
-        {
-            this.TagName    = "geoloc";
-            this.Namespace  = Uri.GEOLOC;
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="Latitude"></param>
-        /// <param name="Longitude"></param>
-        public GeoLoc(double latitude, double longitude) : this()
-        {
-            Latitude    = latitude;
-            Longitude   = longitude;
-        }
-        #endregion
-
-        /// <summary>
-        /// A natural-language description of the location
+        ///     A natural-language description of the location
         /// </summary>
         public string Description
         {
@@ -82,7 +59,7 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// GPS datum
+        ///     GPS datum
         /// </summary>
         public string Datum
         {
@@ -91,7 +68,7 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// Latitude in decimal degrees North
+        ///     Latitude in decimal degrees North
         /// </summary>
         public double Latitude
         {
@@ -100,7 +77,7 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// Longitude in decimal degrees East
+        ///     Longitude in decimal degrees East
         /// </summary>
         public double Longitude
         {
@@ -109,7 +86,7 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// Altitude in meters above or below sea level
+        ///     Altitude in meters above or below sea level
         /// </summary>
         public double Altitude
         {
@@ -118,8 +95,8 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// GPS bearing (direction in which the entity is heading to reach its next waypoint),
-        /// measured in decimal degrees relative to true north
+        ///     GPS bearing (direction in which the entity is heading to reach its next waypoint),
+        ///     measured in decimal degrees relative to true north
         /// </summary>
         public double Bearing
         {
@@ -128,7 +105,7 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// Horizontal GPS error in arc minutes
+        ///     Horizontal GPS error in arc minutes
         /// </summary>
         public double Error
         {
@@ -137,12 +114,34 @@ namespace agsXMPP.protocol.extensions.geoloc
         }
 
         /// <summary>
-        /// UTC timestamp specifying the moment when the reading was taken           
+        ///     UTC timestamp specifying the moment when the reading was taken
         /// </summary>
         public DateTime Timestamp
         {
-            get { return Util.Time.ISO_8601Date(GetTag("timestamp")); }
-            set { SetTag("timestamp", Util.Time.ISO_8601Date(value)); }
+            get { return Time.ISO_8601Date(GetTag("timestamp")); }
+            set { SetTag("timestamp", Time.ISO_8601Date(value)); }
         }
+
+        #region << Constructors >>
+
+        /// <summary>
+        /// </summary>
+        public GeoLoc()
+        {
+            TagName = "geoloc";
+            Namespace = Uri.GEOLOC;
+        }
+
+        /// <summary>
+        /// </summary>
+        /// <param name="Latitude"></param>
+        /// <param name="Longitude"></param>
+        public GeoLoc(double latitude, double longitude) : this()
+        {
+            Latitude = latitude;
+            Longitude = longitude;
+        }
+
+        #endregion
     }
 }
