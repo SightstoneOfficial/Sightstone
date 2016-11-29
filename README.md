@@ -1,3 +1,6 @@
+# RIP
+This project died
+
 # Sightstone Project
 Sightstone is an open-source and alternative League of Legends client. It is currently being rewritten in order to organize code and provide a better user experience. 
 It is aimed to all sort of setups, letting you choose from the below four options:
